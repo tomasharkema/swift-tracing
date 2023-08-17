@@ -1,6 +1,6 @@
 //
 //  Logger.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 13/08/2023.
 //

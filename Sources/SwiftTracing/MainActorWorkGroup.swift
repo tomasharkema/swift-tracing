@@ -1,13 +1,13 @@
 //
-//  File.swift
-//  
+//  MainActorWorkGroup.swift
+//
 //
 //  Created by Tomas Harkema on 16/08/2023.
 //
 
 import Foundation
 
-public typealias MainActorWork = (@Sendable @MainActor () -> ())
+public typealias MainActorWork = @Sendable @MainActor () -> Void
 public typealias MainActorWorkGroup = [MainActorWork]
 
 public extension MainActorWorkGroup {
@@ -17,6 +17,6 @@ public extension MainActorWorkGroup {
         for work in mainActorWorkCapture {
             work()
         }
-        self.removeAll()
+        removeAll()
     }
 }

@@ -1,6 +1,6 @@
 //
 //  dispatchTask.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 13/08/2023.
 //
@@ -10,7 +10,7 @@ import Foundation
 /// closest equivalent to plain old `Task { }`
 public func dispatchTask(
     priority: TaskPriority? = nil,
-    @_implicitSelfCapture @_inheritActorContext _ handler: @Sendable @escaping () async -> (),
+    @_implicitSelfCapture @_inheritActorContext _ handler: @Sendable @escaping () async -> Void,
     _ file: String = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
     let caller = Caller(file: file, line: line, function: function)
@@ -32,7 +32,7 @@ public func dispatchTask(
 /// closest equivalent to plain old `Task { @MainActor in }`
 public func dispatchTaskMain(
     priority: TaskPriority? = nil,
-    @_implicitSelfCapture _ handler: @MainActor @Sendable @escaping () async -> (),
+    @_implicitSelfCapture _ handler: @MainActor @Sendable @escaping () async -> Void,
     _ file: String = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
     let caller = Caller(file: file, line: line, function: function)
@@ -53,4 +53,3 @@ public func dispatchTaskMain(
         }
     }
 }
-

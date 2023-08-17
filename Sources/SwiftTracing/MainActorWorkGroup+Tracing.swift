@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  MainActorWorkGroup+Tracing.swift
+//
 //
 //  Created by Tomas Harkema on 16/08/2023.
 //
@@ -13,9 +13,10 @@ public enum MainActorTaskPriority {
 }
 
 public extension MainActorWorkGroup {
+    @available(iOS 15.0, *)
     mutating func task(
         priority: MainActorTaskPriority,
-        _ task: (@Sendable @MainActor @escaping () -> ()),
+        _ task: @Sendable @MainActor @escaping () -> Void,
         _ function: StaticString = #function
     ) {
         if priority == .high {
@@ -33,5 +34,3 @@ public extension MainActorWorkGroup {
         }
     }
 }
-
-

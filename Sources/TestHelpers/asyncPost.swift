@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftTaskToolbox
 import XCTest
 
 public enum NotificationPost {
@@ -15,7 +16,6 @@ public enum NotificationPost {
 }
 
 public extension XCTestCase {
-
     @nonobjc func asyncYield() async {
         await Task.yield()
         let exp = expectation(description: "derp")
@@ -34,19 +34,19 @@ public extension XCTestCase {
         await asyncPost(.name(notification), object: object, center)
     }
 
-    @nonobjc func asyncPost(_ notification: NotificationPost, object: Any? = nil, _ center: NotificationCenter = NotificationCenter.default) async {
-        var handler: () -> () = {}
+    @nonobjc func asyncPost(_ notification: NotificationPost, object: Any? = nil, queue: OperationQueue? = nil, _ center: NotificationCenter = NotificationCenter.default) async {
+        var handler: () -> Void = {}
         var notificationHandler: NSObjectProtocol?
 
         switch notification {
-        case .name(let name):
-            notificationHandler = center.addObserver(name, object: object) { _ in
+        case let .name(name):
+            notificationHandler = center.addObserver(forName: name, object: object, queue: queue) { _ in
                 handler()
                 notificationHandler = nil
                 handler = {}
             }
-        case .object(let notificationObject):
-            notificationHandler = center.addObserver(notificationObject.name, object: object) { _ in
+        case let .object(notificationObject):
+            notificationHandler = center.addObserver(forName: notificationObject.name, object: object, queue: queue) { _ in
                 handler()
                 notificationHandler = nil
                 handler = {}
@@ -55,9 +55,9 @@ public extension XCTestCase {
 
         Task { @MainActor in
             switch notification {
-            case .name(let name):
-                center.post(name, object: object)
-            case .object(let object):
+            case let .name(name):
+                center.post(name: name, object: object)
+            case let .object(object):
                 center.post(object)
             }
         }
@@ -67,9 +67,5 @@ public extension XCTestCase {
             }
         }
         await Task.yield()
-    }
-
-    @nonobjc func asyncPost<Payload>(_ payloaded: NotificationWithPayload<Payload>, payload: Payload) async {
-        await asyncPost(.object(payloaded.notification(payload: payload)))
     }
 }

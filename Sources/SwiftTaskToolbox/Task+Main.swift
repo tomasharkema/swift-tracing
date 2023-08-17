@@ -1,17 +1,15 @@
 //
 //  Task+Main.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 16/08/2023.
 //
 
 import Foundation
 
-
 private func checkMainThread() {
-
     dispatchPrecondition(condition: .notOnQueue(.main))
-    
+
 #if DEBUG
     if Thread.current.isMainThread {
         print("ALREADY ON MAIN THREAD!")

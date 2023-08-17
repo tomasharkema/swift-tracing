@@ -1,6 +1,6 @@
 //
 //  runOnMainActor.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 11/08/2023.
 //
@@ -9,7 +9,7 @@ import Foundation
 
 public func runOnMainActor(
     isEntry: Bool = false,
-    @_implicitSelfCapture _ handler: @Sendable @escaping @MainActor () async -> (),
+    @_implicitSelfCapture _ handler: @Sendable @escaping @MainActor () async -> Void,
     _ file: String = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
     let caller = Caller(file: file, line: line, function: function)
@@ -27,12 +27,19 @@ public func runOnMainActor(
     let taskFrame = caller.containsTaskFrame()
 
     if Thread.isMainThread {
-        logger.trace("🚦 already called from main thread: caller: \(String(describing: caller)) previousCaller: \(String(describing: previousCaller)) \(String(describing: Task.currentPriority)) taskFrame: \(String(describing: taskFrame))")
+        logger.trace("""
+        🚦 already called from main thread: caller: \(String(describing: caller)) previousCaller: \(String(describing: previousCaller))
+        \(String(describing: Task.currentPriority)) taskFrame: \(String(describing: taskFrame))
+        """)
         if !isEntry, !caller.isEntry {
             logger.trace("🚦 but not is entry!")
         }
     } else {
-        logger.trace("🚦 called from thread: caller: \(String(describing: caller)) previousCaller: \(String(describing: previousCaller)) \(String(describing: Task.currentPriority)) \(String(describing: Thread.current)) taskFrame: \(String(describing: taskFrame))")
+        logger.trace("""
+        🚦 called from thread: caller: \(String(describing: caller)) previousCaller: \(String(describing: previousCaller))
+        \(String(describing: Task.currentPriority)) \(String(describing: Thread.current))
+        taskFrame: \(String(describing: taskFrame))
+        """)
     }
 
     if isEntry, !caller.isEntry {
@@ -51,4 +58,3 @@ public func runOnMainActor(
         }
     }
 }
-

@@ -1,6 +1,6 @@
 //
 //  Caller.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 13/08/2023.
 //
@@ -13,7 +13,7 @@ struct Caller: CustomDebugStringConvertible {
     let file: String
     let line: UInt
     let function: String
-    
+
     let stack: Stack
 
     init(file: String, line: UInt, function: String, stack: any Sequence<String> = Thread.callStackSymbols.dropFirst(2)) {
@@ -25,12 +25,11 @@ struct Caller: CustomDebugStringConvertible {
     }
 
     var debugDescription: String {
-        return "\(function) - \(URL(fileURLWithPath: file).lastPathComponent):\(line)"
+        "\(function) - \(URL(fileURLWithPath: file).lastPathComponent):\(line)"
     }
 
     func containsTaskFrame() -> Frame? {
         if #available(iOS 16, *) {
-
             if let frame = stack.swiftTask {
 //                logger.info("stack isSwiftTask true\n\n\(String(describing: stack))")
                 return frame
@@ -50,10 +49,10 @@ struct Caller: CustomDebugStringConvertible {
 
     var isEntry: Bool {
         stack.isSwiftTask ||
-        stack.isSwiftConcurrency ||
-        stack.isFromUIKit ||
-        stack.isAddObserverMain ||
-        stack.isSwiftUiMainThread
+            stack.isSwiftConcurrency ||
+            stack.isFromUIKit ||
+            stack.isAddObserverMain ||
+            stack.isSwiftUiMainThread
     }
 }
 
@@ -65,7 +64,7 @@ struct Stack: CustomDebugStringConvertible {
     }
 
     var debugDescription: String {
-        frames.map { $0.debugDescription }.joined(separator: "\n")
+        frames.map(\.debugDescription).joined(separator: "\n")
     }
 
     var swiftConcurrency: Frame? {
@@ -122,7 +121,6 @@ struct Stack: CustomDebugStringConvertible {
 }
 
 struct Frame: CustomDebugStringConvertible {
-
     let index: Int
     let lib: String
     let stackPointer: String
@@ -130,8 +128,7 @@ struct Frame: CustomDebugStringConvertible {
     let function: String
 
     init?(_ line: String) {
-        if #available(iOS 16, *) {
-
+        if #available(iOS 16, macOS 13, *) {
             guard let match = line.firstMatch(of: FrameRegex.frameRegex) else {
                 assertionFailure("STACKFRAME: line not matched: \(line)")
                 return nil
@@ -169,9 +166,8 @@ struct Frame: CustomDebugStringConvertible {
     }
 }
 
-@available(iOS 16.0, *)
+@available(iOS 16.0, macOS 13, *)
 enum FrameRegex {
-
     static let indexRef = Reference(Int.self)
     static let libraryRef = Reference(Substring.self)
     static let stackPointerRef = Reference(Substring.self)
@@ -192,13 +188,13 @@ enum FrameRegex {
         OneOrMore(.whitespace)
 
         Capture(as: libraryRef) {
-            OneOrMore(Self.sentence)
+            OneOrMore(sentence)
         }
 
         OneOrMore(.whitespace)
 
         Capture(as: stackPointerRef) {
-            OneOrMore(Self.sentence)
+            OneOrMore(sentence)
         }
 
         OneOrMore(.whitespace)

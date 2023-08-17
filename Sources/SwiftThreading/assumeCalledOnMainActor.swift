@@ -1,6 +1,6 @@
 //
 //  assumeCalledOnMainActor.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 13/08/2023.
 //
@@ -10,7 +10,7 @@ import Foundation
 public func assumeCalledOnMainActor(
     priority: TaskPriority = .userInitiated,
     isEntry: Bool = false,
-    @_implicitSelfCapture _ handler: @Sendable @escaping @MainActor () async -> (),
+    @_implicitSelfCapture _ handler: @Sendable @escaping @MainActor () async -> Void,
     _ file: String = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
     let caller = Caller(file: file, line: line, function: function)
