@@ -20,6 +20,10 @@ let package = Package(
             name: "TestHelpers",
             targets: ["TestHelpers"]
         ),
+        .library(
+            name: "SwiftThreading",
+            targets: ["SwiftThreading"]
+        ),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -32,7 +36,10 @@ let package = Package(
         ),
         .target(
             name: "TestHelpers"
-        )
+        ),
+        .target(
+            name: "SwiftThreading"
+        ),
         // .testTarget(
         //     name: "SwiftTracingTests",
         //     dependencies: ["SwiftTracing"]),
