@@ -82,3 +82,5 @@ public extension XCTestCase {
         await Task.yield()
     }
 }
+
+extension NotificationCenter: @unchecked Sendable { }

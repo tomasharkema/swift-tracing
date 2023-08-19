@@ -1,7 +1,7 @@
 import Foundation
 import OSLog
 
-public struct SignpostID {
+public struct SignpostID: Equatable, Hashable {
 
     public let rawValue: os_signpost_id_t
 
@@ -20,7 +20,7 @@ public struct SignpostID {
     }
 }
 
-public struct SignpostIntervalState {
+public struct SignpostIntervalState: Equatable, Hashable {
     let json: Data
 
     @available(iOS 15, *)
@@ -33,7 +33,7 @@ public struct SignpostIntervalState {
     }
 }
 
-public struct Signposter {
+public struct Signposter: Equatable, Hashable {
     let subsystem: String
     let category: String
 
