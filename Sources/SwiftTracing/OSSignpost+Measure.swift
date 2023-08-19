@@ -8,44 +8,41 @@
 import Foundation
 import OSLog
 
-@available(iOS 15.0, *)
-public extension OSSignpostID {
-    func measureTask<T>(signposter: OSSignposter, name: StaticString, _ task: () async -> T) async -> T {
-        let state = signposter.beginInterval(name, id: self)
+public extension SignpostID {
+    func measureTask<T>(signposter: Signposter, name: StaticString, _ task: () async -> T) async throws -> T {
+        let state = try signposter.beginInterval(name, id: self)
         defer {
-            signposter.endInterval(name, state)
+            try? signposter.endInterval(name, state)
         }
         return await task()
     }
 
-    func measureTask<T>(signposter: OSSignposter, name: StaticString, _ task: () -> T) -> T {
-        let state = signposter.beginInterval(name, id: self)
+    func measureTask<T>(signposter: Signposter, name: StaticString, _ task: () -> T) throws -> T {
+        let state = try signposter.beginInterval(name, id: self)
         defer {
-            signposter.endInterval(name, state)
+            try? signposter.endInterval(name, state)
         }
         return task()
     }
 }
 
-@available(iOS 15.0, *)
-public extension OSSignposter {
-    func measureTask<T>(signpostID: OSSignpostID, name: StaticString, _ task: () async -> T) async -> T {
-        let state = beginInterval(name, id: signpostID)
+public extension Signposter {
+    func measureTask<T>(signpostID: SignpostID, name: StaticString, _ task: () async -> T) async throws -> T {
+        let state = try beginInterval(name, id: signpostID)
         defer {
-            self.endInterval(name, state)
+            try? self.endInterval(name, state)
         }
         return await task()
     }
 
-    func measureTask<T>(signpostID: OSSignpostID, name: StaticString, _ task: () -> T) -> T {
-        let state = beginInterval(name, id: signpostID)
+    func measureTask<T>(signpostID: SignpostID, name: StaticString, _ task: () -> T) throws -> T {
+        let state = try beginInterval(name, id: signpostID)
         defer {
-            self.endInterval(name, state)
+            try? self.endInterval(name, state)
         }
         return task()
     }
 }
-
 
 public extension TracingHolder {
     static func measureTask<T>(name: StaticString, _ task: () async -> T) async -> T {

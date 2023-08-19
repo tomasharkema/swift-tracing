@@ -27,8 +27,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/oozoofrog/SwiftDemangle.git", from: "5.5.8"),
-        .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.52.1"),
-        .package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.4"),
+       .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.52.1"),
+       .package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.4"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -37,18 +37,20 @@ let package = Package(
             name: "SwiftTracing",
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
+                .define("RELEASE", .when(configuration: .release)),
             ],
             plugins: [
-                .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+               .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
             ]
         ),
         .target(
             name: "SwiftTaskToolbox",
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
+                .define("RELEASE", .when(configuration: .release)),
             ],
             plugins: [
-                .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+               .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
             ]
         ),
         .target(
@@ -56,9 +58,10 @@ let package = Package(
             dependencies: ["SwiftTaskToolbox"],
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
+                .define("RELEASE", .when(configuration: .release)),
             ],
             plugins: [
-                .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+               .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
             ]
         ),
         .target(
@@ -69,9 +72,10 @@ let package = Package(
             ],
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
+                .define("RELEASE", .when(configuration: .release)),
             ],
             plugins: [
-                .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+               .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
             ]
         ),
         .binaryTarget(
