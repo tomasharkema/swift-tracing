@@ -56,19 +56,28 @@ public struct Signposter: Equatable, Hashable {
         }
     }
 
-    public func beginInterval(_ name: StaticString, id: SignpostID) throws -> SignpostIntervalState {
-        if #available(iOS 15, *) { 
-            let state = osSignposter.beginInterval(name, id: id.osSignpostID)
-            return try SignpostIntervalState(state)
+    public func beginInterval(_ name: StaticString, id: SignpostID) -> SignpostIntervalState {
+        if #available(iOS 15, *) {
+            do {
+                let state = osSignposter.beginInterval(name, id: id.osSignpostID)
+                return try SignpostIntervalState(state)
+            } catch {
+                assertionFailure("\(error)")
+                return SignpostIntervalState()
+            }
         } else {
             return SignpostIntervalState()
         }
     }
 
-    public func endInterval(_ name: StaticString, _ state: SignpostIntervalState) throws {
+    public func endInterval(_ name: StaticString, _ state: SignpostIntervalState) {
         if #available(iOS 15, *) {
-            let state = try JSONDecoder().decode(OSSignpostIntervalState.self, from: state.json)
-            osSignposter.endInterval(name, state)
+            do {
+                let state = try JSONDecoder().decode(OSSignpostIntervalState.self, from: state.json)
+                osSignposter.endInterval(name, state)
+            } catch {
+                assertionFailure("\(error)")
+            }
         }
     }
 }
