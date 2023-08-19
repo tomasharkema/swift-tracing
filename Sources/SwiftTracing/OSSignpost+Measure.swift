@@ -45,15 +45,15 @@ public extension Signposter {
 }
 
 public extension TracingHolder {
-    static func measureTask<T>(name: StaticString, _ task: () async -> T) async -> T {
+    static func measureTask<T>(name: StaticString, _ task: () async -> T) async throws -> T {
         if #available(iOS 15, *) {
             guard let signposter, let signpostId = signpostID else {
                 fatalError("NO TRACE!")
             }
 
-            let state = signposter.beginInterval(name, id: signpostId)
+            let state = try signposter.beginInterval(name, id: signpostId)
             defer {
-                signposter.endInterval(name, state)
+                try? signposter.endInterval(name, state)
             }
 
             return await task()
@@ -62,15 +62,15 @@ public extension TracingHolder {
         return await task()
     }
 
-    static func measureTask<T>(name: StaticString, _ task: () -> T) -> T {
+    static func measureTask<T>(name: StaticString, _ task: () -> T) throws -> T {
         if #available(iOS 15, *) {
             guard let signposter, let signpostId = signpostID else {
                 fatalError("NO TRACE!")
             }
 
-            let state = signposter.beginInterval(name, id: signpostId)
+            let state = try signposter.beginInterval(name, id: signpostId)
             defer {
-                signposter.endInterval(name, state)
+                try? signposter.endInterval(name, state)
             }
 
             return task()

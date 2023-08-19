@@ -10,18 +10,15 @@ import OSLog
 
 public enum TracingHolder {
 
-    @available(iOS 15.0, *)
     @TaskLocal
-    static var signposter: OSSignposter?
+    static var signposter: Signposter?
 
-    @available(iOS 15.0, *)
     @TaskLocal
-    static var signpostID: OSSignpostID?
+    static var signpostID: SignpostID?
 
-    @available(iOS 15.0, *)
     public static func with(
-        signposter: OSSignposter,
-        signpostID: OSSignpostID,
+        signposter: Signposter,
+        signpostID: SignpostID,
         operation: () throws -> Void,
         file: String = #fileID, line: UInt = #line
     ) rethrows {
@@ -32,10 +29,9 @@ public enum TracingHolder {
         }, file: file, line: line)
     }
 
-    @available(iOS 15.0, *)
     public static func with(
-        signposter: OSSignposter,
-        signpostID: OSSignpostID,
+        signposter: Signposter,
+        signpostID: SignpostID,
         operation: () async throws -> Void,
         file: String = #fileID, line: UInt = #line
     ) async rethrows {

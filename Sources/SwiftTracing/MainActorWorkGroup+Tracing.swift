@@ -20,13 +20,13 @@ public extension MainActorWorkGroup {
     ) {
         if priority == .high {
             insert({
-                TracingHolder.measureTask(name: function) {
+                try? TracingHolder.measureTask(name: function) {
                     task()
                 }
             }, at: 0)
         } else {
             append {
-                TracingHolder.measureTask(name: function) {
+                try? TracingHolder.measureTask(name: function) {
                     task()
                 }
             }
