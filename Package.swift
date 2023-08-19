@@ -62,11 +62,11 @@ let package = Package(
                 .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
             ]
         ),
-        // .binaryTarget(
-        //     name: "swiftformat",
-        //     url: "https://github.com/nicklockwood/SwiftFormat/releases/download/0.52.1/swiftformat.artifactbundle.zip",
-        //     checksum: "ece546c839869004a412ba705839301cdbc22dde182bc09b159ad80b24967357"
-        // ),
+        .binaryTarget(
+            name: "swiftformat",
+            url: "https://github.com/nicklockwood/SwiftFormat/releases/download/0.52.1/swiftformat.artifactbundle.zip",
+            checksum: "ece546c839869004a412ba705839301cdbc22dde182bc09b159ad80b24967357"
+        ),
         // .testTarget(
         //     name: "SwiftTracingTests",
         //     dependencies: ["SwiftTracing"]),

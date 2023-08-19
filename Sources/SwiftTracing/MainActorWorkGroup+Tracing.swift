@@ -13,7 +13,6 @@ public enum MainActorTaskPriority {
 }
 
 public extension MainActorWorkGroup {
-    @available(iOS 15.0, *)
     mutating func task(
         priority: MainActorTaskPriority,
         _ task: @Sendable @MainActor @escaping () -> Void,
