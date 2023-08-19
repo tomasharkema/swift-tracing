@@ -35,12 +35,18 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "SwiftTracing",
+            swiftSettings: [
+                .define("DEBUG", .when(configuration: .debug)),
+            ],
             plugins: [
                 .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
             ]
         ),
         .target(
             name: "SwiftTaskToolbox",
+            swiftSettings: [
+                .define("DEBUG", .when(configuration: .debug)),
+            ],
             plugins: [
                 .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
             ]
@@ -48,6 +54,9 @@ let package = Package(
         .target(
             name: "TestHelpers",
             dependencies: ["SwiftTaskToolbox"],
+            swiftSettings: [
+                .define("DEBUG", .when(configuration: .debug)),
+            ],
             plugins: [
                 .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
             ]
@@ -57,6 +66,9 @@ let package = Package(
             dependencies: [
                 .product(name: "SwiftDemangleFramework", package: "SwiftDemangle"),
                 // .product(name: "SwiftDemangle", package: "SwiftDemangle"),
+            ],
+            swiftSettings: [
+                .define("DEBUG", .when(configuration: .debug)),
             ],
             plugins: [
                 .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),

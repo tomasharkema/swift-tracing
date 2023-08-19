@@ -26,15 +26,28 @@ public extension XCTestCase {
         await fulfillment(of: [exp])
     }
 
-    @nonobjc func asyncPost(_ notification: String, object: Any? = nil, _ center: NotificationCenter = NotificationCenter.default) async {
+    @nonobjc func asyncPost(
+        _ notification: String,
+        object: Any? = nil,
+        _ center: NotificationCenter = NotificationCenter.default
+    ) async {
         await asyncPost(.init(notification), object: object, center)
     }
 
-    @nonobjc func asyncPost(_ notification: Notification.Name, object: Any? = nil, _ center: NotificationCenter = NotificationCenter.default) async {
+    @nonobjc func asyncPost(
+        _ notification: Notification.Name,
+        object: Any? = nil,
+        _ center: NotificationCenter = NotificationCenter.default
+    ) async {
         await asyncPost(.name(notification), object: object, center)
     }
 
-    @nonobjc func asyncPost(_ notification: NotificationPost, object: Any? = nil, queue: OperationQueue? = nil, _ center: NotificationCenter = NotificationCenter.default) async {
+    @nonobjc func asyncPost(
+        _ notification: NotificationPost,
+        object: Any? = nil,
+        queue: OperationQueue? = nil,
+        _ center: NotificationCenter = NotificationCenter.default
+    ) async {
         var handler: () -> Void = {}
         var notificationHandler: NSObjectProtocol?
 

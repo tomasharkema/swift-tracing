@@ -32,7 +32,7 @@ public func assumeCalledOnMainActor(
         assertionFailure("NO PREVIOUS TASK!!!")
     }
 
-    if !caller.isEntry, caller.stack.isFromUIKit != nil, !isEntry {
+    if !caller.isEntry, !caller.stack.isFromUIKit, !isEntry {
         assertionFailure("not from uikit??")
     }
 
