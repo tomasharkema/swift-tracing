@@ -9,51 +9,54 @@ import Foundation
 import OSLog
 
 public extension SignpostID {
-    func measureTask<T>(signposter: Signposter, name: StaticString, _ task: () async -> T) async throws -> T {
-        let state = try signposter.beginInterval(name, id: self)
+    func measureTask<T>(signposter: Signposter, name: StaticString, _ task: () async -> T) async -> T {
+        let state = signposter.beginInterval(name, id: self)
         defer {
-            try? signposter.endInterval(name, state)
+            signposter.endInterval(name, state)
         }
         return await task()
     }
 
-    func measureTask<T>(signposter: Signposter, name: StaticString, _ task: () -> T) throws -> T {
-        let state = try signposter.beginInterval(name, id: self)
+    func measureTask<T>(signposter: Signposter, name: StaticString, _ task: () -> T) -> T {
+        let state = signposter.beginInterval(name, id: self)
         defer {
-            try? signposter.endInterval(name, state)
+            signposter.endInterval(name, state)
         }
         return task()
     }
 }
 
 public extension Signposter {
-    func measureTask<T>(signpostID: SignpostID, name: StaticString, _ task: () async -> T) async throws -> T {
-        let state = try beginInterval(name, id: signpostID)
+    func measureTask<T>(signpostID: SignpostID, name: StaticString, _ task: () async -> T) async -> T {
+        let state = beginInterval(name, id: signpostID)
         defer {
-            try? self.endInterval(name, state)
+            self.endInterval(name, state)
         }
         return await task()
     }
 
-    func measureTask<T>(signpostID: SignpostID, name: StaticString, _ task: () -> T) throws -> T {
-        let state = try beginInterval(name, id: signpostID)
+    func measureTask<T>(signpostID: SignpostID, name: StaticString, _ task: () -> T) -> T {
+        let state = beginInterval(name, id: signpostID)
         defer {
-            try? self.endInterval(name, state)
+            self.endInterval(name, state)
         }
         return task()
     }
 }
 
 public extension TracingHolder {
-    static func measureTask<T>(name: StaticString, _ task: () async -> T) async throws -> T {
+    static func measureTask<T>(name: StaticString, _ task: () async -> T) async -> T {
         if #available(iOS 15, *) {
-            guard let signposter, let signpostId = signpostID else {
-                fatalError("NO TRACE!")
+            guard let signposter = TracingHolder.signposter else {
+                fatalError("NO signposter!")
+            }
+            guard let signpostId = TracingHolder.signpostID else {
+                fatalError("NO signpostId!")
             }
 
-            let state = try signposter.beginInterval(name, id: signpostId)
+            let state = signposter.beginInterval(name, id: signpostId)
             defer {
-                try? signposter.endInterval(name, state)
+                signposter.endInterval(name, state)
             }
 
             return await task()
@@ -62,15 +65,15 @@ public extension TracingHolder {
         return await task()
     }
 
-    static func measureTask<T>(name: StaticString, _ task: () -> T) throws -> T {
+    static func measureTask<T>(name: StaticString, _ task: () -> T) -> T {
         if #available(iOS 15, *) {
             guard let signposter, let signpostId = signpostID else {
                 fatalError("NO TRACE!")
             }
 
-            let state = try signposter.beginInterval(name, id: signpostId)
+            let state = signposter.beginInterval(name, id: signpostId)
             defer {
-                try? signposter.endInterval(name, state)
+                signposter.endInterval(name, state)
             }
 
             return task()

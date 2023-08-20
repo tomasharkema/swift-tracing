@@ -23,7 +23,7 @@ public enum TracingHolder {
         file: String = #fileID, line: UInt = #line
     ) rethrows -> R {
         return try $signposter.withValue(signposter, operation: {
-            return try $signpostID.withValue(signpostID, operation: {
+            return try $signpostID.withValue(id, operation: {
                 return try operation()
             }, file: file, line: line)
         }, file: file, line: line)
@@ -36,35 +36,33 @@ public enum TracingHolder {
         file: String = #fileID, line: UInt = #line
     ) async rethrows -> R {
         return try await $signposter.withValue(signposter, operation: {
-            return try await $signpostID.withValue(signpostID, operation: {
+            return try await $signpostID.withValue(id, operation: {
                 return try await operation()
             }, file: file, line: line)
         }, file: file, line: line)
     }
 
-    public static func with(
+    public static func withNewId<R>(
         _ signposter: Signposter,
-        id: SignpostID,
-        operation: () throws -> Void,
+        operation: () throws -> R,
         file: String = #fileID, line: UInt = #line
-    ) rethrows {
-        try $signposter.withValue(signposter, operation: {
-            try $signpostID.withValue(signpostID, operation: {
-                try operation()
-            }, file: file, line: line)
+    ) rethrows -> R {
+        let id = signposter.makeSignpostID()
+
+        return try TracingHolder.with(signposter, id: id, operation: {
+            try operation()
         }, file: file, line: line)
     }
 
-    public static func with(
+    public static func withNewId<R>(
         _ signposter: Signposter,
-        id: SignpostID,
-        operation: () async throws -> Void,
+        operation: () async throws -> R,
         file: String = #fileID, line: UInt = #line
-    ) async rethrows {
-        try await $signposter.withValue(signposter, operation: {
-            try await $signpostID.withValue(signpostID, operation: {
-                try await operation()
-            }, file: file, line: line)
+    ) async rethrows -> R {
+        let id = signposter.makeSignpostID()
+
+        return try await TracingHolder.with(signposter, id: id, operation: {
+            try await operation()
         }, file: file, line: line)
     }
 }

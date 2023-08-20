@@ -43,8 +43,8 @@ public struct Signposter: Equatable, Hashable {
     }
 
     @available(iOS 15, *)
-    var osSignposter: OSSignposter { 
-        OSSignposter(subsystem: subsystem, category: category) 
+    var osSignposter: OSSignposter {
+        OSSignposter(subsystem: subsystem, category: category)
     }
 
     public func makeSignpostID() -> SignpostID {
