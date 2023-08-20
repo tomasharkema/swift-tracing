@@ -11,10 +11,10 @@ import OSLog
 public enum TracingHolder {
 
     @TaskLocal
-    static var signposter: Signposter?
+    public static var signposter: Signposter?
 
     @TaskLocal
-    static var signpostID: SignpostID?
+    public static var signpostID: SignpostID?
 
     public static func with<R>(
         _ signposter: Signposter,
