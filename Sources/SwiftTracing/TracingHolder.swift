@@ -8,15 +8,15 @@
 import Foundation
 import OSLog
 
-public enum TracingHolder {
+enum TracingHolder {
 
     @TaskLocal
-    public static var signposter: Signposter?
+    static var signposter: Signposter?
 
     @TaskLocal
-    public static var signpostID: SignpostID?
+    static var signpostID: SignpostID?
 
-    public static func with<R>(
+    static func with<R>(
         _ signposter: Signposter,
         id: SignpostID,
         operation: () throws -> R,
@@ -29,7 +29,7 @@ public enum TracingHolder {
         }, file: file, line: line)
     }
 
-    public static func with<R>(
+    static func with<R>(
         _ signposter: Signposter,
         id: SignpostID,
         operation: () async throws -> R,
@@ -42,7 +42,7 @@ public enum TracingHolder {
         }, file: file, line: line)
     }
 
-    public static func withNewId<R>(
+    static func withNewId<R>(
         _ signposter: Signposter,
         operation: () throws -> R,
         file: String = #fileID, line: UInt = #line
@@ -54,7 +54,7 @@ public enum TracingHolder {
         }, file: file, line: line)
     }
 
-    public static func withNewId<R>(
+    static func withNewId<R>(
         _ signposter: Signposter,
         operation: () async throws -> R,
         file: String = #fileID, line: UInt = #line
@@ -70,7 +70,7 @@ public enum TracingHolder {
 @available(iOS 15, *)
 extension TracingHolder {
 
-    public static func with<R>(
+    static func with<R>(
         _ signposter: Signposter,
         id signpostID: OSSignpostID,
         operation: () throws -> R,
@@ -83,7 +83,7 @@ extension TracingHolder {
         }, file: file, line: line)
     }
 
-    public static func with<R>(
+    static func with<R>(
         _ signposter: Signposter,
         id signpostID: OSSignpostID,
         operation: () async throws -> R,

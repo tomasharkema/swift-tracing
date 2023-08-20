@@ -41,13 +41,12 @@ let package = Package(
             name: "SwiftThreading",
             targets: ["SwiftThreading"]
         ),
+        .executable(name: "TestApp", targets: ["TestApp"]),
     ],
     dependencies: [
         .package(url: "https://github.com/oozoofrog/SwiftDemangle.git", from: "5.5.8"),
     ] + dependencies,
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "SwiftTracing",
             swiftSettings: [
@@ -84,6 +83,12 @@ let package = Package(
                 .define("RELEASE", .when(configuration: .release)),
             ],
             plugins: plugins
+        ),
+        .executableTarget(
+            name: "TestApp",
+            dependencies: [
+                "SwiftTracing",
+            ]
         ),
         .binaryTarget(
             name: "swiftformat",
