@@ -1,10 +1,18 @@
 #!/bin/sh
 
 swift package --allow-writing-to-directory docs \
-    generate-documentation \
+    generate-documentation --target SwiftTracing \
     --transform-for-static-hosting \
     --hosting-base-path swift-tracing \
-    --output-path docs
+    --output-path docs \
+    --include-extended-types
+
+# swift package --allow-writing-to-directory docs \
+#     generate-documentation --target SwiftTracing \
+#     --transform-for-static-hosting \
+#     --hosting-base-path swift-tracing \
+#     --output-path docs \
+#     --include-extended-types
 
 # swift package --allow-writing-to-directory docs \
 #     generate-documentation --target SwiftTaskToolbox \
