@@ -7,7 +7,7 @@ Trace code with `OSLog.OSSignposter`
 ```swift
 let signposter = Signposter(subsystem: "a", category: "b")
 
-try await signposter.measureTask(withNewId: "A") {
+try await signposter.measure(withNewId: "A") {
     print("A")
     try await Task.sleep(for: .seconds(1))
     print("B")
@@ -19,4 +19,4 @@ try await signposter.measureTask(withNewId: "A") {
 ### Essentials
 
 - ``Signposter``
-- ``Signposter/measureTask(withNewId:_:)-3g7l3``
+- ``Signposter/measure(withNewId:_:)-3g7l3``

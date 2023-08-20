@@ -22,32 +22,32 @@ enum TracingHolder {
         _ signposter: Signposter,
         id: SignpostID,
         operation: () throws -> R,
-        file: String = #fileID, line: UInt = #line
+        file: StaticString = #fileID, line: UInt = #line
     ) rethrows -> R {
         return try $signposter.withValue(signposter, operation: {
             return try $signpostID.withValue(id, operation: {
                 return try operation()
-            }, file: file, line: line)
-        }, file: file, line: line)
+            }, file: "\(file)", line: line)
+        }, file: "\(file)", line: line)
     }
 
     static func with<R>(
         _ signposter: Signposter,
         id: SignpostID,
         operation: () async throws -> R,
-        file: String = #fileID, line: UInt = #line
+        file: StaticString = #fileID, line: UInt = #line
     ) async rethrows -> R {
         return try await $signposter.withValue(signposter, operation: {
             return try await $signpostID.withValue(id, operation: {
                 return try await operation()
-            }, file: file, line: line)
-        }, file: file, line: line)
+            }, file: "\(file)", line: line)
+        }, file: "\(file)", line: line)
     }
 
     static func withNewId<R>(
         _ signposter: Signposter,
         operation: () throws -> R,
-        file: String = #fileID, line: UInt = #line
+        file: StaticString = #fileID, line: UInt = #line
     ) rethrows -> R {
         let id = signposter.makeSignpostID()
 
@@ -59,7 +59,7 @@ enum TracingHolder {
     static func withNewId<R>(
         _ signposter: Signposter,
         operation: () async throws -> R,
-        file: String = #fileID, line: UInt = #line
+        file: StaticString = #fileID, line: UInt = #line
     ) async rethrows -> R {
         let id = signposter.makeSignpostID()
 
@@ -70,14 +70,14 @@ enum TracingHolder {
 
     static func withNewId<R>(
         operation: () throws -> R,
-        file: String = #fileID, line: UInt = #line
+        file: StaticString = #fileID, line: UInt = #line
     ) rethrows -> R {
         return try withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
     }
 
     static func withNewId<R>(
         operation: () async throws -> R,
-        file: String = #fileID, line: UInt = #line
+        file: StaticString = #fileID, line: UInt = #line
     ) async rethrows -> R {
         return try await withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
     }
@@ -90,7 +90,7 @@ enum TracingHolder {
 //         _ signposter: Signposter,
 //         id signpostID: OSSignpostID,
 //         operation: () throws -> R,
-//         file: String = #fileID, line: UInt = #line
+//         file: StaticString = #fileID, line: UInt = #line
 //     ) rethrows -> R {
 //         return try $signposter.withValue(signposter, operation: {
 //             return try $signpostID.withValue(SignpostID(signpostID), operation: {
@@ -103,7 +103,7 @@ enum TracingHolder {
 //         _ signposter: Signposter,
 //         id signpostID: OSSignpostID,
 //         operation: () async throws -> R,
-//         file: String = #fileID, line: UInt = #line
+//         file: StaticString = #fileID, line: UInt = #line
 //     ) async rethrows -> R {
 //         return try await $signposter.withValue(signposter, operation: {
 //             return try await $signpostID.withValue(SignpostID(signpostID), operation: {

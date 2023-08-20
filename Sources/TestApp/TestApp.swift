@@ -20,7 +20,7 @@ struct TestApp {
     }
 
     static func measure() async throws {
-        try await signposter.measureTask(withNewId: "A") {
+        try await signposter.measure(withNewId: "A") {
 
             print("A")
             if #available(macOS 13.0, *) {
