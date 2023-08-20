@@ -1,4 +1,4 @@
-# Simple workflow for deploying static content to GitHub Pages
+1# Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
 on:
@@ -34,7 +34,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Generate Docc
-        run: sh docs.sh
+        run: RESOLVE_COMMAND_PLUGINS=1 sh docs.sh
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
