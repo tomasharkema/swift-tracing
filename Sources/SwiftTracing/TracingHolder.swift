@@ -42,7 +42,6 @@ public enum TracingHolder {
         }, file: file, line: line)
     }
 
-
     public static func with(
         _ signposter: Signposter,
         id: SignpostID,
