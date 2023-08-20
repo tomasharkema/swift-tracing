@@ -1,5 +1,5 @@
 import Foundation
-import OSLog
+import os
 
 public struct SignpostID: Equatable, Hashable {
 
@@ -43,8 +43,8 @@ public struct Signposter: Equatable, Hashable {
     }
 
     @available(iOS 15, *)
-    var osSignposter: OSSignposter {
-        OSSignposter(subsystem: subsystem, category: category)
+    var osSignposter: os.OSSignposter {
+        os.OSSignposter(subsystem: subsystem, category: category)
     }
 
     public func makeSignpostID() -> SignpostID {
@@ -81,3 +81,5 @@ public struct Signposter: Equatable, Hashable {
         }
     }
 }
+
+public typealias OSSignposter = Signposter
