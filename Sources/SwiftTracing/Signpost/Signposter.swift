@@ -18,7 +18,7 @@ public struct Signposter: Equatable, Hashable {
         os.OSSignposter(subsystem: subsystem, category: category)
     }
 
-    public func makeSignpostID() -> SignpostID {
+    func makeSignpostID() -> SignpostID {
         if #available(iOS 15, *) {
             let id = osSignposter.makeSignpostID()
             return SignpostID(id)
@@ -27,7 +27,7 @@ public struct Signposter: Equatable, Hashable {
         }
     }
 
-    public func beginInterval(_ name: StaticString, id: SignpostID) -> SignpostIntervalState {
+    func beginInterval(_ name: StaticString, id: SignpostID) -> SignpostIntervalState {
         if #available(iOS 15, *) {
             do {
                 let state = osSignposter.beginInterval(name, id: id.osSignpostID)
@@ -41,7 +41,7 @@ public struct Signposter: Equatable, Hashable {
         }
     }
 
-    public func endInterval(_ name: StaticString, _ state: SignpostIntervalState) {
+    func endInterval(_ name: StaticString, _ state: SignpostIntervalState) {
         if #available(iOS 15, *) {
             do {
                 let state = try JSONDecoder().decode(os.OSSignpostIntervalState.self, from: state.json)
