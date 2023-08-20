@@ -7,8 +7,8 @@ import Foundation
 var dependencies = [Package.Dependency]()
 var plugins = [Target.PluginUsage]()
 
-// #if !os(Linux)
-// if ProcessInfo.processInfo.environment["RESOLVE_COMMAND_PLUGINS"] != nil {
+ #if !os(Linux)
+ if ProcessInfo.processInfo.environment["RESOLVE_COMMAND_PLUGINS"] != nil {
     dependencies.append(contentsOf: [
         .package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.2"),
         .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.51.12"),
@@ -17,8 +17,8 @@ var plugins = [Target.PluginUsage]()
     plugins.append(contentsOf: [
         .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
     ])
-// }
-// #endif
+ }
+ #endif
 
 let package = Package(
     name: "SwiftTracing",
