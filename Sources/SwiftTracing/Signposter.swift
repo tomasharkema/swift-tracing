@@ -48,7 +48,7 @@ public struct Signposter: Equatable, Hashable {
     }
 
     public func makeSignpostID() -> SignpostID {
-        if #available(iOS 15, *) { 
+        if #available(iOS 15, *) {
             let id = osSignposter.makeSignpostID()
             return SignpostID(id)
         } else {
