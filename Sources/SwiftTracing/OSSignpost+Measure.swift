@@ -73,11 +73,10 @@ extension Signposter {
     }
 }
 
-
 /// Measure a synchronous task, by creating a new SignpostID.
 public func measureTask<T>(withNewId name: StaticString, _ task: () throws -> T) rethrows -> T {
     return try TracingHolder.withNewId(operation: {
-        return try measureTask(name: name) {
+        return try measureTask(name) {
             return try task()
         }
     })
@@ -86,14 +85,14 @@ public func measureTask<T>(withNewId name: StaticString, _ task: () throws -> T)
 /// Measure a asynchronous task.
 public func measureTask<T>(withNewId name: StaticString, _ task: () async throws -> T) async rethrows -> T {
     return try await TracingHolder.withNewId(operation: {
-        return try await measureTask(name: name) {
+        return try await measureTask(name) {
             return try await task()
         }
     })
 }
 
 /// Measure a synchronous task, by creating a new SignpostID.
-public func measureTask<T>(name: StaticString, _ task: () throws -> T) rethrows -> T {
+public func measureTask<T>(_ name: StaticString, _ task: () throws -> T) rethrows -> T {
     guard let signposter = TracingHolder.signposter, let signpostID = TracingHolder.signpostID else {
         assertionFailure("TracingHolder not set")
         return try task()
@@ -104,7 +103,7 @@ public func measureTask<T>(name: StaticString, _ task: () throws -> T) rethrows 
 }
 
 /// Measure a asynchronous task.
-public func measureTask<T>(name: StaticString, _ task: () async throws -> T) async rethrows -> T {
+public func measureTask<T>(_ name: StaticString, _ task: () async throws -> T) async rethrows -> T {
     guard let signposter = TracingHolder.signposter, let signpostID = TracingHolder.signpostID else {
         assertionFailure("TracingHolder not set")
         return try await task()
