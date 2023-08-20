@@ -67,6 +67,20 @@ enum TracingHolder {
             try await operation()
         }, file: file, line: line)
     }
+
+    static func withNewId<R>(
+        operation: () throws -> R,
+        file: String = #fileID, line: UInt = #line
+    ) rethrows -> R {
+        return try withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
+    }
+
+    static func withNewId<R>(
+        operation: () async throws -> R,
+        file: String = #fileID, line: UInt = #line
+    ) async rethrows -> R {
+        return try await withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
+    }
 }
 
 // @available(iOS 15, *)
