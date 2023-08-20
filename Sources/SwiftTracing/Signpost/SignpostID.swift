@@ -1,12 +1,14 @@
 import Foundation
+#if canImport(os)
 import os
+#endif
 
 public struct SignpostID: Equatable, Hashable {
 
-    public let rawValue: os_signpost_id_t
+    let rawValue: os_signpost_id_t
 
     @available(iOS 15, *)
-    init(_ id: OSSignpostID) {
+    init(_ id: os.OSSignpostID) {
         self.rawValue = id.rawValue
     }
 
@@ -15,7 +17,7 @@ public struct SignpostID: Equatable, Hashable {
     }
 
     @available(iOS 15, *)
-    var osSignpostID: OSSignpostID {
-        return OSSignpostID(rawValue)
+    var osSignpostID: os.OSSignpostID {
+        return os.OSSignpostID(rawValue)
     }
 }

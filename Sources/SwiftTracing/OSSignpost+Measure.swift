@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import OSLog
 
 //extension SignpostID {
 //    public func measureTask<T>(signposter: Signposter, name: StaticString, _ task: () async -> T) async -> T {

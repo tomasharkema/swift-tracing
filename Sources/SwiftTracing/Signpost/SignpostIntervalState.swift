@@ -1,11 +1,13 @@
 import Foundation
+#if canImport(os)
 import os
+#endif
 
 public struct SignpostIntervalState: Equatable, Hashable {
     let json: Data
 
     @available(iOS 15, *)
-    init(_ state: OSSignpostIntervalState) throws {
+    init(_ state: os.OSSignpostIntervalState) throws {
         json = try JSONEncoder().encode(state)
     }
 

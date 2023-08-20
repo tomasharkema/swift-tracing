@@ -7,18 +7,21 @@ import Foundation
 var dependencies = [Package.Dependency]()
 var plugins = [Target.PluginUsage]()
 
- #if !os(Linux)
- if ProcessInfo.processInfo.environment["RESOLVE_COMMAND_PLUGINS"] != nil {
+if ProcessInfo.processInfo.environment["RESOLVE_COMMAND_PLUGINS"] != nil {
+#if !os(Linux)
     dependencies.append(contentsOf: [
         .package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.2"),
         .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.51.12"),
-        .package(url: "https://github.com/apple/swift-docc-plugin.git", from: "1.3.0"),
     ])
     plugins.append(contentsOf: [
         .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
     ])
- }
- #endif
+#endif
+
+    dependencies.append(contentsOf: [
+        .package(url: "https://github.com/apple/swift-docc-plugin.git", from: "1.3.0"),
+    ])
+}
 
 let package = Package(
     name: "SwiftTracing",
@@ -90,14 +93,19 @@ let package = Package(
                 "SwiftTracing",
             ]
         ),
-        .binaryTarget(
-            name: "swiftformat",
-            url: "https://github.com/nicklockwood/SwiftFormat/releases/download/0.52.1/swiftformat.artifactbundle.zip",
-            checksum: "ece546c839869004a412ba705839301cdbc22dde182bc09b159ad80b24967357"
-        ),
         .testTarget(
             name: "SwiftTracingTests",
             dependencies: ["SwiftTracing", "SwiftTaskToolbox"]
         ),
+        // .binaryTarget(
+        //     name: "swiftformat",
+        //     url: "https://github.com/nicklockwood/SwiftFormat/releases/download/0.52.1/swiftformat.artifactbundle.zip",
+        //     checksum: "ece546c839869004a412ba705839301cdbc22dde182bc09b159ad80b24967357"
+        // ),
+        // .binaryTarget(
+        //     name: "SwiftLintBinary",
+        //     url: "https://github.com/realm/SwiftLint/releases/download/0.52.4/SwiftLintBinary-macos.artifactbundle.zip",
+        //     checksum: "8a8095e6235a07d00f34a9e500e7568b359f6f66a249f36d12cd846017a8c6f5"
+        // ),
     ]
 )

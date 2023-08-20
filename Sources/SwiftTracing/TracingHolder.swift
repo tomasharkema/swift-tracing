@@ -6,7 +6,9 @@
 //
 
 import Foundation
-import OSLog
+#if canImport(os)
+import os
+#endif
 
 enum TracingHolder {
 
@@ -67,32 +69,32 @@ enum TracingHolder {
     }
 }
 
-@available(iOS 15, *)
-extension TracingHolder {
+// @available(iOS 15, *)
+// extension TracingHolder {
 
-    static func with<R>(
-        _ signposter: Signposter,
-        id signpostID: OSSignpostID,
-        operation: () throws -> R,
-        file: String = #fileID, line: UInt = #line
-    ) rethrows -> R {
-        return try $signposter.withValue(signposter, operation: {
-            return try $signpostID.withValue(SignpostID(signpostID), operation: {
-                return try operation()
-            }, file: file, line: line)
-        }, file: file, line: line)
-    }
+//     static func with<R>(
+//         _ signposter: Signposter,
+//         id signpostID: OSSignpostID,
+//         operation: () throws -> R,
+//         file: String = #fileID, line: UInt = #line
+//     ) rethrows -> R {
+//         return try $signposter.withValue(signposter, operation: {
+//             return try $signpostID.withValue(SignpostID(signpostID), operation: {
+//                 return try operation()
+//             }, file: file, line: line)
+//         }, file: file, line: line)
+//     }
 
-    static func with<R>(
-        _ signposter: Signposter,
-        id signpostID: OSSignpostID,
-        operation: () async throws -> R,
-        file: String = #fileID, line: UInt = #line
-    ) async rethrows -> R {
-        return try await $signposter.withValue(signposter, operation: {
-            return try await $signpostID.withValue(SignpostID(signpostID), operation: {
-                return try await operation()
-            }, file: file, line: line)
-        }, file: file, line: line)
-    }
-}
+//     static func with<R>(
+//         _ signposter: Signposter,
+//         id signpostID: OSSignpostID,
+//         operation: () async throws -> R,
+//         file: String = #fileID, line: UInt = #line
+//     ) async rethrows -> R {
+//         return try await $signposter.withValue(signposter, operation: {
+//             return try await $signpostID.withValue(SignpostID(signpostID), operation: {
+//                 return try await operation()
+//             }, file: file, line: line)
+//         }, file: file, line: line)
+//     }
+// }

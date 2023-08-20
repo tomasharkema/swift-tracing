@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(os)
 import os
+#endif
 
 /// A helper class for OSSignposter for iOS <= 14
 public struct Signposter: Equatable, Hashable {
@@ -42,7 +44,7 @@ public struct Signposter: Equatable, Hashable {
     public func endInterval(_ name: StaticString, _ state: SignpostIntervalState) {
         if #available(iOS 15, *) {
             do {
-                let state = try JSONDecoder().decode(OSSignpostIntervalState.self, from: state.json)
+                let state = try JSONDecoder().decode(os.OSSignpostIntervalState.self, from: state.json)
                 osSignposter.endInterval(name, state)
             } catch {
                 assertionFailure("\(error)")
