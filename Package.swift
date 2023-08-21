@@ -26,18 +26,20 @@ var plugins = [Target.PluginUsage]()
 
 if isXcode && !isSubDependency() {
 #if !os(Linux)
-dependencies.append(contentsOf: [
-    .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.51.12"),
-])
-
-if ProcessInfo.processInfo.environment["__CFBundleIdentifier"] == "com.apple.dt.Xcode" {
-    dependencies.append(.package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.2"))
-    plugins.append(contentsOf: [
-        .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+    dependencies.append(contentsOf: [
+        .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.51.12"),
     ])
-}
-#endif
 
+    if ProcessInfo.processInfo.environment["__CFBundleIdentifier"] == "com.apple.dt.Xcode" {
+        dependencies.append(.package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.2"))
+        plugins.append(contentsOf: [
+            .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+        ])
+    }
+#endif
+}
+
+if !isSubDependency() {
     dependencies.append(contentsOf: [
         .package(url: "https://github.com/apple/swift-docc-plugin.git", from: "1.3.0"),
     ])
