@@ -24,17 +24,17 @@ public func assumeCalledOnMainActor(
 
     if !isEntry, previousCaller == nil {
         if options.contains(.allowMainThreadWithoutEntry), Thread.isMainThread, caller.isEntry {
-            logger.info("Coming from main thread. Allowing... assumeCalledOnMainActor \(function)")
+            logger.info("🚦 Coming from main thread. Allowing... assumeCalledOnMainActor \(function)")
 
             if Settings.runtimeWarnings.contains(.allowMainThreadWithoutEntryNoMainActor) {
                 if !caller.isComingFromMainActor {
-                    runtimeWarning("Function not explicitly called from a @MainActor annotated function. %@", "assumeCalledOnMainActor: \(function)")
+                    runtimeWarning("🚦 Function not explicitly called from a @MainActor annotated function. %@", "assumeCalledOnMainActor: \(function)")
                 }
             }
         } else {
             logger.fault("🚦 NO PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))")
-            assertionFailure("NO PREVIOUS CALLER!!!", file: file, line: line)
-            return 
+            assertionFailure("🚦 NO PREVIOUS CALLER!!!", file: file, line: line)
+            return
         }
     }
 
@@ -42,16 +42,16 @@ public func assumeCalledOnMainActor(
 
     if !caller.isEntry, taskFrame == nil, !isEntry {
         logger.fault("🚦 NO PREVIOUS TASK!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))")
-        assertionFailure("NO PREVIOUS TASK!!!", file: file, line: line)
+        assertionFailure("🚦 NO PREVIOUS TASK!!!", file: file, line: line)
     }
 
     if !caller.isEntry, !caller.stack.isFromUIKit, !isEntry {
-        assertionFailure("not from uikit??", file: file, line: line)
+        assertionFailure("🚦 not from uikit??", file: file, line: line)
     }
 
     guard Task.currentPriority.rawValue >= 25 else {
         logger.fault("🚦 assumeCalledOnMainActor not right prio \(String(describing: Task.currentPriority)) \(String(describing: caller))\n\n\(String(describing: caller.stack))")
-        assertionFailure("assumeCalledOnMainActor not right prio \(Task.currentPriority) caller: \(caller) previousCaller: \(previousCaller)", file: file, line: line)
+        assertionFailure("🚦 assumeCalledOnMainActor not right prio \(Task.currentPriority) caller: \(caller) previousCaller: \(previousCaller)", file: file, line: line)
         return
     }
 #endif

@@ -17,9 +17,9 @@ public func dispatchTask(
 #if DEBUG
     let caller = Caller(file: file, line: line, function: function)
 
-    if let previousCaller = TaskCaller.caller {
+    if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
         logger.fault("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))")
-        assertionFailure("ALREADY PREVIOUS CALLER!!! \(caller)", file: file, line: line)
+        assertionFailure("🚦 ALREADY PREVIOUS CALLER!!! \(caller)", file: file, line: line)
     }
 #endif
 
@@ -47,7 +47,7 @@ public func dispatchTaskDetached(
 
     if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
         logger.fault("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))")
-        assertionFailure("ALREADY PREVIOUS CALLER!!! \(caller)", file: file, line: line)
+        assertionFailure("🚦 ALREADY PREVIOUS CALLER!!! \(caller)", file: file, line: line)
     }
 #endif
 
@@ -64,7 +64,7 @@ public func dispatchTaskDetached(
 
 /// closest equivalent to plain old `Task { @MainActor in }`
 public func dispatchTaskMain(
-    priority: TaskPriority? = nil,
+    priority: TaskPriority? = .userInitiated,
     options: DispatchTaskOptions = .default,
     @_implicitSelfCapture _ handler: @MainActor @Sendable @escaping () async -> Void,
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
@@ -73,8 +73,10 @@ public func dispatchTaskMain(
     let caller = Caller(file: file, line: line, function: function)
 
     if let previousCaller = TaskCaller.caller {
-        logger.fault("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))")
-        assertionFailure("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))", file: file, line: line)
+        logger.info("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))")
+        if options.contains(.assertOnAlreadyOnTaskContext) {
+            assertionFailure("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))", file: file, line: line)
+        }
     }
 #endif
 
@@ -93,8 +95,7 @@ public func dispatchTaskMain(
 public struct DispatchTaskOptions: OptionSet {
     public static let assertOnAlreadyOnTaskContext = DispatchTaskOptions(rawValue: 1 << 0)
 
-    public static let `default`: DispatchTaskOptions = [.assertOnAlreadyOnTaskContext]
-    public static let noOptions: DispatchTaskOptions = []
+    public static let `default`: DispatchTaskOptions = []
 
     public let rawValue: Int
 

@@ -19,7 +19,6 @@ import Foundation
 ///   - priority: The priority of the task. Pass nil to use the priority from Task.currentPriority.
 ///   - allowFromMainThread: set to `true` if call blocking from `MainActor` or main thread is allowed.
 ///   - handler: The operation to perform.
-@inline(__always)
 public func _printComingFromThread(
     priority: TaskPriority? = nil,
     allowFromMainThread: Bool = false,
@@ -39,7 +38,6 @@ public func _printComingFromThread(
 /// - Parameters:
 ///   - allowFromMainThread: set to `true` if call blocking from `MainActor` or main thread is allowed.
 ///   - handler: The operation to perform.
-@inline(__always)
 public func _printComingFromThread<ReturnType>(
     allowFromMainThread: Bool = false,
     @_implicitSelfCapture @_inheritActorContext _ handler: @Sendable @escaping () async -> ReturnType,
@@ -58,9 +56,9 @@ func innerDebugResult(
 
     if allowFromMainThread && Thread.isMainThread {
         if Settings.runtimeWarnings.contains(.calledOnMainThread) {
-            runtimeWarning("Called from main thread. Allowing this. %@", function)
+            runtimeWarning("🚦 Called from main thread. Allowing this. %@", function)
         } else {
-            logger.trace("\(function) Called from main thread. Allowing this.\n\n\(String(describing: caller.stack))")
+            logger.trace("🚦 \(function) Called from main thread. Allowing this.\n\n\(String(describing: caller.stack))")
         }
 
         return (caller, true)
