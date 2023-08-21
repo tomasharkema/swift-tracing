@@ -13,9 +13,9 @@ public func dispatchTask(
     @_implicitSelfCapture @_inheritActorContext _ handler: @Sendable @escaping () async -> Void,
     _ file: String = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
+#if DEBUG
     let caller = Caller(file: file, line: line, function: function)
 
-#if DEBUG
     if let previousCaller = TaskCaller.caller {
         logger.fault("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))")
         assertionFailure("ALREADY PREVIOUS CALLER!!! \(caller)")
@@ -23,9 +23,13 @@ public func dispatchTask(
 #endif
 
     Task(priority: priority) {
+#if DEBUG
         await TaskCaller.$caller.withValue(caller) {
             await handler()
         }
+#else
+        await handler()
+#endif
     }
 }
 
@@ -35,9 +39,9 @@ public func dispatchTaskMain(
     @_implicitSelfCapture _ handler: @MainActor @Sendable @escaping () async -> Void,
     _ file: String = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
+#if DEBUG
     let caller = Caller(file: file, line: line, function: function)
 
-#if DEBUG
     dispatchPrecondition(condition: .onQueue(.main))
 
     if let previousCaller = TaskCaller.caller {
@@ -47,9 +51,13 @@ public func dispatchTaskMain(
 #endif
 
     Task(priority: priority) { @MainActor in
+#if DEBUG
         await TaskCaller.$caller.withValue(caller) {
             dispatchPrecondition(condition: .onQueue(.main))
             await handler()
         }
+#else
+        await handler()
+#endif
     }
 }

@@ -12,9 +12,8 @@ public func runOnMainActor(
     @_implicitSelfCapture _ handler: @Sendable @escaping @MainActor () async -> Void,
     _ file: String = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
-    let caller = Caller(file: file, line: line, function: function)
-
 #if DEBUG
+    let caller = Caller(file: file, line: line, function: function)
 
     let previousCaller = TaskCaller.caller
 
@@ -53,8 +52,12 @@ public func runOnMainActor(
 #endif
 
     Task(priority: .userInitiated) { @MainActor in
+#if DEBUG
         await TaskCaller.$caller.withValue(caller) { @MainActor in
             await handler()
         }
+#else
+        await handler()
+#endif
     }
 }

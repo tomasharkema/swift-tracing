@@ -1,18 +1,17 @@
 //
 //  OSSignposterTests.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 19/08/2023.
 //
 
 import Foundation
-import XCTest
-@testable import SwiftTracing
-import SwiftTaskToolbox
 import OSLog
+import SwiftTaskToolbox
+@testable import SwiftTracing
+import XCTest
 
 class OSSignposterTests: XCTestCase {
-
     let signposter = Signposter(subsystem: "a", category: "b")
 
     func testInit() async throws {

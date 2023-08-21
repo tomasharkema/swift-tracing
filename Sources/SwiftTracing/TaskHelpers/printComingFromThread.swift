@@ -12,11 +12,10 @@ public func printComingFromThread(
     @_implicitSelfCapture @_inheritActorContext _ handler: @Sendable @escaping () async -> Void,
     _ file: String = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
+#if DEBUG
     let caller = Caller(file: file, line: line, function: function)
 
     let previousCaller = TaskCaller.caller
-
-#if DEBUG
 
     if !caller.isEntry, previousCaller == nil {
         logger.fault("🚦 NO PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))")
@@ -39,8 +38,12 @@ public func printComingFromThread(
 #endif
 
     Task(priority: priority) {
+#if DEBUG
         await TaskCaller.$caller.withValue(caller) {
             await handler()
         }
+#else
+        await handler()
+#endif
     }
 }

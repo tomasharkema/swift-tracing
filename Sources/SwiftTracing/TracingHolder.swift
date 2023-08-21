@@ -11,7 +11,6 @@ import os
 #endif
 
 enum TracingHolder {
-
     @TaskLocal
     static var signposter: Signposter?
 
@@ -24,9 +23,9 @@ enum TracingHolder {
         operation: () throws -> R,
         file: StaticString = #fileID, line: UInt = #line
     ) rethrows -> R {
-        return try $signposter.withValue(signposter, operation: {
-            return try $signpostID.withValue(id, operation: {
-                return try operation()
+        try $signposter.withValue(signposter, operation: {
+            try $signpostID.withValue(id, operation: {
+                try operation()
             }, file: "\(file)", line: line)
         }, file: "\(file)", line: line)
     }
@@ -37,9 +36,9 @@ enum TracingHolder {
         operation: () async throws -> R,
         file: StaticString = #fileID, line: UInt = #line
     ) async rethrows -> R {
-        return try await $signposter.withValue(signposter, operation: {
-            return try await $signpostID.withValue(id, operation: {
-                return try await operation()
+        try await $signposter.withValue(signposter, operation: {
+            try await $signpostID.withValue(id, operation: {
+                try await operation()
             }, file: "\(file)", line: line)
         }, file: "\(file)", line: line)
     }
@@ -72,14 +71,14 @@ enum TracingHolder {
         operation: () throws -> R,
         file: StaticString = #fileID, line: UInt = #line
     ) rethrows -> R {
-        return try withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
+        try withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
     }
 
     static func withNewId<R>(
         operation: () async throws -> R,
         file: StaticString = #fileID, line: UInt = #line
     ) async rethrows -> R {
-        return try await withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
+        try await withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
     }
 }
 

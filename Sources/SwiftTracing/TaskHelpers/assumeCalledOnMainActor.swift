@@ -13,9 +13,9 @@ public func assumeCalledOnMainActor(
     @_implicitSelfCapture _ handler: @Sendable @escaping @MainActor () async -> Void,
     _ file: String = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
+#if DEBUG
     let caller = Caller(file: file, line: line, function: function)
 
-#if DEBUG
     dispatchPrecondition(condition: .onQueue(.main))
 
     let previousCaller = TaskCaller.caller
@@ -44,8 +44,12 @@ public func assumeCalledOnMainActor(
 #endif
 
     Task(priority: priority) { @MainActor in
+#if DEBUG
         await TaskCaller.$caller.withValue(caller) {
             await handler()
         }
+#else
+        await handler()
+#endif
     }
 }

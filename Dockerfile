@@ -13,6 +13,9 @@ COPY Tests Tests
 FROM source AS source-debug
 RUN swift build
 
+FROM source AS source-release
+RUN swift build -c release
+
 FROM source AS docs
 
 COPY docs.sh .
@@ -23,4 +26,5 @@ RUN RESOLVE_COMMAND_PLUGINS=1 sh docs.sh
 
 FROM swift:5.8.1-jammy
 COPY --from=source-debug /root/.build/debug /root/.build/debug
+COPY --from=source-release /root/.build/release /root/.build/release
 COPY --from=docs /root/docs /root/docs

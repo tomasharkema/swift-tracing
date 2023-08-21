@@ -12,11 +12,11 @@ public enum MainActorTaskPriority {
     case low
 }
 
-extension MainActorWorkGroup {
-    public mutating func task(
+public extension MainActorWorkGroup {
+    mutating func task(
         priority: MainActorTaskPriority,
         _ task: @Sendable @MainActor @escaping () -> Void,
-        _ function: StaticString = #function
+        _: StaticString = #function
     ) {
         if priority == .high {
             insert({

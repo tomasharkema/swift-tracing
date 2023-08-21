@@ -4,18 +4,38 @@
 import PackageDescription
 import Foundation
 
+let isXcode = ProcessInfo.processInfo.environment["__CFBundleIdentifier"] == "com.apple.dt.Xcode"
+let isSubDependency: () -> Bool = {
+    let context = ProcessInfo.processInfo.arguments.drop {
+        $0 != "-context"
+    }.dropFirst(1).first
+    guard let context else {
+        return false
+    }
+    guard let json = (try? JSONSerialization.jsonObject(with: context.data(using: .utf8) ?? Data())) as? [String: Any] else {
+        return false
+    }
+    guard let packageDirectory = json["packageDirectory"] as? String else {
+        return false
+    }
+    return packageDirectory.contains(".build") || packageDirectory.contains("DerivedData")
+}
+
 var dependencies = [Package.Dependency]()
 var plugins = [Target.PluginUsage]()
 
-if ProcessInfo.processInfo.environment["RESOLVE_COMMAND_PLUGINS"] != nil {
+if isXcode && !isSubDependency() {
 #if !os(Linux)
-    dependencies.append(contentsOf: [
-        .package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.2"),
-        .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.51.12"),
-    ])
+dependencies.append(contentsOf: [
+    .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.51.12"),
+])
+
+if ProcessInfo.processInfo.environment["__CFBundleIdentifier"] == "com.apple.dt.Xcode" {
+    dependencies.append(.package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.2"))
     plugins.append(contentsOf: [
         .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
     ])
+}
 #endif
 
     dependencies.append(contentsOf: [
@@ -40,10 +60,6 @@ let package = Package(
             name: "SwiftTracingTestHelpers",
             targets: ["SwiftTracingTestHelpers"]
         ),
-        .library(
-            name: "SwiftThreading",
-            targets: ["SwiftThreading"]
-        ),
         .executable(name: "TestApp", targets: ["TestApp"]),
     ],
     dependencies: [
@@ -52,6 +68,9 @@ let package = Package(
     targets: [
         .target(
             name: "SwiftTracing",
+            dependencies: [
+                .product(name: "SwiftDemangleFramework", package: "SwiftDemangle"),
+            ],
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
                 .define("RELEASE", .when(configuration: .release)),
@@ -69,18 +88,6 @@ let package = Package(
         .target(
             name: "SwiftTracingTestHelpers",
             dependencies: ["SwiftTaskToolbox"],
-            swiftSettings: [
-                .define("DEBUG", .when(configuration: .debug)),
-                .define("RELEASE", .when(configuration: .release)),
-            ],
-            plugins: plugins
-        ),
-        .target(
-            name: "SwiftThreading",
-            dependencies: [
-                .product(name: "SwiftDemangleFramework", package: "SwiftDemangle"),
-                // .product(name: "SwiftDemangle", package: "SwiftDemangle"),
-            ],
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
                 .define("RELEASE", .when(configuration: .release)),

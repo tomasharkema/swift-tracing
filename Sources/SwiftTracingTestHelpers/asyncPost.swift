@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftTaskToolbox
+#if canImport(XCTest)
 import XCTest
 
 public enum NotificationPost {
@@ -83,4 +84,5 @@ public extension XCTestCase {
     }
 }
 
-extension NotificationCenter: @unchecked Sendable { }
+extension NotificationCenter: @unchecked Sendable {}
+#endif

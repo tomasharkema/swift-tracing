@@ -4,12 +4,11 @@ import os
 #endif
 
 public struct SignpostID: Equatable, Hashable {
-
     let rawValue: os_signpost_id_t
 
     @available(iOS 15, *)
     init(_ id: os.OSSignpostID) {
-        self.rawValue = id.rawValue
+        rawValue = id.rawValue
     }
 
     init() {
@@ -18,6 +17,6 @@ public struct SignpostID: Equatable, Hashable {
 
     @available(iOS 15, *)
     var osSignpostID: os.OSSignpostID {
-        return os.OSSignpostID(rawValue)
+        os.OSSignpostID(rawValue)
     }
 }

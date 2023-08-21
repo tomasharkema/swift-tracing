@@ -1,10 +1,9 @@
 import Foundation
-import XCTest
-@testable import SwiftTracing
 import SwiftTaskToolbox
+@testable import SwiftTracing
+import XCTest
 
 class SwiftTracingTests: XCTestCase {
-
     let signposter = Signposter(subsystem: "a", category: "b")
 
     func testInit() async throws {
