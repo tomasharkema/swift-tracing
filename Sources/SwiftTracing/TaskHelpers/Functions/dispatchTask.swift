@@ -72,8 +72,6 @@ public func dispatchTaskMain(
 #if DEBUG
     let caller = Caller(file: file, line: line, function: function)
 
-    dispatchPrecondition(condition: .onQueue(.main))
-
     if let previousCaller = TaskCaller.caller {
         logger.fault("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))")
         assertionFailure("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))", file: file, line: line)

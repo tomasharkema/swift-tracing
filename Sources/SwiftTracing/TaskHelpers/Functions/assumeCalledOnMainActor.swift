@@ -9,20 +9,33 @@ import Foundation
 
 public func assumeCalledOnMainActor(
     priority: TaskPriority = .userInitiated,
-    isEntry: Bool = false,
+    options: AssumeCalledOnMainActorOptions = .default,
     @_implicitSelfCapture _ handler: @Sendable @escaping @MainActor () async -> Void,
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
 #if DEBUG
     let caller = Caller(file: file, line: line, function: function)
 
-    dispatchPrecondition(condition: .onQueue(.main))
+//    dispatchPrecondition(condition: .onQueue(.main))
 
     let previousCaller = TaskCaller.caller
 
-    if !isEntry, previousCaller == nil, !caller.isEntry {
-        logger.fault("🚦 NO PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))")
-        assertionFailure("NO PREVIOUS CALLER!!!", file: file, line: line)
+    let isEntry = options.contains(.isEntry)
+
+    if !isEntry, previousCaller == nil {
+        if options.contains(.allowMainThreadWithoutEntry), Thread.isMainThread, caller.isEntry {
+            logger.info("Coming from main thread. Allowing... assumeCalledOnMainActor \(function)")
+
+            if Settings.runtimeWarnings.contains(.allowMainThreadWithoutEntryNoMainActor) {
+                if !caller.isComingFromMainActor {
+                    runtimeWarning("Function not explicitly called from a @MainActor annotated function. %@", "assumeCalledOnMainActor: \(function)")
+                }
+            }
+        } else {
+            logger.fault("🚦 NO PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))")
+            assertionFailure("NO PREVIOUS CALLER!!!", file: file, line: line)
+            return 
+        }
     }
 
     let taskFrame = caller.containsTaskFrame()
@@ -51,5 +64,19 @@ public func assumeCalledOnMainActor(
 #else
         await handler()
 #endif
+    }
+}
+
+
+public struct AssumeCalledOnMainActorOptions: OptionSet {
+    public static let isEntry = AssumeCalledOnMainActorOptions(rawValue: 1 << 0)
+    public static let allowMainThreadWithoutEntry = AssumeCalledOnMainActorOptions(rawValue: 1 << 1)
+
+    public static let `default`: AssumeCalledOnMainActorOptions = .allowMainThreadWithoutEntry
+
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
     }
 }

@@ -55,7 +55,7 @@ struct Frame: CustomDebugStringConvertible {
     }
 
     var isFromUIKit: Bool {
-        lib.contains("UIKitCore") && function.contains("UIView")
+        (lib.contains("UIKitCore") || lib.contains("libswiftUIKit")) && (function.contains("UIView") || function.contains("UIApplicationMain"))
     }
 
     var isAddObserverMain: Bool {

@@ -49,7 +49,8 @@ func innerDebug(
     priority: TaskPriority?,
     options: RunOnMainActorOptions,
     @_implicitSelfCapture _ handler: @Sendable @escaping @MainActor () async -> Void,
-    _ file: StaticString, _ line: UInt, _ function: String
+    _ file: StaticString, _ line: UInt, _ function: String,
+    _ currentFunction: String = #function
 ) {
 
     let caller = Caller(file: file, line: line, function: function)
@@ -59,24 +60,23 @@ func innerDebug(
     let isEntry = options.contains(.isEntry)
 
     if !isEntry, previousCaller == nil {
-        if options.contains(.allowMainThreadWithoutEntry), Thread.isMainThread {
-            logger.info("Coming from main thread. Allowing...")
-
-            if Settings.runtimeWarnings.contains(.allowMainThreadWithoutEntryNoMainActor) {
-                if !caller.isComingFromMainActor {
-                    runtimeWarning("Function not explicitly called from a @MainActor annotated function. %@", "\(function)")
-                }
-            }
-
+        if options.contains(.allowMainThreadWithoutEntry), Thread.isMainThread, caller.isEntry {
+            logger.info("Coming from main thread without clear entry. Allowing... \(function): \(currentFunction)")
         } else {
-            logger.fault("🚦 Not called from a task context: \(String(describing: caller)). No previous context.\n\n\(String(describing: caller.stack))")
-            assertionFailure("🚦 Not called from a task context: \(caller). No previous context.", file: file, line: line)
+            logger.fault("🚦 Not called from a task context: \(String(describing: caller)). No previous context.\n\n\(String(describing: caller.stack)) \(function): \(currentFunction)")
+            assertionFailure("🚦 Not called from a task context: \(caller). No previous context \(function): \(currentFunction)", file: file, line: line)
             return
         }
     }
 
     if options.contains(.assertWhenAlreadyFromMainActor), let frame = caller.comingFromMainActor {
         assertionFailure("Already coming from @MainActor \(caller) \(frame)", file: file, line: line)
+    }
+
+    if caller.isComingFromMainActor {
+        runtimeWarning("Already coming called from @MainActor. %@", "\(function): \(currentFunction)")
+    } else if Thread.isMainThread {
+        runtimeWarning("Already coming called from MainThread. %@", "\(function): \(currentFunction)")
     }
 
     let taskFrame = caller.containsTaskFrame()
@@ -87,7 +87,7 @@ func innerDebug(
         \(String(describing: Task.currentPriority)) taskFrame: \(String(describing: taskFrame))
         """)
         if !isEntry, !caller.isEntry {
-            logger.trace("🚦 but not is entry!")
+            logger.trace("🚦 but not is entry! \(function)")
         }
     } else {
         logger.trace("""
@@ -98,11 +98,11 @@ func innerDebug(
     }
 
     if isEntry, !caller.isEntry {
-        logger.notice("isEntry true; for stack:\n\n\(String(describing: caller.stack))")
+        logger.notice("isEntry true; for stack: \(function): \(currentFunction)\n\n\(String(describing: caller.stack))")
     }
 
     if !isEntry, !caller.isEntry {
-        logger.notice("isEntry false; for stack:\n\n\(String(describing: caller.stack))")
+        logger.notice("isEntry false; for stack: \(function): \(currentFunction)\n\n\(String(describing: caller.stack))")
     }
 
     Task(priority: priority) { @MainActor in
