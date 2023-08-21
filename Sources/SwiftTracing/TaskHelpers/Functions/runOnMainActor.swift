@@ -10,7 +10,7 @@ import Foundation
 /// closest equivalent to plain old `Task { @MainActor in }`, with extra safety mechanisms.
 public func runOnMainActor(
     priority: TaskPriority? = nil,
-    _ options: RunOnMainActorOptions = .default,
+    options: RunOnMainActorOptions = .default,
     @_implicitSelfCapture _ handler: @Sendable @escaping @MainActor () async -> Void,
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {

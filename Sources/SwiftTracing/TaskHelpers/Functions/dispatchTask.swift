@@ -10,6 +10,7 @@ import Foundation
 /// closest equivalent to plain old `Task { }`
 public func dispatchTask(
     priority: TaskPriority? = nil,
+    options: DispatchTaskOptions = .default,
     @_implicitSelfCapture @_inheritActorContext _ handler: @Sendable @escaping () async -> Void,
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
@@ -37,7 +38,7 @@ public func dispatchTask(
 /// closest equivalent to plain old `Task.detached { }`
 public func dispatchTaskDetached(
     priority: TaskPriority? = nil,
-    _ options: DispatchTaskOptions = .default,
+    options: DispatchTaskOptions = .default,
     @_implicitSelfCapture @_inheritActorContext _ handler: @Sendable @escaping () async -> Void,
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
@@ -64,6 +65,7 @@ public func dispatchTaskDetached(
 /// closest equivalent to plain old `Task { @MainActor in }`
 public func dispatchTaskMain(
     priority: TaskPriority? = nil,
+    options: DispatchTaskOptions = .default,
     @_implicitSelfCapture _ handler: @MainActor @Sendable @escaping () async -> Void,
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
