@@ -8,6 +8,11 @@
 import Foundation
 
 #if DEBUG
+
+#if canImport(SwiftDemangle)
+import SwiftDemangle
+#endif
+
 struct Frame: CustomDebugStringConvertible {
     let index: Int
     let lib: String
@@ -26,7 +31,11 @@ struct Frame: CustomDebugStringConvertible {
             lib = String(match[FrameRegex.libraryRef])
             stackPointer = String(match[FrameRegex.stackPointerRef])
             mangledFunction = String(match[FrameRegex.mangledFuncRef])
+#if canImport(SwiftDemangle)
             function = mangledFunction.demangled
+#else
+            function = mangledFunction
+#endif
 
         } else {
             return nil
@@ -50,7 +59,15 @@ struct Frame: CustomDebugStringConvertible {
     }
 
     var isAddObserverMain: Bool {
-        lib.contains("FMCore") && function.contains("addObserverMain") && function.contains("using: @Swift.MainActor")
+        isFromSwiftTracing && function.contains("addObserverMain") && isComingFromMainActor
+    }
+
+    var isComingFromMainActor: Bool {
+        function.contains("using: @Swift.MainActor")
+    }
+
+    var isFromSwiftTracing: Bool {
+        lib.contains("SwiftTracing") || function.contains("SwiftTracing.") || mangledFunction.contains("$s12SwiftTracing")
     }
 }
 #endif

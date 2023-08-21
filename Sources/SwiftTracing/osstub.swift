@@ -1,6 +1,10 @@
 #if canImport(os)
 import os
 #else
+
+// swiftlint:disable:next identifier_name
+let NSEC_PER_SEC = 1_000_000_000
+
 // swiftlint:disable:next type_name
 typealias os_signpost_id_t = Int
 

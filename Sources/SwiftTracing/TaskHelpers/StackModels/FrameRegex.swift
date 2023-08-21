@@ -44,7 +44,7 @@ enum FrameRegex {
         OneOrMore(.whitespace)
 
         Capture(as: mangledFuncRef) {
-            OneOrMore(.anyNonNewline)
+            OneOrMore(sentence)
         }
     }
 }

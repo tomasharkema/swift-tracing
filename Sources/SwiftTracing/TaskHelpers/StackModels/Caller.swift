@@ -7,17 +7,17 @@
 
 import Foundation
 import RegexBuilder
-import SwiftDemangle
 
 #if DEBUG
+
 struct Caller: CustomDebugStringConvertible {
-    let file: String
+    let file: StaticString
     let line: UInt
     let function: String
 
     let stack: Stack
 
-    init(file: String, line: UInt, function: String, stack: any Sequence<String> = Thread.callStackSymbols.dropFirst(2)) {
+    init(file: StaticString, line: UInt, function: String, stack: any Sequence<String> = Thread.callStackSymbols) {
         self.file = file
         self.line = line
         self.function = function
@@ -26,7 +26,7 @@ struct Caller: CustomDebugStringConvertible {
     }
 
     var debugDescription: String {
-        "\(function) - \(URL(fileURLWithPath: file).lastPathComponent):\(line)"
+        "\(function) - \(URL(fileURLWithPath: "\(file)").lastPathComponent):\(line)"
     }
 
     func containsTaskFrame() -> Frame? {
@@ -52,6 +52,14 @@ struct Caller: CustomDebugStringConvertible {
             stack.isFromUIKit ||
             stack.isAddObserverMain ||
             stack.isSwiftUiMainThread
+    }
+
+    var comingFromMainActor: Frame? {
+        stack.comingFromMainActor
+    }
+
+    var isComingFromMainActor: Bool {
+        comingFromMainActor != nil
     }
 }
 #endif

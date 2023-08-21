@@ -12,7 +12,12 @@ struct Stack: CustomDebugStringConvertible {
     let frames: [Frame]
 
     init(_ lines: any Sequence<String>) {
-        frames = lines.compactMap(Frame.init)
+        frames = Array(
+            lines.compactMap(Frame.init)
+                .drop {
+                    $0.isFromSwiftTracing
+                }
+        )
     }
 
     var debugDescription: String {
@@ -57,6 +62,16 @@ struct Stack: CustomDebugStringConvertible {
 
     var isAddObserverMain: Bool {
         fromAddObserverMain != nil
+    }
+
+    var comingFromMainActor: Frame? {
+        frames.first {
+            $0.isComingFromMainActor
+        }
+    }
+
+    var isComingFromMainActor: Bool {
+        comingFromMainActor != nil
     }
 
     var swiftUiMainThread: (Frame, Frame)? {

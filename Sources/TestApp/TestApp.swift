@@ -13,6 +13,13 @@ enum TestApp {
     static let signposter = Signposter(subsystem: "a", category: "b")
 
     static func main() async throws {
+        #if DEBUG
+        print("DEBUG")
+        #endif
+        #if RELEASE
+        print("RELEASE")
+        #endif
+
         for _ in 0 ... 1000 {
             try await measure()
         }
