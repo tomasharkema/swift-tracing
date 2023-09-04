@@ -10,14 +10,14 @@ import RegexBuilder
 
 #if DEBUG
 
-struct Caller: CustomDebugStringConvertible {
-    let file: StaticString
+struct Caller: CustomDebugStringConvertible, Hashable, Equatable {
+    let file: String
     let line: UInt
     let function: String
 
     let stack: Stack
 
-    init(file: StaticString, line: UInt, function: String, stack: any Sequence<String> = Thread.callStackSymbols) {
+    init(file: String, line: UInt, function: String, stack: any Sequence<String> = Thread.callStackSymbols) {
         self.file = file
         self.line = line
         self.function = function

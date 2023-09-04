@@ -8,7 +8,7 @@
 import Foundation
 
 #if DEBUG
-struct Stack: CustomDebugStringConvertible {
+struct Stack: CustomDebugStringConvertible, Hashable, Equatable {
     let frames: [Frame]
 
     init(_ lines: any Sequence<String>) {

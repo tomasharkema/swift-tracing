@@ -15,7 +15,7 @@ public func dispatchTask(
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
 #if DEBUG
-    let caller = Caller(file: file, line: line, function: function)
+    let caller = Caller(file: "\(file)", line: line, function: function)
 
     if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
         logger.fault("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))")
@@ -43,7 +43,7 @@ public func dispatchTaskDetached(
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
 #if DEBUG
-    let caller = Caller(file: file, line: line, function: function)
+    let caller = Caller(file: "\(file)", line: line, function: function)
 
     if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
         logger.fault("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))")
@@ -70,7 +70,7 @@ public func dispatchTaskMain(
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
 #if DEBUG
-    let caller = Caller(file: file, line: line, function: function)
+    let caller = Caller(file: "\(file)", line: line, function: function)
 
     if let previousCaller = TaskCaller.caller {
         logger.info("🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))")

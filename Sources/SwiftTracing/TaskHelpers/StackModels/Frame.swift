@@ -13,7 +13,7 @@ import Foundation
 import SwiftDemangle
 #endif
 
-struct Frame: CustomDebugStringConvertible {
+struct Frame: CustomDebugStringConvertible, Hashable, Equatable {
     let index: Int
     let lib: String
     let stackPointer: String

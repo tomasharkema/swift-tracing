@@ -14,7 +14,7 @@ public func assumeCalledOnMainActor(
     _ file: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
 #if DEBUG
-    let caller = Caller(file: file, line: line, function: function)
+    let caller = Caller(file: "\(file)", line: line, function: function)
 
 //    dispatchPrecondition(condition: .onQueue(.main))
 

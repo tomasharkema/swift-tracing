@@ -54,7 +54,7 @@ func innerDebug(
     _ currentFunction: String = #function
 ) {
 
-    let caller = Caller(file: file, line: line, function: function)
+    let caller = Caller(file: "\(file)", line: line, function: function)
 
     let previousCaller = TaskCaller.caller
 
