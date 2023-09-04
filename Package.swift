@@ -69,7 +69,7 @@ let package = Package(
         .target(
             name: "SwiftTracing",
             dependencies: [
-                .product(name: "SwiftDemangleFramework", package: "SwiftDemangle"),
+                .product(name: "SwiftDemangle", package: "SwiftDemangle"),
             ],
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
