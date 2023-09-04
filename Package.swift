@@ -4,45 +4,6 @@
 import PackageDescription
 import Foundation
 
-let isXcode = ProcessInfo.processInfo.environment["__CFBundleIdentifier"] == "com.apple.dt.Xcode"
-let isSubDependency: () -> Bool = {
-    let context = ProcessInfo.processInfo.arguments.drop {
-        $0 != "-context"
-    }.dropFirst(1).first
-    guard let context else {
-        return false
-    }
-    guard let json = (try? JSONSerialization.jsonObject(with: context.data(using: .utf8) ?? Data())) as? [String: Any] else {
-        return false
-    }
-    guard let packageDirectory = json["packageDirectory"] as? String else {
-        return false
-    }
-    return packageDirectory.contains(".build") || packageDirectory.contains("DerivedData") || packageDirectory == "/"
-}
-
-var dependencies = [Package.Dependency]()
-var plugins = [Target.PluginUsage]()
-
-if isXcode && !isSubDependency() {
-#if !os(Linux)
-    dependencies.append(contentsOf: [
-        .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.51.12"),
-    ])
-
-    dependencies.append(.package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.2"))
-    plugins.append(contentsOf: [
-        .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
-    ])
-#endif
-}
-
-if !isSubDependency() {
-    dependencies.append(contentsOf: [
-        .package(url: "https://github.com/apple/swift-docc-plugin.git", from: "1.3.0"),
-    ])
-}
-
 let package = Package(
     name: "SwiftTracing",
     platforms: [.iOS(.v14), .macOS(.v12)],
@@ -64,7 +25,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/oozoofrog/SwiftDemangle.git", from: "5.5.8"),
-    ] + dependencies,
+    ],
     targets: [
         .target(
             name: "SwiftTracing",
@@ -74,16 +35,14 @@ let package = Package(
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
                 .define("RELEASE", .when(configuration: .release)),
-            ],
-            plugins: plugins
+            ]
         ),
         .target(
             name: "SwiftTaskToolbox",
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
                 .define("RELEASE", .when(configuration: .release)),
-            ],
-            plugins: plugins
+            ]
         ),
         .target(
             name: "SwiftTracingTestHelpers",
@@ -91,8 +50,7 @@ let package = Package(
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
                 .define("RELEASE", .when(configuration: .release)),
-            ],
-            plugins: plugins
+            ]
         ),
         .executableTarget(
             name: "TestApp",
@@ -116,3 +74,41 @@ let package = Package(
         // ),
     ]
 )
+
+let isXcode = ProcessInfo.processInfo.environment["__CFBundleIdentifier"] == "com.apple.dt.Xcode"
+let isSubDependency: () -> Bool = {
+    let context = ProcessInfo.processInfo.arguments.drop {
+        $0 != "-context"
+    }.dropFirst(1).first
+    guard let context else {
+        return false
+    }
+    guard let json = (try? JSONSerialization.jsonObject(with: context.data(using: .utf8) ?? Data())) as? [String: Any] else {
+        return false
+    }
+    guard let packageDirectory = json["packageDirectory"] as? String else {
+        return false
+    }
+    return packageDirectory.contains(".build") || packageDirectory.contains("DerivedData") || packageDirectory == "/"
+}
+
+if isXcode && !isSubDependency() {
+#if !os(Linux)
+    package.dependencies.append(contentsOf: [
+        .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.51.12"),
+    ])
+
+    package.dependencies.append(.package(url: "https://github.com/realm/SwiftLint.git", from: "0.52.2"))
+
+    for target in package.targets {
+        var plugin = target.plugins ?? []
+        plugin.append(.plugin(name: "SwiftLintPlugin", package: "SwiftLint"))
+        target.plugins = plugin
+    }
+
+#endif
+}
+
+if !isSubDependency() {
+    package.dependencies.append(.package(url: "https://github.com/apple/swift-docc-plugin.git", from: "1.3.0"))
+}

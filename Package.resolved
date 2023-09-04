@@ -66,7 +66,7 @@
     {
       "identity" : "swiftdemangle",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/oozoofrog/SwiftDemangle",
+      "location" : "https://github.com/oozoofrog/SwiftDemangle.git",
       "state" : {
         "revision" : "bd8933cccc0c912c15d396fc23f51b072dc72654",
         "version" : "5.5.9"
@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nicklockwood/SwiftFormat.git",
       "state" : {
-        "revision" : "1780bcdc3237633a50e4aaa97422de37e77130bd",
-        "version" : "0.52.2"
+        "revision" : "1c1bf3b72a020cabe39ce7cd31fc47a3fdc90b44",
+        "version" : "0.52.3"
       }
     },
     {
