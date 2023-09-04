@@ -3,7 +3,7 @@ FROM swift:5.8.1-jammy AS package
 WORKDIR /root
 
 COPY Package.* .
-RUN RESOLVE_COMMAND_PLUGINS=1 swift package resolve
+RUN swift package resolve
 
 FROM package AS source
 
@@ -20,9 +20,7 @@ FROM source AS docs
 
 COPY docs.sh .
 
-# RUN RESOLVE_COMMAND_PLUGINS=1 swift build
-
-RUN RESOLVE_COMMAND_PLUGINS=1 sh docs.sh
+RUN sh docs.sh
 
 FROM swift:5.8.1-jammy
 COPY --from=source-debug /root/.build/debug /root/.build/debug
