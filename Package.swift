@@ -18,8 +18,8 @@ let isSubDependency: () -> Bool = {
     guard let packageDirectory = json["packageDirectory"] as? String else {
         return false
     }
-    fatalError("packageDirectory \(packageDirectory) \(ProcessInfo.processInfo.arguments)")
-    return packageDirectory.contains(".build") || packageDirectory.contains("DerivedData")
+    fatalError("packageDirectory \(packageDirectory) \(ProcessInfo.processInfo.arguments) \(packageDirectory == "/")")
+    return packageDirectory.contains(".build") || packageDirectory.contains("DerivedData") || packageDirectory == "/"
 }
 
 var dependencies = [Package.Dependency]()
