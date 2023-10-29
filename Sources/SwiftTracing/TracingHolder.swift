@@ -11,75 +11,75 @@ import os
 #endif
 
 enum TracingHolder {
-    @TaskLocal
-    static var signposter: Signposter?
+  @TaskLocal
+  static var signposter: Signposter?
 
-    @TaskLocal
-    static var signpostID: SignpostID?
+  @TaskLocal
+  static var signpostID: SignpostID?
 
-    static func with<R>(
-        _ signposter: Signposter,
-        id: SignpostID,
-        operation: () throws -> R,
-        file: StaticString = #fileID, line: UInt = #line
-    ) rethrows -> R {
-        try $signposter.withValue(signposter, operation: {
-            try $signpostID.withValue(id, operation: {
-                try operation()
-            }, file: "\(file)", line: line)
-        }, file: "\(file)", line: line)
-    }
+  static func with<R>(
+    _ signposter: Signposter,
+    id: SignpostID,
+    operation: () throws -> R,
+    file: StaticString = #fileID, line: UInt = #line
+  ) rethrows -> R {
+    try $signposter.withValue(signposter, operation: {
+      try $signpostID.withValue(id, operation: {
+        try operation()
+      }, file: "\(file)", line: line)
+    }, file: "\(file)", line: line)
+  }
 
-    static func with<R>(
-        _ signposter: Signposter,
-        id: SignpostID,
-        operation: () async throws -> R,
-        file: StaticString = #fileID, line: UInt = #line
-    ) async rethrows -> R {
-        try await $signposter.withValue(signposter, operation: {
-            try await $signpostID.withValue(id, operation: {
-                try await operation()
-            }, file: "\(file)", line: line)
-        }, file: "\(file)", line: line)
-    }
+  static func with<R>(
+    _ signposter: Signposter,
+    id: SignpostID,
+    operation: () async throws -> R,
+    file: StaticString = #fileID, line: UInt = #line
+  ) async rethrows -> R {
+    try await $signposter.withValue(signposter, operation: {
+      try await $signpostID.withValue(id, operation: {
+        try await operation()
+      }, file: "\(file)", line: line)
+    }, file: "\(file)", line: line)
+  }
 
-    static func withNewId<R>(
-        _ signposter: Signposter,
-        operation: () throws -> R,
-        file: StaticString = #fileID, line: UInt = #line
-    ) rethrows -> R {
-        let id = signposter.makeSignpostID()
+  static func withNewId<R>(
+    _ signposter: Signposter,
+    operation: () throws -> R,
+    file: StaticString = #fileID, line: UInt = #line
+  ) rethrows -> R {
+    let id = signposter.makeSignpostID()
 
-        return try TracingHolder.with(signposter, id: id, operation: {
-            try operation()
-        }, file: file, line: line)
-    }
+    return try TracingHolder.with(signposter, id: id, operation: {
+      try operation()
+    }, file: file, line: line)
+  }
 
-    static func withNewId<R>(
-        _ signposter: Signposter,
-        operation: () async throws -> R,
-        file: StaticString = #fileID, line: UInt = #line
-    ) async rethrows -> R {
-        let id = signposter.makeSignpostID()
+  static func withNewId<R>(
+    _ signposter: Signposter,
+    operation: () async throws -> R,
+    file: StaticString = #fileID, line: UInt = #line
+  ) async rethrows -> R {
+    let id = signposter.makeSignpostID()
 
-        return try await TracingHolder.with(signposter, id: id, operation: {
-            try await operation()
-        }, file: file, line: line)
-    }
+    return try await TracingHolder.with(signposter, id: id, operation: {
+      try await operation()
+    }, file: file, line: line)
+  }
 
-    static func withNewId<R>(
-        operation: () throws -> R,
-        file: StaticString = #fileID, line: UInt = #line
-    ) rethrows -> R {
-        try withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
-    }
+  static func withNewId<R>(
+    operation: () throws -> R,
+    file: StaticString = #fileID, line: UInt = #line
+  ) rethrows -> R {
+    try withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
+  }
 
-    static func withNewId<R>(
-        operation: () async throws -> R,
-        file: StaticString = #fileID, line: UInt = #line
-    ) async rethrows -> R {
-        try await withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
-    }
+  static func withNewId<R>(
+    operation: () async throws -> R,
+    file: StaticString = #fileID, line: UInt = #line
+  ) async rethrows -> R {
+    try await withNewId(TracingHolder.signposter!, operation: operation, file: file, line: line)
+  }
 }
 
 // @available(iOS 15, *)

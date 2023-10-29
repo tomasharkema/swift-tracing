@@ -1,6 +1,6 @@
 //
 //  runtimeWarning.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 21/08/2023.
 //
@@ -16,31 +16,30 @@ import SwiftUI
 //
 // Feedback filed: https://gist.github.com/stephencelis/a8d06383ed6ccde3e5ef5d1b3ad52bbc
 let runtimeWarningDso = (
-    dso: { () -> UnsafeMutableRawPointer in
-        var info = Dl_info()
-        dladdr(dlsym(dlopen(nil, RTLD_LAZY), "LocalizedString"), &info)
-        return info.dli_fbase
-    }(),
-    log: OSLog(subsystem: "com.apple.runtime-issues", category: "SwiftTracing")
+  dso: { () -> UnsafeMutableRawPointer in
+    var info = Dl_info()
+    dladdr(dlsym(dlopen(nil, RTLD_LAZY), "LocalizedString"), &info)
+    return info.dli_fbase
+  }(),
+  log: OSLog(subsystem: "com.apple.runtime-issues", category: "SwiftTracing")
 )
 
 @_transparent
 @inline(__always)
 func runtimeWarning(
-    _ string: StaticString,
-    _ args: CVarArg...
+  _ string: StaticString,
+  _ args: any CVarArg...
 ) {
-    os_log(.fault, dso: runtimeWarningDso.dso, log: runtimeWarningDso.log, string, args)
+  os_log(.fault, dso: runtimeWarningDso.dso, log: runtimeWarningDso.log, string, args)
 }
 
 #else
 @_transparent
 @inline(__always)
 func runtimeWarning(
-    _ string: StaticString,
-    _ args: CVarArg...
-) {
-}
+  _: StaticString,
+  _: CVarArg...
+) {}
 #endif
 
 #endif

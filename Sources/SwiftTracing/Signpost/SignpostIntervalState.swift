@@ -4,14 +4,14 @@ import os
 #endif
 
 public struct SignpostIntervalState: Equatable, Hashable {
-    let json: Data
+  let json: Data
 
-    @available(iOS 15, *)
-    init(_ state: os.OSSignpostIntervalState) throws {
-        json = try JSONEncoder().encode(state)
-    }
+  @available(iOS 15, *)
+  init(_ state: os.OSSignpostIntervalState) throws {
+    json = try JSONEncoder().encode(state)
+  }
 
-    init() {
-        json = Data()
-    }
+  init() {
+    json = Data()
+  }
 }

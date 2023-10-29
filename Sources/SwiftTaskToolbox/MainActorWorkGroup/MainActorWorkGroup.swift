@@ -11,14 +11,14 @@ import Foundation
 public typealias MainActorWorkGroup = [MainActorWork]
 
 public extension MainActorWorkGroup {
-    @MainActor
-    mutating func execute() {
-        let mainActorWorkCapture = self
-        for work in mainActorWorkCapture {
-            work()
-        }
-        removeAll()
+  @MainActor
+  mutating func execute() {
+    let mainActorWorkCapture = self
+    for work in mainActorWorkCapture {
+      work()
     }
+    removeAll()
+  }
 }
 
 public typealias MainActorWork = @Sendable @MainActor () -> Void

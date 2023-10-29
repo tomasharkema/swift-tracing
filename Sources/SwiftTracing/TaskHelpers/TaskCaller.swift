@@ -6,9 +6,8 @@
 //
 
 import Foundation
+import SwiftStacktrace
 
-#if DEBUG
-enum TaskCaller {
-    @TaskLocal static var caller: Caller?
+package enum TaskCaller {
+  @TaskLocal static var caller: Caller?
 }
-#endif

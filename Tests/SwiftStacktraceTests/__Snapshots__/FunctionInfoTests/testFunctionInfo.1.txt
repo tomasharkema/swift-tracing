@@ -1,0 +1,32 @@
+▿ FunctionInfo
+  ▿ arguments: 4 elements
+    ▿ FunctionArgument
+      - label: "_"
+      ▿ type: TypeName
+        ▿ base: Optional<String>
+          - some: "Swift"
+        - name: "String"
+    ▿ FunctionArgument
+      - label: "_"
+      ▿ type: TypeName
+        ▿ base: Optional<String>
+          - some: "Swift"
+        - name: "UInt"
+    ▿ FunctionArgument
+      - label: "_"
+      ▿ type: TypeName
+        ▿ base: Optional<String>
+          - some: "Swift"
+        - name: "String"
+    ▿ FunctionArgument
+      - label: "stack"
+      ▿ type: TypeName
+        ▿ base: Optional<String>
+          - some: "Swift"
+        - name: "Sequence"
+  - functionName: "init"
+  ▿ functionType: Optional<TypeName>
+    ▿ some: TypeName
+      ▿ base: Optional<String>
+        - some: "SwiftStacktrace"
+      - name: "Caller"

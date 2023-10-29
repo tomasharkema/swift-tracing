@@ -4,19 +4,19 @@ import SwiftTaskToolbox
 import XCTest
 
 class SwiftTracingTests: XCTestCase {
-    let signposter = Signposter(subsystem: "a", category: "b")
+  let signposter = Signposter(subsystem: "a", category: "b")
 
-    func testInit() async throws {
-        let id = signposter.makeSignpostID()
+  func testInit() async throws {
+    let id = signposter.makeSignpostID()
 
-        let result: Int = try await TracingHolder.with(signposter, id: id) {
-            XCTAssertEqual(TracingHolder.signpostID, id)
-            XCTAssertEqual(TracingHolder.signposter, signposter)
-            try await Task.sleep(seconds: 1)
-            XCTAssertEqual(TracingHolder.signpostID, id)
-            XCTAssertEqual(TracingHolder.signposter, signposter)
-            return 1
-        }
-        print(result)
+    let result: Int = try await TracingHolder.with(signposter, id: id) {
+      XCTAssertEqual(TracingHolder.signpostID, id)
+      XCTAssertEqual(TracingHolder.signposter, signposter)
+      try await Task.sleep(seconds: 1)
+      XCTAssertEqual(TracingHolder.signpostID, id)
+      XCTAssertEqual(TracingHolder.signposter, signposter)
+      return 1
     }
+    print(result)
+  }
 }

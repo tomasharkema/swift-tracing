@@ -11,8 +11,8 @@ import Darwin
 
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 public extension Task where Failure == Never, Success == Never {
-    static func sleep(seconds: Double) async throws {
-        try await sleep(nanoseconds: UInt64(seconds * Double(NSEC_PER_SEC)))
-    }
+  static func sleep(seconds: Double) async throws {
+    try await sleep(nanoseconds: UInt64(seconds * Double(NSEC_PER_SEC)))
+  }
 }
 #endif

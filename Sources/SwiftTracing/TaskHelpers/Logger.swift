@@ -16,10 +16,10 @@ let logger = Logger(subsystem: "SwiftTracing", category: "SwiftTracing")
 let logger = Logger()
 
 struct Logger {
-    func trace(_ message: String) { }
-    func fault(_ message: String) { }
-    func info(_ message: String) { }
-    func notice(_ message: String) { }
+  func trace(_: String) {}
+  func fault(_: String) {}
+  func info(_: String) {}
+  func notice(_: String) {}
 }
 
 #endif

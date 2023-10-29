@@ -8,7 +8,8 @@
 import Foundation
 
 // extension SignpostID {
-//    public func measure<T>(signposter: Signposter, name: StaticString, operation: () async -> T) async -> T {
+//    public func measure<T>(signposter: Signposter, name: StaticString, operation: () async -> T)
+//    async -> T {
 //        let state = signposter.beginInterval(name, id: self)
 //        defer {
 //            signposter.endInterval(name, state)
@@ -26,114 +27,130 @@ import Foundation
 // }
 
 extension Signposter {
-    /// Measure a asynchronous task.
-    func measure<T>(
-        signpostID: SignpostID, name: StaticString, operation: () async throws -> T,
-        file _: StaticString = #fileID, line _: UInt = #line
-    ) async rethrows -> T {
-        let state = beginInterval(name, id: signpostID)
-        defer {
-            self.endInterval(name, state)
-        }
-        return try await operation()
+  /// Measure a asynchronous task.
+  func measure<T>(
+    signpostID: SignpostID, name: StaticString, operation: () async throws -> T,
+    file _: StaticString = #fileID, line _: UInt = #line
+  ) async rethrows -> T {
+    let state = beginInterval(name, id: signpostID)
+    defer {
+      self.endInterval(name, state)
     }
+    return try await operation()
+  }
 
-    /// Measure a synchronous task.
-    func measure<T>(
-        signpostID: SignpostID, name: StaticString, operation: () throws -> T,
-        file _: StaticString = #fileID, line _: UInt = #line
-    ) rethrows -> T {
-        let state = beginInterval(name, id: signpostID)
-        defer {
-            self.endInterval(name, state)
-        }
-        return try operation()
+  /// Measure a synchronous task.
+  func measure<T>(
+    signpostID: SignpostID, name: StaticString, operation: () throws -> T,
+    file _: StaticString = #fileID, line _: UInt = #line
+  ) rethrows -> T {
+    let state = beginInterval(name, id: signpostID)
+    defer {
+      self.endInterval(name, state)
     }
+    return try operation()
+  }
 
-    /// Measure a asynchronous task.
-    public func measure<T>(
-        withNewId name: StaticString, operation: () async throws -> T,
-        file: StaticString = #fileID, line: UInt = #line
-    ) async rethrows -> T {
-        try await TracingHolder.$signposter.withValue(self, operation: {
-            try await TracingHolder.withNewId(operation: {
-                guard let signpostID = TracingHolder.signpostID else {
-                    assertionFailure("TracingHolder not set", file: file, line: line)
-                    return try await operation()
-                }
-                return try await measure(signpostID: signpostID, name: name, operation: operation, file: file, line: line)
-            }, file: file, line: line)
-        }, file: "\(file)", line: line)
-    }
-
-    /// Measure a synchronous task.
-    public func measure<T>(
-        withNewId name: StaticString, operation: () throws -> T,
-        file: StaticString = #fileID, line: UInt = #line
-    ) rethrows -> T {
-        try TracingHolder.$signposter.withValue(self, operation: {
-            try TracingHolder.withNewId(operation: {
-                guard let signpostID = TracingHolder.signpostID else {
-                    assertionFailure("TracingHolder not set", file: file, line: line)
-                    return try operation()
-                }
-
-                return try measure(signpostID: signpostID, name: name, operation: operation, file: file, line: line)
-            }, file: file, line: line)
-        }, file: "\(file)", line: line)
-    }
-}
-
-/// Measure a synchronous task, by creating a new SignpostID.
-public func measure<T>(
-    withNewId name: StaticString, operation: () throws -> T,
-    file: StaticString = #fileID, line: UInt = #line
-) rethrows -> T {
-    try TracingHolder.withNewId(operation: {
-        try measure(name, operation: {
-            try operation()
-        }, file: file, line: line)
-    }, file: file, line: line)
-}
-
-/// Measure a asynchronous task.
-public func measure<T>(
+  /// Measure a asynchronous task.
+  public func measure<T>(
     withNewId name: StaticString, operation: () async throws -> T,
     file: StaticString = #fileID, line: UInt = #line
-) async rethrows -> T {
-    try await TracingHolder.withNewId(operation: {
-        try await measure(name, operation: {
-            try await operation()
-        }, file: file, line: line)
-    }, file: file, line: line)
+  ) async rethrows -> T {
+    try await TracingHolder.$signposter.withValue(self, operation: {
+      try await TracingHolder.withNewId(operation: {
+        guard let signpostID = TracingHolder.signpostID else {
+          assertionFailure("TracingHolder not set", file: file, line: line)
+          return try await operation()
+        }
+        return try await measure(
+          signpostID: signpostID,
+          name: name,
+          operation: operation,
+          file: file,
+          line: line
+        )
+      }, file: file, line: line)
+    }, file: "\(file)", line: line)
+  }
+
+  /// Measure a synchronous task.
+  public func measure<T>(
+    withNewId name: StaticString, operation: () throws -> T,
+    file: StaticString = #fileID, line: UInt = #line
+  ) rethrows -> T {
+    try TracingHolder.$signposter.withValue(self, operation: {
+      try TracingHolder.withNewId(operation: {
+        guard let signpostID = TracingHolder.signpostID else {
+          assertionFailure("TracingHolder not set", file: file, line: line)
+          return try operation()
+        }
+
+        return try measure(
+          signpostID: signpostID,
+          name: name,
+          operation: operation,
+          file: file,
+          line: line
+        )
+      }, file: file, line: line)
+    }, file: "\(file)", line: line)
+  }
 }
 
 /// Measure a synchronous task, by creating a new SignpostID.
 public func measure<T>(
-    _ name: StaticString, operation: () throws -> T,
-    file: StaticString = #fileID, line: UInt = #line
+  withNewId name: StaticString, operation: () throws -> T,
+  file: StaticString = #fileID, line: UInt = #line
 ) rethrows -> T {
-    guard let signposter = TracingHolder.signposter, let signpostID = TracingHolder.signpostID else {
-        assertionFailure("TracingHolder not set", file: file, line: line)
-        return try operation()
-    }
-    return try signposter.measure(signpostID: signpostID, name: name, operation: {
-        try operation()
+  try TracingHolder.withNewId(operation: {
+    try measure(name, operation: {
+      try operation()
     }, file: file, line: line)
+  }, file: file, line: line)
 }
 
 /// Measure a asynchronous task.
 public func measure<T>(
-    _ name: StaticString, operation: () async throws -> T,
-    file: StaticString = #fileID, line: UInt = #line
+  withNewId name: StaticString, operation: () async throws -> T,
+  file: StaticString = #fileID, line: UInt = #line
 ) async rethrows -> T {
-    guard let signposter = TracingHolder.signposter, let signpostID = TracingHolder.signpostID else {
-        assertionFailure("TracingHolder not set", file: file, line: line)
-        return try await operation()
-    }
-    return try await signposter.measure(signpostID: signpostID, name: name, operation: {
-        try await operation()
+  try await TracingHolder.withNewId(operation: {
+    try await measure(name, operation: {
+      try await operation()
     }, file: file, line: line)
+  }, file: file, line: line)
+}
+
+/// Measure a synchronous task, by creating a new SignpostID.
+public func measure<T>(
+  _ name: StaticString, operation: () throws -> T,
+  file: StaticString = #fileID, line: UInt = #line
+) rethrows -> T {
+  guard let signposter = TracingHolder.signposter,
+        let signpostID = TracingHolder.signpostID
+  else {
+    assertionFailure("TracingHolder not set", file: file, line: line)
+    return try operation()
+  }
+  return try signposter.measure(signpostID: signpostID, name: name, operation: {
+    try operation()
+  }, file: file, line: line)
+}
+
+/// Measure a asynchronous task.
+public func measure<T>(
+  _ name: StaticString, operation: () async throws -> T,
+  file: StaticString = #fileID, line: UInt = #line
+) async rethrows -> T {
+  guard let signposter = TracingHolder.signposter,
+        let signpostID = TracingHolder.signpostID
+  else {
+    assertionFailure("TracingHolder not set", file: file, line: line)
+    return try await operation()
+  }
+  return try await signposter.measure(signpostID: signpostID, name: name, operation: {
+    try await operation()
+  }, file: file, line: line)
 }
 
 // extension TracingHolder {

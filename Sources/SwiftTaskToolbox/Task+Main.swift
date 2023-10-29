@@ -8,25 +8,28 @@
 import Foundation
 
 private func checkMainThread() {
-    dispatchPrecondition(condition: .notOnQueue(.main))
+  dispatchPrecondition(condition: .notOnQueue(.main))
 
 #if DEBUG
-    if Thread.current.isMainThread {
-        print("ALREADY ON MAIN THREAD!")
-    }
+  if Thread.current.isMainThread {
+    print("ALREADY ON MAIN THREAD!")
+  }
 #endif
 }
 
 public func dispatchMainActor(@_implicitSelfCapture operation: @MainActor @escaping () -> Void) {
-    checkMainThread()
-    Task { @MainActor in
-        operation()
-    }
+  checkMainThread()
+  Task { @MainActor in
+    operation()
+  }
 }
 
-public func dispatchMainActor(@_implicitSelfCapture operation: @escaping @Sendable @MainActor () async -> Void) {
-    checkMainThread()
-    Task { @MainActor in
-        await operation()
-    }
+public func dispatchMainActor(@_implicitSelfCapture operation: @escaping @Sendable @MainActor (
+) async
+  -> Void)
+{
+  checkMainThread()
+  Task { @MainActor in
+    await operation()
+  }
 }
