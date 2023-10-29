@@ -48,12 +48,12 @@ public struct FunctionInfo: Hashable, Equatable, Sendable, CustomDebugStringConv
       throw FunctionInfoError(expr: sourceFile, reason: .noFunctionFound)
     }
 
-    print("vvv")
-    dump(functionBlock)
-    print("^^^")
-    print("vvv")
-    print(functionBlock)
-    print("^^^")
+    // print("vvv")
+    // dump(functionBlock)
+    // print("^^^")
+    // print("vvv")
+    // print(functionBlock)
+    // print("^^^")
 
     guard let memberAccessExpr = functionBlock.calledExpression.as(MemberAccessExprSyntax.self)
     else {
@@ -78,8 +78,8 @@ public struct FunctionInfo: Hashable, Equatable, Sendable, CustomDebugStringConv
       try FunctionArgument(argument)
     }
 
-    print(arguments)
-    dump(arguments)
+    // print(arguments)
+    // dump(arguments)
 
     self.arguments = arguments
   }
@@ -138,7 +138,7 @@ public extension FunctionInfo {
     }
 
     init(_ expr: SequenceExprSyntax) throws {
-      dump(expr.elements)
+      // dump(expr.elements)
 
       let finder = MemberTypeSyntaxWithExpression(viewMode: .sourceAccurate)
       finder.walk(expr)
@@ -236,8 +236,8 @@ struct _FunctionInfo: Hashable, Equatable, Sendable {
     extraPrefix = String(line.prefix(upTo: tokens.range.lowerBound))
     extraSuffix = String(line.suffix(from: tokens.range.upperBound))
 
-    print(line, self)
-    print(self)
-    print(self)
+    // print(line, self)
+    // print(self)
+    // print(self)
   }
 }

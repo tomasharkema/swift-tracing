@@ -1,25 +1,29 @@
 ▿ FunctionInfo
   ▿ arguments: 4 elements
     ▿ FunctionArgument
-      - label: "_"
+      ▿ label: Optional<String>
+        - some: "_"
       ▿ type: TypeName
         ▿ base: Optional<String>
           - some: "Swift"
         - name: "String"
     ▿ FunctionArgument
-      - label: "_"
+      ▿ label: Optional<String>
+        - some: "_"
       ▿ type: TypeName
         ▿ base: Optional<String>
           - some: "Swift"
         - name: "UInt"
     ▿ FunctionArgument
-      - label: "_"
+      ▿ label: Optional<String>
+        - some: "_"
       ▿ type: TypeName
         ▿ base: Optional<String>
           - some: "Swift"
         - name: "String"
     ▿ FunctionArgument
-      - label: "stack"
+      ▿ label: Optional<String>
+        - some: "stack"
       ▿ type: TypeName
         ▿ base: Optional<String>
           - some: "Swift"
@@ -30,3 +34,4 @@
       ▿ base: Optional<String>
         - some: "SwiftStacktrace"
       - name: "Caller"
+  - raw: "default argument 3 of SwiftStacktrace.Caller.init(_: Swift.String, _: Swift.UInt, _: Swift.String, stack: any Swift.Sequence<Self.Swift.Sequence.Element == Swift.String>) -> SwiftStacktrace.Caller"

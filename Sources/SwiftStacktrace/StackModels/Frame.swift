@@ -35,7 +35,7 @@ public struct Frame: CustomDebugStringConvertible, Hashable, Equatable, Sendable
     do {
       functionInfo = try cleanupped.flatMap { try FunctionInfo($0) }
     } catch {
-      print(error)
+      // print(error)
       functionInfo = nil
     }
   }

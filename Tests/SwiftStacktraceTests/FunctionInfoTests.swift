@@ -3,8 +3,8 @@ import SnapshotTesting
 import XCTest
 
 // swiftlint:disable line_length
-
 final class FunctionInfoTests: XCTestCase {
+  
   func testFunctionInfo() throws {
     let functionInfo =
       try FunctionInfo(
