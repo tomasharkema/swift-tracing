@@ -17,7 +17,7 @@ public func dispatchTask(
   dso: UnsafeRawPointer = #dsohandle
 ) {
 #if DEBUG
-  let caller = Caller(fileID: "\(fileID)", line: line, function: function)
+  let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
 
   if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
     logger
@@ -48,7 +48,7 @@ public func dispatchTaskDetached(
   dso: UnsafeRawPointer = #dsohandle
 ) {
 #if DEBUG
-  let caller = Caller(fileID: "\(fileID)", line: line, function: function)
+  let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
 
   if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
     logger
@@ -78,7 +78,7 @@ public func dispatchTaskMain(
   _ fileID: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
 #if DEBUG
-  let caller = Caller(fileID: "\(fileID)", line: line, function: function)
+  let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
 
   if let previousCaller = TaskCaller.caller {
     logger

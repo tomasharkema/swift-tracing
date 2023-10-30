@@ -9,19 +9,24 @@ let package = Package(
   products: [
     .library(
       name: "SwiftTracing",
+      type: .dynamic,
       targets: ["SwiftTracing"]
     ),
     .library(
       name: "SwiftTaskToolbox",
+      type: .dynamic,
       targets: ["SwiftTaskToolbox"]
     ),
     .library(
       name: "SwiftTracingTestHelpers",
+      type: .dynamic,
       targets: ["SwiftTracingTestHelpers"]
     ),
-    .library(name: "SwiftStacktrace", targets: ["SwiftStacktrace"]),
-    .library(name: "SwiftStacktraceDynamic", type: .dynamic, targets: ["SwiftStacktrace"]),
-    .executable(name: "TestApp", targets: ["TestApp"]),
+    .library(
+      name: "SwiftStacktrace",
+      type: .dynamic,
+      targets: ["SwiftStacktrace"]
+    ),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0"),
@@ -32,74 +37,26 @@ let package = Package(
       name: "SwiftTracing",
       dependencies: [
         "SwiftStacktrace",
-      ],
-      swiftSettings: [
-        .define("DEBUG", .when(configuration: .debug)),
-        .define("RELEASE", .when(configuration: .release)),
-        .enableUpcomingFeature("ConciseMagicFile"),
-        .enableUpcomingFeature("BareSlashRegexLiterals"),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableExperimentalFeature("NestedProtocols"),
-        .enableExperimentalFeature("AccessLevelOnImport"),
       ]
     ),
     .target(
-      name: "SwiftTaskToolbox",
-      swiftSettings: [
-        .define("DEBUG", .when(configuration: .debug)),
-        .define("RELEASE", .when(configuration: .release)),
-        .enableUpcomingFeature("ConciseMagicFile"),
-        .enableUpcomingFeature("BareSlashRegexLiterals"),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableExperimentalFeature("NestedProtocols"),
-        .enableExperimentalFeature("AccessLevelOnImport"),
-      ]
+      name: "SwiftTaskToolbox"
     ),
     .target(
       name: "SwiftTracingTestHelpers",
-      dependencies: ["SwiftTaskToolbox"],
-      swiftSettings: [
-        .define("DEBUG", .when(configuration: .debug)),
-        .define("RELEASE", .when(configuration: .release)),
-        .enableUpcomingFeature("ConciseMagicFile"),
-        .enableUpcomingFeature("BareSlashRegexLiterals"),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableExperimentalFeature("NestedProtocols"),
-        .enableExperimentalFeature("AccessLevelOnImport"),
-      ]
+      dependencies: ["SwiftTaskToolbox"]
     ),
     .target(
       name: "SwiftStacktrace",
       dependencies: [
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftParser", package: "swift-syntax"),
-      ],
-      swiftSettings: [
-        .define("DEBUG", .when(configuration: .debug)),
-        .define("RELEASE", .when(configuration: .release)),
-        .enableUpcomingFeature("ConciseMagicFile"),
-        .enableUpcomingFeature("BareSlashRegexLiterals"),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableExperimentalFeature("NestedProtocols"),
-        .enableExperimentalFeature("AccessLevelOnImport"),
       ]
     ),
     .executableTarget(
-      name: "TestApp",
+      name: "TestRunner",
       dependencies: [
         "SwiftTracing",
-      ],
-      swiftSettings: [
-        .enableUpcomingFeature("ConciseMagicFile"),
-        .enableUpcomingFeature("BareSlashRegexLiterals"),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableExperimentalFeature("NestedProtocols"),
-        .enableExperimentalFeature("AccessLevelOnImport"),
       ]
     ),
     .testTarget(
@@ -111,6 +68,10 @@ let package = Package(
       dependencies: [
         "SwiftStacktrace",
         .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+      ],
+      exclude: ["__Snapshots__"],
+      resources: [
+        .embedInCode("TestResources"),
       ]
     ),
   ]
@@ -161,4 +122,19 @@ if !isSubDependency() {
     url: "https://github.com/apple/swift-docc-plugin.git",
     from: "1.3.0"
   ))
+}
+
+let swiftSettings: [SwiftSetting] = [
+  .enableUpcomingFeature("ConciseMagicFile"),
+  .enableUpcomingFeature("BareSlashRegexLiterals"),
+  .enableUpcomingFeature("ExistentialAny"),
+  .enableUpcomingFeature("InternalImportsByDefault"),
+  .enableExperimentalFeature("NestedProtocols"),
+  .enableExperimentalFeature("AccessLevelOnImport"),
+]
+
+for target in package.targets {
+  var settings = target.swiftSettings ?? []
+  settings.append(contentsOf: swiftSettings)
+  target.swiftSettings = settings
 }

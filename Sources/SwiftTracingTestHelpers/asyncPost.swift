@@ -17,23 +17,24 @@ public enum NotificationPost {
 }
 
 public extension XCTestCase {
-  @nonobjc func asyncYield() async {
-    await Task.yield()
-    let exp = expectation(description: "derp")
-    Task {
-      try? await Task.sleep(seconds: 1)
-      exp.fulfill()
-    }
-    await fulfillment(of: [exp])
-  }
+  // @nonobjc func asyncYield() async {
+  //   await Task.yield()
+  //   let exp = expectation(description: "derp")
+  //   Task {
+  //     try? await Task.sleep(seconds: 1)
+  //     exp.fulfill()
+  //   }
+  //   await fulfillment(of: [exp])
+  // }
 
-  @nonobjc func asyncPost(
-    _ notification: String,
-    object: Any? = nil,
-    _ center: NotificationCenter = NotificationCenter.default
-  ) async {
-    await asyncPost(.init(notification), object: object, center)
-  }
+  // @nonobjc func asyncPost(
+  //   _ notification: String,
+  //   object: Any? = nil,
+  //   _ center: NotificationCenter = NotificationCenter.default
+  // ) async {
+  //   assertionFailure()
+  //   await asyncPost(.init(notification), object: object, center)
+  // }
 
   // @nonobjc func asyncPost(
   //   _ notification: Notification.Name,
@@ -83,5 +84,5 @@ public extension XCTestCase {
 //   }
 }
 
-extension NotificationCenter: @unchecked Sendable {}
+// extension NotificationCenter: @unchecked Sendable {}
 #endif

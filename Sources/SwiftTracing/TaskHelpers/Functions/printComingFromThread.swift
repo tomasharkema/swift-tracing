@@ -71,7 +71,7 @@ func innerDebugResult(
   allowFromMainThread: Bool,
   _ fileID: StaticString, _ line: UInt, _ function: String
 ) -> (Caller, Bool) {
-  let caller = Caller(fileID: "\(fileID)", line: line, function: function)
+  let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
 
   if allowFromMainThread, Thread.isMainThread {
     if Settings.runtimeWarnings.contains(.calledOnMainThread) {

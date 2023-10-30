@@ -8,30 +8,50 @@
 import Foundation
 import RegexBuilder
 
-public struct Caller: CustomDebugStringConvertible, Hashable, Equatable, Sendable,
-  SourcecodeLocation
-{
+public class LazyCaller: LazyInitializable {
+  public let fileID: String
+  public let line: UInt
+  public let function: String
+  public let stack: LazyStack
+
+  public lazy var initialized: Caller = .init(
+    fileID: fileID,
+    line: line,
+    function: function,
+    stack: stack
+  )
+
+  public init(
+    fileID: String = #fileID,
+    line: UInt = #line,
+    function: String = #function,
+    _ stack: any Sequence<String> = Thread.callStackSymbols
+  ) {
+    self.fileID = fileID
+    self.line = line
+    self.function = function
+    self.stack = LazyStack(stack)
+  }
+}
+
+public struct Caller: Hashable, Equatable, LazyContainer {
   public let file: String
   public let line: UInt
   public let function: String
   public let moduleName: String
 
-  public let stack: Stack
+  @HashableNoop
+  public var stack: LazyStack
 
-  package init(
-    _ fileID: String = #fileID,
-    _ line: UInt = #line,
-    _ function: String = #function,
-    stack: any Sequence<String> = Thread.callStackSymbols
-  ) {
-    self.init(fileID: fileID, line: line, function: function, stack: stack)
+  public var lazy: LazyStack {
+    stack
   }
 
-  public init(
+  fileprivate init(
     fileID: String,
     line: UInt,
     function: String,
-    stack: any Sequence<String> = Thread.callStackSymbols
+    stack: LazyStack
   ) {
     let splitted = fileID.split(separator: "/")
 
@@ -40,16 +60,16 @@ public struct Caller: CustomDebugStringConvertible, Hashable, Equatable, Sendabl
     self.function = function
     moduleName = String(splitted[0])
 
-    self.stack = Stack(stack)
+    self.stack = stack
   }
 
   package func containsTaskFrame() -> Frame? {
     if #available(iOS 16, *) {
-      if let frame = stack.swiftTask {
+      if let frame = stack.initialized.swiftTask {
         return frame
       }
 
-      if let frame = stack.swiftConcurrency {
+      if let frame = stack.initialized.swiftConcurrency {
         return frame
       }
 
@@ -61,18 +81,51 @@ public struct Caller: CustomDebugStringConvertible, Hashable, Equatable, Sendabl
   }
 
   public var isEntry: Bool {
-    stack.isSwiftTask ||
-      stack.isSwiftConcurrency ||
-      stack.isFromUIKit ||
-      stack.isAddObserverMain ||
-      stack.isSwiftUiMainThread
+    stack.initialized.isSwiftTask ||
+      stack.initialized.isSwiftConcurrency ||
+      stack.initialized.isFromUIKit ||
+      stack.initialized.isAddObserverMain ||
+      stack.initialized.isSwiftUiMainThread
   }
 
   public var comingFromMainActor: Frame? {
-    stack.comingFromMainActor
+    stack.initialized.comingFromMainActor
   }
 
   public var isComingFromMainActor: Bool {
-    comingFromMainActor != nil
+    stack.initialized.isComingFromMainActor
+  }
+}
+
+extension Caller: CustomBriefStringConvertible {
+  public var briefDescription: String {
+    stack.briefDescription
+  }
+}
+
+extension Caller: StackStringConvertible {
+  public var stackFormatted: String {
+    initialized.stackFormatted
+  }
+}
+
+extension LazyCaller: Encodable {}
+
+extension Caller: Encodable {
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(file, forKey: .file)
+    try container.encode(line, forKey: .line)
+    try container.encode(function, forKey: .function)
+    try container.encode(moduleName, forKey: .moduleName)
+    try container.encode(stack, forKey: .initialized)
+  }
+
+  enum CodingKeys: CodingKey {
+    case file
+    case line
+    case function
+    case moduleName
+    case initialized
   }
 }

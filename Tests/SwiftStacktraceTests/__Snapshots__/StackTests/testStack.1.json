@@ -1,0 +1,212 @@
+{
+  "initialized" : [
+    {
+      "function" : "SwiftStacktrace.Caller.init(fileID: Swift.String, line: Swift.UInt, function: Swift.String, stack: any Swift.Sequence<Self.Swift.Sequence.Element == Swift.String>) -> SwiftStacktrace.Caller",
+      "functionInfo" : {
+        "arguments" : [
+          {
+            "label" : "fileID",
+            "type" : {
+              "base" : "Swift",
+              "name" : "String"
+            }
+          },
+          {
+            "label" : "line",
+            "type" : {
+              "base" : "Swift",
+              "name" : "UInt"
+            }
+          },
+          {
+            "label" : "function",
+            "type" : {
+              "base" : "Swift",
+              "name" : "String"
+            }
+          },
+          {
+            "label" : "stack",
+            "type" : {
+              "base" : "Swift",
+              "name" : "Sequence"
+            }
+          }
+        ],
+        "functionName" : "init",
+        "functionType" : {
+          "base" : "SwiftStacktrace",
+          "name" : "Caller"
+        },
+        "raw" : "SwiftStacktrace.Caller.init(fileID: Swift.String, line: Swift.UInt, function: Swift.String, stack: any Swift.Sequence<Self.Swift.Sequence.Element == Swift.String>) -> SwiftStacktrace.Caller"
+      },
+      "index" : 0,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "$s15SwiftStacktrace6CallerV6fileID4line8function5stackACSS_SuSSST_pSS7ElementSTRts_XPtcfcfA2_",
+      "stackPointer" : "0x0000000100336208"
+    },
+    {
+      "function" : "SwiftStacktrace.StacktraceError.init(Swift.Error, Swift.String, Swift.UInt, Swift.String) -> SwiftStacktrace.StacktraceError",
+      "functionInfo" : {
+        "arguments" : [
+          {
+            "type" : {
+              "base" : "Swift",
+              "name" : "Error"
+            }
+          },
+          {
+            "type" : {
+              "base" : "Swift",
+              "name" : "String"
+            }
+          },
+          {
+            "type" : {
+              "base" : "Swift",
+              "name" : "UInt"
+            }
+          },
+          {
+            "type" : {
+              "base" : "Swift",
+              "name" : "String"
+            }
+          }
+        ],
+        "functionName" : "init",
+        "functionType" : {
+          "base" : "SwiftStacktrace",
+          "name" : "StacktraceError"
+        },
+        "raw" : "SwiftStacktrace.StacktraceError.init(Swift.Error, Swift.String, Swift.UInt, Swift.String) -> SwiftStacktrace.StacktraceError"
+      },
+      "index" : 1,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "$s15SwiftStacktrace0B5ErrorVyACs0C0_p_SSSuSStcfC",
+      "stackPointer" : "0x00000001003522ac"
+    },
+    {
+      "function" : "PlexApi.Requestor.request<A where A: Swift.Decodable>(url: Foundation.URL, _: A.Type, requestUUID: Swift.Optional<Foundation.UUID>, method: Swift.String, queryItems: Swift.Optional<Swift.Array<Foundation.URLQueryItem>>, sendDefaultQueries: Swift.Bool, timeout: Swift.Optional<Swift.Duration>, invalidateAfterError: Swift.Bool, useCache: Swift.Bool, onlyCached: Swift.Bool) async throws -> A",
+      "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58 :: SourceFileSyntax\n├─statements: CodeBlockItemListSyntax\n│ ╰─[0]: CodeBlockItemSyntax\n│   ╰─item: SequenceExprSyntax\n│     ╰─elements: ExprListSyntax\n│       ├─[0]: MemberAccessExprSyntax\n│       │ ├─base: MemberAccessExprSyntax\n│       │ │ ├─base: DeclReferenceExprSyntax\n│       │ │ │ ╰─baseName: identifier(\"PlexApi\")\n│       │ │ ├─period: period\n│       │ │ ╰─declName: DeclReferenceExprSyntax\n│       │ │   ╰─baseName: identifier(\"Requestor\")\n│       │ ├─period: period\n│       │ ╰─declName: DeclReferenceExprSyntax\n│       │   ╰─baseName: identifier(\"request\")\n│       ├─[1]: BinaryOperatorExprSyntax\n│       │ ╰─operator: binaryOperator(\"<\")\n│       ╰─[2]: DeclReferenceExprSyntax\n│         ╰─baseName: identifier(\"A\")\n├─unexpectedBetweenStatementsAndEndOfFileToken: UnexpectedNodesSyntax\n│ ├─[0]: keyword(SwiftSyntax.Keyword.where)\n│ ├─[1]: identifier(\"A\")\n│ ├─[2]: colon\n│ ├─[3]: identifier(\"Swift\")\n│ ├─[4]: period\n│ ├─[5]: identifier(\"Decodable\")\n│ ├─[6]: binaryOperator(\">\")\n│ ├─[7]: leftParen\n│ ├─[8]: identifier(\"url\")\n│ ├─[9]: colon\n│ ├─[10]: identifier(\"Foundation\")\n│ ├─[11]: period\n│ ├─[12]: identifier(\"URL\")\n│ ├─[13]: comma\n│ ├─[14]: wildcard\n│ ├─[15]: colon\n│ ├─[16]: identifier(\"A\")\n│ ├─[17]: period\n│ ├─[18]: identifier(\"Type\")\n│ ├─[19]: comma\n│ ├─[20]: identifier(\"requestUUID\")\n│ ├─[21]: colon\n│ ├─[22]: identifier(\"Swift\")\n│ ├─[23]: period\n│ ├─[24]: identifier(\"Optional\")\n│ ├─[25]: binaryOperator(\"<\")\n│ ├─[26]: identifier(\"Foundation\")\n│ ├─[27]: period\n│ ├─[28]: identifier(\"UUID\")\n│ ├─[29]: postfixOperator(\">\")\n│ ├─[30]: comma\n│ ├─[31]: identifier(\"method\")\n│ ├─[32]: colon\n│ ├─[33]: identifier(\"Swift\")\n│ ├─[34]: period\n│ ├─[35]: identifier(\"String\")\n│ ├─[36]: comma\n│ ├─[37]: identifier(\"queryItems\")\n│ ├─[38]: colon\n│ ├─[39]: identifier(\"Swift\")\n│ ├─[40]: period\n│ ├─[41]: identifier(\"Optional\")\n│ ├─[42]: binaryOperator(\"<\")\n│ ├─[43]: identifier(\"Swift\")\n│ ├─[44]: period\n│ ├─[45]: identifier(\"Array\")\n│ ├─[46]: binaryOperator(\"<\")\n│ ├─[47]: identifier(\"Foundation\")\n│ ├─[48]: period\n│ ├─[49]: identifier(\"URLQueryItem\")\n│ ├─[50]: postfixOperator(\">>\")\n│ ├─[51]: comma\n│ ├─[52]: identifier(\"sendDefaultQueries\")\n│ ├─[53]: colon\n│ ├─[54]: identifier(\"Swift\")\n│ ├─[55]: period\n│ ├─[56]: identifier(\"Bool\")\n│ ├─[57]: comma\n│ ├─[58]: identifier(\"timeout\")\n│ ├─[59]: colon\n│ ├─[60]: identifier(\"Swift\")\n│ ├─[61]: period\n│ ├─[62]: identifier(\"Optional\")\n│ ├─[63]: binaryOperator(\"<\")\n│ ├─[64]: identifier(\"Swift\")\n│ ├─[65]: period\n│ ├─[66]: identifier(\"Duration\")\n│ ├─[67]: postfixOperator(\">\")\n│ ├─[68]: comma\n│ ├─[69]: identifier(\"invalidateAfterError\")\n│ ├─[70]: colon\n│ ├─[71]: identifier(\"Swift\")\n│ ├─[72]: period\n│ ├─[73]: identifier(\"Bool\")\n│ ├─[74]: comma\n│ ├─[75]: identifier(\"useCache\")\n│ ├─[76]: colon\n│ ├─[77]: identifier(\"Swift\")\n│ ├─[78]: period\n│ ├─[79]: identifier(\"Bool\")\n│ ├─[80]: comma\n│ ├─[81]: identifier(\"onlyCached\")\n│ ├─[82]: colon\n│ ├─[83]: identifier(\"Swift\")\n│ ├─[84]: period\n│ ├─[85]: identifier(\"Bool\")\n│ ├─[86]: rightParen\n│ ├─[87]: identifier(\"async\")\n│ ├─[88]: keyword(SwiftSyntax.Keyword.throws)\n│ ├─[89]: arrow\n│ ╰─[90]: identifier(\"A\")\n╰─endOfFileToken: endOfFile",
+      "index" : 2,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "$s7PlexApi9RequestorC7request3url_0D4UUID6method10queryItems18sendDefaultQueries7timeout20invalidateAfterError8useCache10onlyCachedx10Foundation3URLV_xmAN0F0VSgSSSayAN12URLQueryItemVGSgSbs8DurationVSgS3btYaKSeRzlFTY5_",
+      "stackPointer" : "0x0000000100f84c38"
+    },
+    {
+      "function" : "PlexApi.ResourcesService.ping(server: PlexShared.ServerWithConnection, timeout: Swift.Duration) async -> PlexApi.PingResult",
+      "functionInfo" : {
+        "arguments" : [
+          {
+            "label" : "server",
+            "type" : {
+              "base" : "PlexShared",
+              "name" : "ServerWithConnection"
+            }
+          },
+          {
+            "label" : "timeout",
+            "type" : {
+              "base" : "Swift",
+              "name" : "Duration"
+            }
+          }
+        ],
+        "functionName" : "ping",
+        "functionType" : {
+          "base" : "PlexApi",
+          "name" : "ResourcesService"
+        },
+        "raw" : "PlexApi.ResourcesService.ping(server: PlexShared.ServerWithConnection, timeout: Swift.Duration) async -> PlexApi.PingResult"
+      },
+      "index" : 3,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "$s7PlexApi16ResourcesServiceC4ping6server7timeoutAA10PingResultV0A6Shared20ServerWithConnectionV_s8DurationVtYaFTQ1_",
+      "stackPointer" : "0x0000000100f88145"
+    },
+    {
+      "function" : "PlexApi.ResourcesService.capabilities(server: PlexShared.Server) async throws -> PlexShared.Root<PlexShared.Capabilities>",
+      "functionInfo" : {
+        "arguments" : [
+          {
+            "label" : "server",
+            "type" : {
+              "base" : "PlexShared",
+              "name" : "Server"
+            }
+          }
+        ],
+        "functionName" : "capabilities",
+        "functionType" : {
+          "base" : "PlexApi",
+          "name" : "ResourcesService"
+        },
+        "raw" : "PlexApi.ResourcesService.capabilities(server: PlexShared.Server) async throws -> PlexShared.Root<PlexShared.Capabilities>"
+      },
+      "index" : 4,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "$s7PlexApi16ResourcesServiceC12capabilities6server0A6Shared4RootVyAF12CapabilitiesVGAF6ServerV_tYaKFTQ1_",
+      "stackPointer" : "0x0000000100f8cf25"
+    },
+    {
+      "function" : "static PlexRunner.Main.main() async throws -> ()",
+      "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58 :: SourceFileSyntax\n├─statements: CodeBlockItemListSyntax\n├─unexpectedBetweenStatementsAndEndOfFileToken: UnexpectedNodesSyntax\n│ ├─[0]: keyword(SwiftSyntax.Keyword.static)\n│ ├─[1]: identifier(\"PlexRunner\")\n│ ├─[2]: period\n│ ├─[3]: identifier(\"Main\")\n│ ├─[4]: period\n│ ├─[5]: identifier(\"main\")\n│ ├─[6]: leftParen\n│ ├─[7]: rightParen\n│ ├─[8]: identifier(\"async\")\n│ ├─[9]: keyword(SwiftSyntax.Keyword.throws)\n│ ├─[10]: arrow\n│ ├─[11]: leftParen\n│ ╰─[12]: rightParen\n╰─endOfFileToken: endOfFile",
+      "index" : 5,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "$s10PlexRunner4MainO4mainyyYaKFZTQ1_",
+      "stackPointer" : "0x0000000100003619"
+    },
+    {
+      "function" : "static PlexRunner.Main.$main() async throws -> ()",
+      "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58 :: SourceFileSyntax\n├─statements: CodeBlockItemListSyntax\n├─unexpectedBetweenStatementsAndEndOfFileToken: UnexpectedNodesSyntax\n│ ├─[0]: keyword(SwiftSyntax.Keyword.static)\n│ ├─[1]: identifier(\"PlexRunner\")\n│ ├─[2]: period\n│ ├─[3]: identifier(\"Main\")\n│ ├─[4]: period\n│ ├─[5]: identifier(\"$main\")\n│ ├─[6]: leftParen\n│ ├─[7]: rightParen\n│ ├─[8]: identifier(\"async\")\n│ ├─[9]: keyword(SwiftSyntax.Keyword.throws)\n│ ├─[10]: arrow\n│ ├─[11]: leftParen\n│ ╰─[12]: rightParen\n╰─endOfFileToken: endOfFile",
+      "index" : 6,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "$s10PlexRunner4MainO5$mainyyYaKFZTQ0_",
+      "stackPointer" : "0x00000001000049c1"
+    },
+    {
+      "functionInfo" : "Error Domain= Code=0 \"(null)\"",
+      "index" : 7,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "async_MainTQ0_",
+      "stackPointer" : "0x0000000100004bd1"
+    },
+    {
+      "function" : "reabstraction thunk helper from @escaping @convention(thin) @async () -> () to @escaping @callee_guaranteed @async () -> (@out (), @error @owned Swift.Error)",
+      "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58 :: SourceFileSyntax\n├─statements: CodeBlockItemListSyntax\n│ ├─[0]: CodeBlockItemSyntax\n│ │ ├─item: DeclReferenceExprSyntax\n│ │ │ ╰─baseName: identifier(\"reabstraction\")\n│ │ ╰─semicolon: semicolon MISSING\n│ ├─[1]: CodeBlockItemSyntax\n│ │ ├─item: DeclReferenceExprSyntax\n│ │ │ ╰─baseName: identifier(\"thunk\")\n│ │ ╰─semicolon: semicolon MISSING\n│ ├─[2]: CodeBlockItemSyntax\n│ │ ├─item: DeclReferenceExprSyntax\n│ │ │ ╰─baseName: identifier(\"helper\")\n│ │ ╰─semicolon: semicolon MISSING\n│ ├─[3]: CodeBlockItemSyntax\n│ │ ├─item: DeclReferenceExprSyntax\n│ │ │ ╰─baseName: identifier(\"from\")\n│ │ ╰─semicolon: semicolon MISSING\n│ ├─[4]: CodeBlockItemSyntax\n│ │ ├─item: TypeExprSyntax\n│ │ │ ╰─type: AttributedTypeSyntax\n│ │ │   ├─attributes: AttributeListSyntax\n│ │ │   │ ├─[0]: AttributeSyntax\n│ │ │   │ │ ├─atSign: atSign\n│ │ │   │ │ ╰─attributeName: IdentifierTypeSyntax\n│ │ │   │ │   ╰─name: identifier(\"escaping\")\n│ │ │   │ ├─[1]: AttributeSyntax\n│ │ │   │ │ ├─atSign: atSign\n│ │ │   │ │ ├─attributeName: IdentifierTypeSyntax\n│ │ │   │ │ │ ╰─name: identifier(\"convention\")\n│ │ │   │ │ ├─leftParen: leftParen\n│ │ │   │ │ ├─arguments: ConventionAttributeArgumentsSyntax\n│ │ │   │ │ │ ╰─conventionLabel: identifier(\"thin\")\n│ │ │   │ │ ╰─rightParen: rightParen\n│ │ │   │ ╰─[2]: AttributeSyntax\n│ │ │   │   ├─atSign: atSign\n│ │ │   │   ╰─attributeName: IdentifierTypeSyntax\n│ │ │   │     ╰─name: identifier(\"async\")\n│ │ │   ╰─baseType: FunctionTypeSyntax\n│ │ │     ├─leftParen: leftParen\n│ │ │     ├─parameters: TupleTypeElementListSyntax\n│ │ │     ├─rightParen: rightParen\n│ │ │     ╰─returnClause: ReturnClauseSyntax\n│ │ │       ├─arrow: arrow\n│ │ │       ╰─type: TupleTypeSyntax\n│ │ │         ├─leftParen: leftParen\n│ │ │         ├─elements: TupleTypeElementListSyntax\n│ │ │         ╰─rightParen: rightParen\n│ │ ╰─semicolon: semicolon MISSING\n│ ╰─[5]: CodeBlockItemSyntax\n│   ╰─item: DeclReferenceExprSyntax\n│     ╰─baseName: identifier(\"to\")\n├─unexpectedBetweenStatementsAndEndOfFileToken: UnexpectedNodesSyntax\n│ ├─[0]: atSign\n│ ├─[1]: identifier(\"escaping\")\n│ ├─[2]: atSign\n│ ├─[3]: identifier(\"callee_guaranteed\")\n│ ├─[4]: atSign\n│ ├─[5]: identifier(\"async\")\n│ ├─[6]: leftParen\n│ ├─[7]: rightParen\n│ ├─[8]: arrow\n│ ├─[9]: leftParen\n│ ├─[10]: atSign\n│ ├─[11]: identifier(\"out\")\n│ ├─[12]: leftParen\n│ ├─[13]: rightParen\n│ ├─[14]: comma\n│ ├─[15]: atSign\n│ ├─[16]: identifier(\"error\")\n│ ├─[17]: atSign\n│ ├─[18]: identifier(\"owned\")\n│ ├─[19]: identifier(\"Swift\")\n│ ├─[20]: period\n│ ├─[21]: identifier(\"Error\")\n│ ╰─[22]: rightParen\n╰─endOfFileToken: endOfFile",
+      "index" : 8,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "$sIetH_yts5Error_pIegHrzo_TRTQ0_",
+      "stackPointer" : "0x0000000100004d3d"
+    },
+    {
+      "function" : "partial apply forwarder for reabstraction thunk helper from @escaping @convention(thin) @async () -> () to @escaping @callee_guaranteed @async () -> (@out (), @error @owned Swift.Error)",
+      "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58 :: SourceFileSyntax\n├─statements: CodeBlockItemListSyntax\n│ ├─[0]: CodeBlockItemSyntax\n│ │ ├─item: DeclReferenceExprSyntax\n│ │ │ ╰─baseName: identifier(\"partial\")\n│ │ ╰─semicolon: semicolon MISSING\n│ ├─[1]: CodeBlockItemSyntax\n│ │ ├─item: DeclReferenceExprSyntax\n│ │ │ ╰─baseName: identifier(\"apply\")\n│ │ ╰─semicolon: semicolon MISSING\n│ ├─[2]: CodeBlockItemSyntax\n│ │ ├─item: DeclReferenceExprSyntax\n│ │ │ ╰─baseName: identifier(\"forwarder\")\n│ │ ╰─semicolon: semicolon MISSING\n│ ╰─[3]: CodeBlockItemSyntax\n│   ╰─item: ForStmtSyntax\n│     ├─forKeyword: keyword(SwiftSyntax.Keyword.for)\n│     ├─pattern: IdentifierPatternSyntax\n│     │ ╰─identifier: identifier(\"reabstraction\")\n│     ├─inKeyword: keyword(SwiftSyntax.Keyword.in) MISSING\n│     ├─sequence: DeclReferenceExprSyntax\n│     │ ╰─baseName: identifier(\"thunk\")\n│     ╰─body: CodeBlockSyntax\n│       ├─leftBrace: leftBrace MISSING\n│       ├─statements: CodeBlockItemListSyntax\n│       │ ├─[0]: CodeBlockItemSyntax\n│       │ │ ├─item: DeclReferenceExprSyntax\n│       │ │ │ ╰─baseName: identifier(\"helper\")\n│       │ │ ╰─semicolon: semicolon MISSING\n│       │ ├─[1]: CodeBlockItemSyntax\n│       │ │ ├─item: DeclReferenceExprSyntax\n│       │ │ │ ╰─baseName: identifier(\"from\")\n│       │ │ ╰─semicolon: semicolon MISSING\n│       │ ├─[2]: CodeBlockItemSyntax\n│       │ │ ├─item: TypeExprSyntax\n│       │ │ │ ╰─type: AttributedTypeSyntax\n│       │ │ │   ├─attributes: AttributeListSyntax\n│       │ │ │   │ ├─[0]: AttributeSyntax\n│       │ │ │   │ │ ├─atSign: atSign\n│       │ │ │   │ │ ╰─attributeName: IdentifierTypeSyntax\n│       │ │ │   │ │   ╰─name: identifier(\"escaping\")\n│       │ │ │   │ ├─[1]: AttributeSyntax\n│       │ │ │   │ │ ├─atSign: atSign\n│       │ │ │   │ │ ├─attributeName: IdentifierTypeSyntax\n│       │ │ │   │ │ │ ╰─name: identifier(\"convention\")\n│       │ │ │   │ │ ├─leftParen: leftParen\n│       │ │ │   │ │ ├─arguments: ConventionAttributeArgumentsSyntax\n│       │ │ │   │ │ │ ╰─conventionLabel: identifier(\"thin\")\n│       │ │ │   │ │ ╰─rightParen: rightParen\n│       │ │ │   │ ╰─[2]: AttributeSyntax\n│       │ │ │   │   ├─atSign: atSign\n│       │ │ │   │   ╰─attributeName: IdentifierTypeSyntax\n│       │ │ │   │     ╰─name: identifier(\"async\")\n│       │ │ │   ╰─baseType: FunctionTypeSyntax\n│       │ │ │     ├─leftParen: leftParen\n│       │ │ │     ├─parameters: TupleTypeElementListSyntax\n│       │ │ │     ├─rightParen: rightParen\n│       │ │ │     ╰─returnClause: ReturnClauseSyntax\n│       │ │ │       ├─arrow: arrow\n│       │ │ │       ╰─type: TupleTypeSyntax\n│       │ │ │         ├─leftParen: leftParen\n│       │ │ │         ├─elements: TupleTypeElementListSyntax\n│       │ │ │         ╰─rightParen: rightParen\n│       │ │ ╰─semicolon: semicolon MISSING\n│       │ ╰─[3]: CodeBlockItemSyntax\n│       │   ╰─item: DeclReferenceExprSyntax\n│       │     ╰─baseName: identifier(\"to\")\n│       ╰─rightBrace: rightBrace MISSING\n├─unexpectedBetweenStatementsAndEndOfFileToken: UnexpectedNodesSyntax\n│ ├─[0]: atSign\n│ ├─[1]: identifier(\"escaping\")\n│ ├─[2]: atSign\n│ ├─[3]: identifier(\"callee_guaranteed\")\n│ ├─[4]: atSign\n│ ├─[5]: identifier(\"async\")\n│ ├─[6]: leftParen\n│ ├─[7]: rightParen\n│ ├─[8]: arrow\n│ ├─[9]: leftParen\n│ ├─[10]: atSign\n│ ├─[11]: identifier(\"out\")\n│ ├─[12]: leftParen\n│ ├─[13]: rightParen\n│ ├─[14]: comma\n│ ├─[15]: atSign\n│ ├─[16]: identifier(\"error\")\n│ ├─[17]: atSign\n│ ├─[18]: identifier(\"owned\")\n│ ├─[19]: identifier(\"Swift\")\n│ ├─[20]: period\n│ ├─[21]: identifier(\"Error\")\n│ ╰─[22]: rightParen\n╰─endOfFileToken: endOfFile",
+      "index" : 9,
+      "lib" : "PlexRunner",
+      "mangledFunction" : "$sIetH_yts5Error_pIegHrzo_TRTATQ0_",
+      "stackPointer" : "0x0000000100004e65"
+    },
+    {
+      "functionInfo" : "Error Domain= Code=0 \"(null)\"",
+      "index" : 10,
+      "lib" : "libswift_Concurrency.dylib",
+      "mangledFunction" : "_ZL23completeTaskWithClosurePN5swift12AsyncContextEPNS_10SwiftErrorE",
+      "stackPointer" : "0x00000002273f1c7d"
+    }
+  ],
+  "raw" : [
+    "0   PlexRunner                          0x0000000100336208 $s15SwiftStacktrace6CallerV6fileID4line8function5stackACSS_SuSSST_pSS7ElementSTRts_XPtcfcfA2_ + 40",
+    "1   PlexRunner                          0x00000001003522ac $s15SwiftStacktrace0B5ErrorVyACs0C0_p_SSSuSStcfC + 192",
+    "2   PlexRunner                          0x0000000100f84c38 $s7PlexApi9RequestorC7request3url_0D4UUID6method10queryItems18sendDefaultQueries7timeout20invalidateAfterError8useCache10onlyCachedx10Foundation3URLV_xmAN0F0VSgSSSayAN12URLQueryItemVGSgSbs8DurationVSgS3btYaKSeRzlFTY5_ + 4612",
+    "3   PlexRunner                          0x0000000100f88145 $s7PlexApi16ResourcesServiceC4ping6server7timeoutAA10PingResultV0A6Shared20ServerWithConnectionV_s8DurationVtYaFTQ1_ + 1",
+    "4   PlexRunner                          0x0000000100f8cf25 $s7PlexApi16ResourcesServiceC12capabilities6server0A6Shared4RootVyAF12CapabilitiesVGAF6ServerV_tYaKFTQ1_ + 1",
+    "5   PlexRunner                          0x0000000100003619 $s10PlexRunner4MainO4mainyyYaKFZTQ1_ + 1",
+    "6   PlexRunner                          0x00000001000049c1 $s10PlexRunner4MainO5$mainyyYaKFZTQ0_ + 1",
+    "7   PlexRunner                          0x0000000100004bd1 async_MainTQ0_ + 1",
+    "8   PlexRunner                          0x0000000100004d3d $sIetH_yts5Error_pIegHrzo_TRTQ0_ + 1",
+    "9   PlexRunner                          0x0000000100004e65 $sIetH_yts5Error_pIegHrzo_TRTATQ0_ + 1",
+    "10  libswift_Concurrency.dylib          0x00000002273f1c7d _ZL23completeTaskWithClosurePN5swift12AsyncContextEPNS_10SwiftErrorE + 1"
+  ]
+}

@@ -15,7 +15,7 @@ public func assumeCalledOnMainActor(
   _ fileID: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
 #if DEBUG
-  let caller = Caller(fileID: "\(fileID)", line: line, function: function)
+  let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
 
 //    dispatchPrecondition(condition: .onQueue(.main))
 
@@ -56,7 +56,7 @@ public func assumeCalledOnMainActor(
     assertionFailure("🚦 NO PREVIOUS TASK!!!", file: fileID, line: line)
   }
 
-  if !caller.isEntry, !caller.stack.isFromUIKit, !isEntry {
+  if !caller.isEntry, !caller.stack.initialized.isFromUIKit, !isEntry {
     assertionFailure("🚦 not from uikit??", file: fileID, line: line)
   }
 

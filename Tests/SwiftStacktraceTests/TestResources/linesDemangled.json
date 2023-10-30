@@ -1,0 +1,13 @@
+[
+  "0  PlexRunner                          0x0000000100336208 $s15SwiftStacktrace6CallerV6fileID4line8function5stackACSS_SuSSST_pSS7ElementSTRts_XPtcfcfA2_ + 40",
+  "  PlexRunner                          0x00000001003522ac $s15SwiftStacktrace0B5ErrorVyACs0C0_p_SSSuSStcfC + 192",
+  "  PlexRunner                          0x0000000100f84c38 $s7PlexApi9RequestorC7request3url_0D4UUID6method10queryItems18sendDefaultQueries7timeout20invalidateAfterError8useCache10onlyCachedx10Foundation3URLV_xmAN0F0VSgSSSayAN12URLQueryItemVGSgSbs8DurationVSgS3btYaKSeRzlFTY5_ + 4612",
+  "  PlexRunner                          0x0000000100f88145 $s7PlexApi16ResourcesServiceC4ping6server7timeoutAA10PingResultV0A6Shared20ServerWithConnectionV_s8DurationVtYaFTQ1_ + 1",
+  "  PlexRunner                          0x0000000100f8cf25 $s7PlexApi16ResourcesServiceC12capabilities6server0A6Shared4RootVyAF12CapabilitiesVGAF6ServerV_tYaKFTQ1_ + 1",
+  "  PlexRunner                          0x0000000100003619 $s10PlexRunner4MainO4mainyyYaKFZTQ1_ + 1",
+  "  PlexRunner                          0x00000001000049c1 $s10PlexRunner4MainO5$mainyyYaKFZTQ0_ + 1",
+  "  PlexRunner                          0x0000000100004bd1 async_MainTQ0_ + 1",
+  "  PlexRunner                          0x0000000100004d3d $sIetH_yts5Error_pIegHrzo_TRTQ0_ + 1",
+  "  PlexRunner                          0x0000000100004e65 $sIetH_yts5Error_pIegHrzo_TRTATQ0_ + 1",
+  "0 libswift_Concurrency.dylib          0x00000002273f1c7d _ZL23completeTaskWithClosurePN5swift12AsyncContextEPNS_10SwiftErrorE + 1"
+]

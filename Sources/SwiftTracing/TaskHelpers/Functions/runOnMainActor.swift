@@ -54,7 +54,7 @@ func innerDebug(
   _ fileID: StaticString, _ line: UInt, _ function: String,
   _ currentFunction: String = #function
 ) {
-  let caller = Caller(fileID: "\(fileID)", line: line, function: function)
+  let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
 
   let previousCaller = TaskCaller.caller
 

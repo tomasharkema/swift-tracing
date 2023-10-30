@@ -4,7 +4,6 @@ import XCTest
 
 // swiftlint:disable line_length
 final class FunctionInfoTests: XCTestCase {
-  
   func testFunctionInfo() throws {
     let functionInfo =
       try FunctionInfo(
@@ -13,10 +12,19 @@ final class FunctionInfoTests: XCTestCase {
     assertSnapshot(of: functionInfo, as: .dump)
   }
 
-  func testGarbage() throws {
+  func testGarbage1() throws {
     try assertSnapshot(
       of: FunctionInfo(
         "(6) suspend resume partial function for PlexApi.Requestor.request<A where A: Swift.Decodable>(url: Foundation.URL, _: A.Type, requestUUID: Swift.Optional<Foundation.UUID>, method: Swift.String, queryItems: Swift.Optional<Swift.Array<Foundation.URLQueryItem>>, sendDefaultQueries: Swift.Bool, timeout: Swift.Optional<Swift.Duration>, invalidateAfterError: Swift.Bool, useCache: Swift.Bool, onlyCached: Swift.Bool) async throws -> A"
+      ),
+      as: .dump
+    )
+  }
+
+  func testGarbage2() throws {
+    try assertSnapshot(
+      of: FunctionInfo(
+        "PlexApi.Requestor.request<A where A: Swift.Decodable>(url: Foundation.URL, _: A.Type, requestUUID: Swift.Optional<Foundation.UUID>, method: Swift.String, queryItems: Swift.Optional<Swift.Array<Foundation.URLQueryItem>>, sendDefaultQueries: Swift.Bool, timeout: Swift.Optional<Swift.Duration>, invalidateAfterError: Swift.Bool, useCache: Swift.Bool, onlyCached: Swift.Bool) async throws -> A"
       ),
       as: .dump
     )

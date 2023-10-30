@@ -6,23 +6,40 @@
 //
 
 import Foundation
+import SwiftSyntax
 
-public struct Frame: CustomDebugStringConvertible, Hashable, Equatable, Sendable {
+public class LazyFrame: LazyInitializable {
+  package let raw: String
+
+  public lazy var initialized: Frame = .init(raw)
+
+  package init(_ line: String) {
+    raw = line
+  }
+}
+
+public struct Frame: Hashable, Equatable, Sendable, Encodable {
   public let index: Int
   public let lib: String
   public let stackPointer: String
   public let mangledFunction: String
   public let function: String?
-  public let functionInfo: FunctionInfo?
 
-  package init?(_ line: String) {
-    guard #available(iOS 16, macOS 13, *) else {
-      return nil
-    }
+  @HashableNoop
+  public private(set) var functionInfo: Result<FunctionInfo, FunctionInfoError>
 
-    guard let match = line.firstMatch(of: FrameRegex.frameRegex) else {
+  fileprivate init(_ line: String) {
+    guard #available(macOS 13, *),
+          let match = line.firstMatch(of: FrameRegex.frameRegex)
+    else {
       assertionFailure("STACKFRAME: line not matched: \(line)")
-      return nil
+      index = 0
+      lib = "ERROR"
+      stackPointer = "ERROR"
+      mangledFunction = "ERROR"
+      function = nil
+      functionInfo = .failure(.otherError(NSError(domain: "", code: 0)))
+      return
     }
 
     index = match[FrameRegex.indexRef]
@@ -32,27 +49,24 @@ public struct Frame: CustomDebugStringConvertible, Hashable, Equatable, Sendable
     let demangled = swift_demangle(mangledFunction)
     let cleanupped = demangled.flatMap { cleanup(line: $0) }
     function = cleanupped
-    do {
-      functionInfo = try cleanupped.flatMap { try FunctionInfo($0) }
-    } catch {
-      // print(error)
-      functionInfo = nil
-    }
-  }
 
-  public var debugDescription: String {
-    let functionText: String
+    let functionInfo = cleanupped
+      .flatMap { line in
+        Result {
+          try FunctionInfo(line)
+        }.mapError { error in
+          if let error = error as? ParseError {
+            FunctionInfoError.parseError(error)
+          } else {
+            FunctionInfoError.otherError(error)
+          }
+        }
+      }
     if let functionInfo {
-      functionText = functionInfo.debugDescription
+      self.functionInfo = functionInfo
     } else {
-      functionText = "raw: \(function ?? mangledFunction)"
+      self.functionInfo = .failure(.otherError(NSError(domain: "", code: 0)))
     }
-    
-    return "\(functionText) \(index) \(lib) \(stackPointer)"
-  }
-
-  public var briefDescription: String {
-    "\(function?.description ?? String(mangledFunction.prefix(10))) \(index) \(lib) \(stackPointer)"
   }
 
   package var functionOrMangled: String {
@@ -91,10 +105,32 @@ public struct Frame: CustomDebugStringConvertible, Hashable, Equatable, Sendable
   }
 }
 
+extension Frame: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    let functionText: String = switch functionInfo {
+    case let .success(result):
+      result.debugDescription
+    case let .failure(error):
+      "raw: \(function ?? mangledFunction) \(error)"
+    }
+
+    return "\(functionText) \(index) \(lib) \(stackPointer)"
+  }
+}
+
+extension Frame: CustomBriefStringConvertible {
+  public var briefDescription: String {
+    "\(function?.description ?? String(mangledFunction.prefix(10))) \(index) \(lib) \(stackPointer)"
+  }
+}
+
+extension LazyFrame: Encodable {}
+
 func cleanup(line: String) -> String {
   if #available(macOS 13.0, *) {
-    let cleanupRegex = /^((\([0-9]+\)) )?((suspend) )?((?<await>await) )?((resume) )?((partial) )?((function) )?((for) )?((default) (argument) ([0-9]+) (of) )?(?<functionDecl>.*)/
-    
+    let cleanupRegex =
+      /^((\([0-9]+\)) )?((suspend) )?((?<await>await) )?((resume) )?((partial) )?((function) )?((for) )?((default) (argument) ([0-9]+) (of) )?(?<functionDecl>.*)/
+
     if let match = line.firstMatch(of: cleanupRegex) {
       return "\(match.output.functionDecl)"
     }

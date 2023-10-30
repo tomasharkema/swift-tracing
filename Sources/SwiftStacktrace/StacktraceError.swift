@@ -8,9 +8,9 @@ public protocol StacktraceErrorContainable {
 
 public struct StacktraceError: Error {
   public let underlyingError: any Error
-  public let stacktrace: Caller
+  package let stacktrace: LazyCaller
 
-  public init(
+  package init(
     _ underlyingError: any Error,
     _ fileID: String = #fileID,
     _ line: UInt = #line,
@@ -21,7 +21,7 @@ public struct StacktraceError: Error {
     //     self.stackTrace = stack.stackTrace
     // } else {
     self.underlyingError = underlyingError
-    stacktrace = Caller(fileID: fileID, line: line, function: function)
+    stacktrace = LazyCaller(fileID: fileID, line: line, function: function)
     // }
   }
 
@@ -80,17 +80,11 @@ extension StacktraceError: CustomDebugStringConvertible {
   public var debugDescription: String {
     let descr = underlyingErrorDescription()
     let stack = latestError().stacktrace
-    let stackFormatted = stack.stack.frames
-      .map {
-        if let functionInfo = $0.functionInfo {
-          return "\t\tat: \(functionInfo.debugDescription)"
-        } else {
-          return "\t\t\tat: \($0)"
-        }
-      }
-      .joined(separator: "\n")
+    let callerInitialized = stack.initialized
+    let stackInitialized = callerInitialized.stack.initialized
+    let stackFormatted = stackInitialized.stackFormatted
 
-    let stacktraceDescription = stack.debugDescription
+    let stacktraceDescription = stackInitialized.debugDescription
 
     return "\(descr)\n\n\t\(stacktraceDescription)\n\(stackFormatted)"
   }

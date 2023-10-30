@@ -21,9 +21,13 @@ public extension ObservableObject {
     _ function: String = #function,
     dso _: UnsafeRawPointer = #dsohandle
   ) {
-    let caller = Caller(fileID: fileID, line: line, function: function)
+    let caller = LazyCaller(
+      fileID: fileID,
+      line: line,
+      function: function
+    )
 
-    cancableForFileLocation[caller] = objectWillChange.sink { _ in
+    cancableForFileLocation[caller.initialized] = objectWillChange.sink { _ in
       self.stackHelper()
     }
   }
@@ -34,14 +38,14 @@ public extension ObservableObject {
     _ function: String = #function,
     dso _: UnsafeRawPointer = #dsohandle
   ) {
-    let caller = Caller(fileID: fileID, line: line, function: function)
+    let caller = LazyCaller(fileID: fileID, line: line, function: function).initialized
 
-    let latest = caller.stack.frames
+    let latest = caller.stack.initialized.frames
       .drop {
-        !$0.lib.contains("Combine")
+        !$0.initialized.lib.contains("Combine")
       }
       .drop {
-        $0.lib.contains("Combine")
+        $0.initialized.lib.contains("Combine")
       }
       .dropFirst(1)
       .first

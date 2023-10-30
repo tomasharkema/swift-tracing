@@ -9,7 +9,17 @@ import Foundation
 import SwiftParser
 import SwiftSyntax
 
-public struct FunctionInfo: Hashable, Equatable, Sendable, CustomDebugStringConvertible {
+// public class LazyFunctionInfo: LazyInitializable {
+//   package let raw: String
+
+//   public lazy var initialized: FunctionInfo = .init(raw)
+
+//   package init(_ line: String) {
+//     raw = line
+//   }
+// }
+
+public struct FunctionInfo: Hashable, Equatable, Sendable, Encodable {
   let functionType: TypeName?
   let functionName: String
 //  let functionGenerics: String?
@@ -32,20 +42,20 @@ public struct FunctionInfo: Hashable, Equatable, Sendable, CustomDebugStringConv
       throw NSError(domain: "", code: 0)
     }
 
-    self.raw = line
+    raw = line
     let sourceFile: SourceFileSyntax = Parser.parse(source: line)
 
     let isSucceded = line == sourceFile.description
 
     guard isSucceded else {
-      throw FunctionInfoError(expr: sourceFile, reason: .parsingFailed)
+      throw ParseError(expr: sourceFile, reason: .parsingFailed)
     }
 
     let findFunction = FindFunctionWithExpression(viewMode: .sourceAccurate)
     findFunction.walk(sourceFile)
 
     guard let functionBlock = findFunction.functionBlock else {
-      throw FunctionInfoError(expr: sourceFile, reason: .noFunctionFound)
+      throw ParseError(expr: sourceFile, reason: .noFunctionFound)
     }
 
     // print("vvv")
@@ -57,7 +67,7 @@ public struct FunctionInfo: Hashable, Equatable, Sendable, CustomDebugStringConv
 
     guard let memberAccessExpr = functionBlock.calledExpression.as(MemberAccessExprSyntax.self)
     else {
-      throw FunctionInfoError(expr: functionBlock, reason: .memberTypeNotFound)
+      throw ParseError(expr: functionBlock, reason: .memberTypeNotFound)
     }
 
     let base = memberAccessExpr.base?.as(MemberAccessExprSyntax.self)
@@ -83,14 +93,16 @@ public struct FunctionInfo: Hashable, Equatable, Sendable, CustomDebugStringConv
 
     self.arguments = arguments
   }
+}
 
+extension FunctionInfo: CustomDebugStringConvertible {
   public var debugDescription: String {
-    raw //"\(functionType?.debugDescription ?? "") \(functionName) \(arguments)"
+    raw // "\(functionType?.debugDescription ?? "") \(functionName) \(arguments)"
   }
 }
 
 public extension FunctionInfo {
-  struct FunctionArgument: Hashable, Equatable, Sendable, CustomDebugStringConvertible {
+  struct FunctionArgument: Hashable, Equatable, Sendable, Encodable {
     let label: String?
     let type: TypeName
 
@@ -105,15 +117,17 @@ public extension FunctionInfo {
       let type = try TypeName(decl.expression)
       self.type = type
     }
+  }
+}
 
-    public var debugDescription: String {
-      "\(label ?? "") \(type)"
-    }
+extension FunctionInfo.FunctionArgument: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    "\(label ?? "") \(type)"
   }
 }
 
 public extension FunctionInfo {
-  struct TypeName: Hashable, Equatable, Sendable, CustomDebugStringConvertible {
+  struct TypeName: Hashable, Equatable, Sendable, Encodable {
     let base: String?
     let name: String
 
@@ -128,7 +142,7 @@ public extension FunctionInfo {
       } else if let sequenceExpr = expr.as(SequenceExprSyntax.self) {
         try self.init(sequenceExpr)
       } else {
-        throw FunctionInfoError(expr: expr, reason: .noLabel)
+        throw ParseError(expr: expr, reason: .noLabel)
       }
     }
 
@@ -144,38 +158,18 @@ public extension FunctionInfo {
       finder.walk(expr)
 
       guard let memberType = finder.functionBlock else {
-        throw FunctionInfoError(expr: expr, reason: .memberTypeNotFound)
+        throw ParseError(expr: expr, reason: .memberTypeNotFound)
       }
 
       base = memberType.baseType.description
       name = memberType.name.text
     }
-
-    public var debugDescription: String {
-      "\(base ?? "") \(name)"
-    }
   }
 }
 
-public struct FunctionInfoError: Error {
-  let expr: any SyntaxProtocol
-  let reason: Reason
-  let file: String
-  let line: UInt
-
-  init(expr: any SyntaxProtocol, reason: Reason, _ file: String = #fileID, _ line: UInt = #line) {
-    self.expr = expr
-    self.reason = reason
-    self.file = file
-    self.line = line
-  }
-
-  public enum Reason {
-    case noLabel
-    case unsupportedType
-    case memberTypeNotFound
-    case parsingFailed
-    case noFunctionFound
+extension FunctionInfo.TypeName: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    "\(base ?? "") \(name)"
   }
 }
 

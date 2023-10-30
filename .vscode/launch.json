@@ -19,6 +19,26 @@
       "args": [],
       "cwd": "${workspaceFolder:swift-tracing}",
       "preLaunchTask": "swift: Build Release TestApp"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:swift-tracing}",
+      "name": "Debug TestRunner",
+      "program": "${workspaceFolder:swift-tracing}/.build/debug/TestRunner",
+      "preLaunchTask": "swift: Build Debug TestRunner"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:swift-tracing}",
+      "name": "Release TestRunner",
+      "program": "${workspaceFolder:swift-tracing}/.build/release/TestRunner",
+      "preLaunchTask": "swift: Build Release TestRunner"
     }
   ]
 }
