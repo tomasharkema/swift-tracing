@@ -1,5 +1,5 @@
 //
-//  StringBuilder.swift
+//  Partial.swift
 //
 //
 //  Created by Tomas Harkema on 31/10/2023.
@@ -7,35 +7,32 @@
 
 import Foundation
 
-func flatten(in element: any StringConvertible) -> [any StringConvertible] {
-  if let array = element as? [any StringConvertible] {
-    let res = array.flatMap {
-      flatten(in: $0)
-    }
-    return res
-  } else {
-    return [element]
+public struct Partial: Attributable {
+  private var value: String
+
+  public init(_ value: String) {
+    self.value = value // .escaped
   }
 }
 
-extension [any StringConvertible]: StringConvertible {
-  public var lines: [String] {
-    let strings = flatMap { element in
-      let stringValue = element.lines
-      return stringValue
-    }
-    return strings
+public protocol PartialStringConvertible {
+  var line: String { get }
+}
+
+extension Partial: PartialStringConvertible {
+  public var line: String {
+    value
   }
 }
 
 @resultBuilder
-public enum StringBuilder {
-  public typealias Expression = StringConvertible
+public enum PartialBuilder {
+  public typealias Expression = PartialStringConvertible
 
-  public typealias Component = [any StringConvertible]
+  public typealias Component = [any PartialStringConvertible]
 
   public static func buildExpression(_ expression: String) -> Component {
-    [Text(expression)]
+    [Partial(expression)]
   }
 
   public static func buildExpression(_ expression: [any Expression]) -> Component {

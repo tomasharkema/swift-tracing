@@ -84,22 +84,21 @@ public class StacktraceError: Error {
   }
 
   @StringBuilder
-  private func errorChainsString(chain: [StacktraceError]) -> StringResult {
+  private func errorChainsString(chain: [StacktraceError]) -> any StringConvertible {
     for error in chain {
-      let description = error.stacktrace.briefDescription
-      "-> \(description)"
+      "-> \(error.stacktrace.briefDescription)"
     }
   }
 
   @StringBuilder
-  private var underlyingErrorDescription: StringResult {
+  private var underlyingErrorDescription: any StringConvertible {
     if let (chain, lastError) = self.chain() {
       let typeDescription = String(describing: type(of: underlyingError))
       let lastErrorDescription = String(describing: lastError.underlyingError)
       let chainString = errorChainsString(chain: chain.dropLast())
 
       "\(typeDescription): \(lastErrorDescription)"
-      " "
+      Empty()
       Indented {
         chainString
       }
@@ -120,28 +119,27 @@ extension StacktraceError: LocalizedError {
 
 extension StacktraceError: CustomStringConvertible {
   @StringBuilder
-  package var descriptionResult: StringResult {
+  package var descriptionResult: any StringConvertible {
     "hallo?"
   }
 
   public var description: String {
-    descriptionResult.final
+    descriptionResult.string
   }
 }
 
 extension StacktraceError: CustomDebugStringConvertible {
   public var debugDescription: String {
-    debugDescriptionResult.final
+    debugDescriptionResult.string
   }
 
   @StringBuilder
-  package var debugDescriptionResult: StringResult {
+  package var debugDescriptionResult: any StringConvertible {
     underlyingErrorDescription
-    " "
+    Empty()
     Indented {
       "\(self.latestError().stacktrace.debugDescription)"
-      " "
-
+      Empty()
       Indented {
         self.stacktrace.stack.initialized.stackFormattedResult
       }

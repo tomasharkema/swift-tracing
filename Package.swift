@@ -23,10 +23,15 @@ let package = Package(
       name: "SwiftStacktrace",
       targets: ["SwiftStacktrace"]
     ),
+    .library(
+      name: "StringsBuilder",
+      targets: ["StringsBuilder"]
+    ),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0"),
     .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.12.0"),
+    .package(url: "https://github.com/apple/swift-algorithms", from: "1.1.0"),
   ],
   targets: [
     .target(
@@ -53,6 +58,7 @@ let package = Package(
     .target(
       name: "StringsBuilder",
       dependencies: [
+        .product(name: "Algorithms", package: "swift-algorithms"),
       ]
     ),
     .executableTarget(

@@ -135,11 +135,11 @@ public protocol StackStringConvertible {
 
 extension Stack: StackStringConvertible {
   public var stackFormatted: String {
-    stackFormattedResult.final
+    stackFormattedResult.string
   }
 
   @StringBuilder
-  package var stackFormattedResult: StringResult {
+  package var stackFormattedResult: any StringConvertible {
     for frame in frames.initialized {
       if !frame.isFromSwiftTracing, !frame.isFromSwiftStacktrace {
         switch frame.functionInfo {
@@ -163,7 +163,7 @@ extension Stack: CustomDebugStringConvertible {
 
 extension Stack: CustomBriefStringConvertible {
   @StringBuilder
-  package var briefDescriptionResult: StringResult {
+  package var briefDescriptionResult: any StringConvertible {
     for frame in frames {
       let description = frame.briefDescription
       "\(description)"
@@ -171,7 +171,7 @@ extension Stack: CustomBriefStringConvertible {
   }
 
   public var briefDescription: String {
-    briefDescriptionResult.final
+    briefDescriptionResult.string
   }
 }
 

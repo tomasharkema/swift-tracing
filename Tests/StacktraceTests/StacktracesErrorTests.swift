@@ -19,8 +19,8 @@ final class StacktracesErrorTests: XCTestCase {
     )
     return StacktraceError(
       underlyingError: first,
-       caller: caller
-      )
+      caller: caller
+    )
   }()
 
   func testStacktracesErrorDescription() {
