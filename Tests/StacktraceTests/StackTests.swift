@@ -3,10 +3,6 @@ import SnapshotTesting
 import XCTest
 
 final class StackTests: XCTestCase {
-  override class func setUp() {
-    super.setUp()
-    // isRecording = true
-  }
 
   func testStack() throws {
     let lines = try PackageResources.lines
@@ -20,12 +16,12 @@ final class StackTests: XCTestCase {
     let stack = LazyStack(lines)
     let eager = try EagerChain(stack)
     let json = try eager.json
-    assertSnapshot(of: json, as: .dump)
+    assertSnapshot(of: json)
   }
 
   func testStacktrace() throws {
     let lines = try PackageResources.lines
     let stack = LazyStack(lines)
-    assertSnapshot(of: stack.initialized.stackFormatted, as: .dump)
+    assertSnapshot(of: stack.initialized.stackFormatted)
   }
 }

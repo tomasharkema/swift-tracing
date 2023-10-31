@@ -29,7 +29,7 @@ public struct Frame: Hashable, Equatable, Sendable, Encodable {
   public private(set) var functionInfo: Result<FunctionInfo, FunctionInfoError>
 
   fileprivate init(_ line: String) {
-    guard #available(macOS 13, *),
+    guard #available(macOS 13, iOS 16, *),
           let match = line.firstMatch(of: FrameRegex.frameRegex)
     else {
       assertionFailure("STACKFRAME: line not matched: \(line)")
@@ -96,12 +96,23 @@ public struct Frame: Hashable, Equatable, Sendable, Encodable {
   }
 
   var isFromSwiftTracing: Bool {
-    lib.contains("SwiftTracing") || functionOrMangled
-      .contains("SwiftTracing.") || mangledFunction.contains("$s12SwiftTracing")
+    if lib.contains("SwiftTracing") {
+      return true
+    } else if case .success(let functionInfo) = functionInfo, let base = functionInfo.functionType?.base {
+      return base == "SwiftTracing"
+    } else {
+      return functionOrMangled.contains("SwiftTracing.") || mangledFunction.contains("$s12SwiftTracing")
+    }
   }
 
   var isFromSwiftStacktrace: Bool {
-    lib.contains("SwiftStacktrace")
+    if lib.contains("SwiftStacktrace") {
+      return true
+    } else if case .success(let functionInfo) = functionInfo, let base = functionInfo.functionType?.base {
+      return base == "SwiftStacktrace"
+    } else {
+      return functionOrMangled.contains("SwiftStacktrace.") || mangledFunction.contains("$s12SwiftStacktrace")
+    }
   }
 }
 
@@ -111,7 +122,7 @@ extension Frame: CustomDebugStringConvertible {
     case let .success(result):
       result.debugDescription
     case let .failure(error):
-      "raw: \(function ?? mangledFunction) \(error)"
+      "\(function ?? mangledFunction)" // \(error)"
     }
 
     return "\(functionText) \(index) \(lib) \(stackPointer)"
@@ -127,7 +138,7 @@ extension Frame: CustomBriefStringConvertible {
 extension LazyFrame: Encodable {}
 
 func cleanup(line: String) -> String {
-  if #available(macOS 13.0, *) {
+  if #available(macOS 13.0, iOS 16, *) {
     let cleanupRegex =
       /^((\([0-9]+\)) )?((suspend) )?((?<await>await) )?((resume) )?((partial) )?((function) )?((for) )?((default) (argument) ([0-9]+) (of) )?(?<functionDecl>.*)/
 

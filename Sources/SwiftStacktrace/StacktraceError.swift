@@ -1,3 +1,10 @@
+//
+//  StacktraceError.swift
+//
+//
+//  Created by Tomas Harkema on 21/08/2023.
+//
+
 import Foundation
 
 typealias StackError = StacktraceError
@@ -6,11 +13,12 @@ public protocol StacktraceErrorContainable {
   var stacktraceError: StacktraceError? { get }
 }
 
-public struct StacktraceError: Error {
+public class StacktraceError: Error {
   public let underlyingError: any Error
-  package let stacktrace: LazyCaller
+  private let stacktraceClosure: () -> Caller
+  package lazy var stacktrace: Caller = stacktraceClosure()
 
-  package init(
+  public init(
     _ underlyingError: any Error,
     _ fileID: String = #fileID,
     _ line: UInt = #line,
@@ -21,13 +29,31 @@ public struct StacktraceError: Error {
     //     self.stackTrace = stack.stackTrace
     // } else {
     self.underlyingError = underlyingError
-    stacktrace = LazyCaller(fileID: fileID, line: line, function: function)
+    let lazyCaller = LazyCaller(fileID: fileID, line: line, function: function)
+    stacktraceClosure = {
+      lazyCaller.initialized
+    }
     // }
   }
 
-  private static func lastUnderlyingStackError(_ currentError: StacktraceError)
-    -> StacktraceError?
-  {
+  init(
+    underlyingError: any Error,
+    caller: Caller
+  ) {
+    // if let stack = underlyingError as? StacktraceError {
+    //     self.underlyingError = stack.underlyingError
+    //     self.stackTrace = stack.stackTrace
+    // } else {
+    self.underlyingError = underlyingError
+    stacktraceClosure = {
+      caller
+    }
+    // }
+  }
+
+  private static func lastUnderlyingStackError(
+    _ currentError: StacktraceError
+  ) -> StacktraceError? {
     (currentError.underlyingError as? StacktraceError) ??
       (currentError.underlyingError as? any StacktraceErrorContainable)?.stacktraceError
   }
@@ -56,16 +82,31 @@ public struct StacktraceError: Error {
     }
   }
 
-  private func underlyingErrorDescription() -> String {
+  @StringBuilder
+  private func errorChainsString(chain: [StacktraceError]) -> StringResult {
+    for error in chain {
+      let description = error.stacktrace.briefDescription
+      "-> \(description)"
+    }
+  }
+
+  @StringBuilder
+  private var underlyingErrorDescription: StringResult {
     if let (chain, lastError) = self.chain() {
-      let chainString = chain.dropLast()
-        .map(\.stacktrace.briefDescription)
-        .map { "\t-> \($0)" }
-        .joined(separator: "\n")
+      let typeDescription = String(describing: type(of: underlyingError))
       let lastErrorDescription = String(describing: lastError.underlyingError)
-      return "\(type(of: underlyingError)): \(lastErrorDescription)\n\n\(chainString)"
+      let chainString = errorChainsString(chain: chain.dropLast())
+
+      "\(typeDescription): \(lastErrorDescription)"
+      " "
+      Indented {
+        chainString
+      }
+      
     } else {
-      return "\(type(of: underlyingError)): \(underlyingError)"
+      let typeDescription = String(describing: type(of: underlyingError))
+      let underlyingErrorDescription = String(describing: underlyingError)
+      "\(typeDescription): \(underlyingErrorDescription)"
     }
   }
 }
@@ -76,16 +117,41 @@ extension StacktraceError: LocalizedError {
   }
 }
 
+extension StacktraceError: CustomStringConvertible {
+  @StringBuilder
+  public var descriptionResult: StringResult {
+    "hallo?"
+  }
+
+  public var description: String {
+    descriptionResult.final
+  }
+}
+
 extension StacktraceError: CustomDebugStringConvertible {
   public var debugDescription: String {
-    let descr = underlyingErrorDescription()
+    debugDescriptionResult.final
+  }
+  
+  @StringBuilder
+  public var debugDescriptionResult: StringResult {
     let stack = latestError().stacktrace
-    let callerInitialized = stack.initialized
-    let stackInitialized = callerInitialized.stack.initialized
-    let stackFormatted = stackInitialized.stackFormatted
+    let stackFormatted = stack.stack.initialized.stackFormattedResult
 
-    let stacktraceDescription = stackInitialized.debugDescription
+    let stacktraceDescription = stack.debugDescription
+    let underlyingErrorDescriptionResult = underlyingErrorDescription
+    
+    underlyingErrorDescriptionResult
+    ""
+    Indented {
+      "\(stacktraceDescription)"
+      " "
 
-    return "\(descr)\n\n\t\(stacktraceDescription)\n\(stackFormatted)"
+      Indented {
+        stackFormatted
+      }
+    }
+    
+//    return "\(descr)\n\n\t\(stacktraceDescription)\n\(stackFormatted)"
   }
 }

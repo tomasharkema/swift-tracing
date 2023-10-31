@@ -34,4 +34,4 @@
       ▿ base: Optional<String>
         - some: "SwiftStacktrace"
       - name: "Caller"
-  - raw: "default argument 3 of SwiftStacktrace.Caller.init(_: Swift.String, _: Swift.UInt, _: Swift.String, stack: any Swift.Sequence<Self.Swift.Sequence.Element == Swift.String>) -> SwiftStacktrace.Caller"
+  - raw: "default argument 3 of SwiftStacktrace.Caller.init(_: Swift.String, _: Swift.UInt, _: Swift.String, stack: any Swift.Sequence<Self.Swift.Sequence.Element == Swift.String>) -> SwiftStacktrace.Caller\n"

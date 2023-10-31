@@ -3,10 +3,6 @@ import SnapshotTesting
 import XCTest
 
 final class CallerTests: XCTestCase {
-  override class func setUp() {
-    super.setUp()
-    // isRecording = true
-  }
 
   func testCaller() throws {
     let lines = try PackageResources.lines
@@ -20,6 +16,6 @@ final class CallerTests: XCTestCase {
     let caller = LazyCaller(lines)
     let eager = try EagerChain(caller)
     let json = try eager.json
-    assertSnapshot(of: json, as: .dump)
+    assertSnapshot(of: json)
   }
 }

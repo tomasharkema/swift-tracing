@@ -197,7 +197,7 @@ struct _FunctionInfo: Hashable, Equatable, Sendable {
   let extraSuffix: String?
 
   init?(_ line: String) {
-    guard #available(macOS 13.0, *) else {
+    guard #available(macOS 13.0, iOS 16, *) else {
       return nil
     }
 

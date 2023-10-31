@@ -47,7 +47,7 @@ public struct Caller: Hashable, Equatable, LazyContainer {
     stack
   }
 
-  fileprivate init(
+  init(
     fileID: String,
     line: UInt,
     function: String,
@@ -97,9 +97,16 @@ public struct Caller: Hashable, Equatable, LazyContainer {
   }
 }
 
+extension Caller: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    "\(function) \(file):\(line) \(moduleName)"
+  }
+}
+
 extension Caller: CustomBriefStringConvertible {
   public var briefDescription: String {
-    stack.briefDescription
+    "\(function) \(file):\(line) \(moduleName)"
+    // stack.initialized.briefDescription
   }
 }
 

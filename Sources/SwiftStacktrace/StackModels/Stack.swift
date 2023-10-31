@@ -31,10 +31,9 @@ public struct Stack: Hashable, Equatable, LazyContainer {
 
   fileprivate init(_ lines: any Sequence<String>) {
     raw = Array(lines)
-    frames = Array(lines.compactMap(LazyFrame.init))
-    // .drop {
-    //   $0.isFromSwiftTracing || $0.isFromSwiftStacktrace
-    // })
+    frames = Array(
+      lines.compactMap(LazyFrame.init)
+    )
   }
 
   package var swiftConcurrency: Frame? {
@@ -134,30 +133,47 @@ public protocol StackStringConvertible {
 }
 
 extension Stack: StackStringConvertible {
+
   public var stackFormatted: String {
-    frames
-      .map {
-        switch $0.initialized.functionInfo {
+    stackFormattedResult.final
+  }
+
+  @StringBuilder
+  public var stackFormattedResult: StringResult {
+    for frame in frames.initialized {
+      if !frame.isFromSwiftTracing, !frame.isFromSwiftStacktrace {
+        switch frame.functionInfo {
         case let .success(functionInfo):
-          "\t\tat: \(functionInfo.debugDescription)"
+          "at: \(functionInfo.debugDescription)"
 
         case let .failure(error):
-          "\t\t\tat: \($0) \(error)"
+          //              Indented {
+          "at: \(frame.debugDescription)" // \(error)
+                                          //              }
         }
       }
-      .joined(separator: "\n")
+    }
   }
 }
 
 extension Stack: CustomDebugStringConvertible {
   public var debugDescription: String {
-    frames.map(\.debugDescription).joined(separator: "\n")
+    frames.map(\.initialized.debugDescription)
+      .joined(separator: "\n")
   }
 }
 
 extension Stack: CustomBriefStringConvertible {
+  @StringBuilder
+  public var briefDescriptionResult: StringResult {
+    for frame in frames {
+      let description = frame.briefDescription
+      "\(description)"
+    }
+  }
+
   public var briefDescription: String {
-    frames.map(\.briefDescription).joined(separator: "\n")
+    briefDescriptionResult.final
   }
 }
 

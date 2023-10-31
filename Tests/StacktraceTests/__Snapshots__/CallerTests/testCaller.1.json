@@ -1,0 +1,218 @@
+{
+  "file" : "CallerTests.swift",
+  "function" : "testCaller()",
+  "initialized" : {
+    "initialized" : [
+      {
+        "function" : "SwiftStacktrace.Caller.init(fileID: Swift.String, line: Swift.UInt, function: Swift.String, stack: any Swift.Sequence<Self.Swift.Sequence.Element == Swift.String>) -> SwiftStacktrace.Caller",
+        "functionInfo" : {
+          "arguments" : [
+            {
+              "label" : "fileID",
+              "type" : {
+                "base" : "Swift",
+                "name" : "String"
+              }
+            },
+            {
+              "label" : "line",
+              "type" : {
+                "base" : "Swift",
+                "name" : "UInt"
+              }
+            },
+            {
+              "label" : "function",
+              "type" : {
+                "base" : "Swift",
+                "name" : "String"
+              }
+            },
+            {
+              "label" : "stack",
+              "type" : {
+                "base" : "Swift",
+                "name" : "Sequence"
+              }
+            }
+          ],
+          "functionName" : "init",
+          "functionType" : {
+            "base" : "SwiftStacktrace",
+            "name" : "Caller"
+          },
+          "raw" : "SwiftStacktrace.Caller.init(fileID: Swift.String, line: Swift.UInt, function: Swift.String, stack: any Swift.Sequence<Self.Swift.Sequence.Element == Swift.String>) -> SwiftStacktrace.Caller"
+        },
+        "index" : 0,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "$s15SwiftStacktrace6CallerV6fileID4line8function5stackACSS_SuSSST_pSS7ElementSTRts_XPtcfcfA2_",
+        "stackPointer" : "0x0000000100336208"
+      },
+      {
+        "function" : "SwiftStacktrace.StacktraceError.init(Swift.Error, Swift.String, Swift.UInt, Swift.String) -> SwiftStacktrace.StacktraceError",
+        "functionInfo" : {
+          "arguments" : [
+            {
+              "type" : {
+                "base" : "Swift",
+                "name" : "Error"
+              }
+            },
+            {
+              "type" : {
+                "base" : "Swift",
+                "name" : "String"
+              }
+            },
+            {
+              "type" : {
+                "base" : "Swift",
+                "name" : "UInt"
+              }
+            },
+            {
+              "type" : {
+                "base" : "Swift",
+                "name" : "String"
+              }
+            }
+          ],
+          "functionName" : "init",
+          "functionType" : {
+            "base" : "SwiftStacktrace",
+            "name" : "StacktraceError"
+          },
+          "raw" : "SwiftStacktrace.StacktraceError.init(Swift.Error, Swift.String, Swift.UInt, Swift.String) -> SwiftStacktrace.StacktraceError"
+        },
+        "index" : 1,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "$s15SwiftStacktrace0B5ErrorVyACs0C0_p_SSSuSStcfC",
+        "stackPointer" : "0x00000001003522ac"
+      },
+      {
+        "function" : "PlexApi.Requestor.request<A where A: Swift.Decodable>(url: Foundation.URL, _: A.Type, requestUUID: Swift.Optional<Foundation.UUID>, method: Swift.String, queryItems: Swift.Optional<Swift.Array<Foundation.URLQueryItem>>, sendDefaultQueries: Swift.Bool, timeout: Swift.Optional<Swift.Duration>, invalidateAfterError: Swift.Bool, useCache: Swift.Bool, onlyCached: Swift.Bool) async throws -> A",
+        "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58",
+        "index" : 2,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "$s7PlexApi9RequestorC7request3url_0D4UUID6method10queryItems18sendDefaultQueries7timeout20invalidateAfterError8useCache10onlyCachedx10Foundation3URLV_xmAN0F0VSgSSSayAN12URLQueryItemVGSgSbs8DurationVSgS3btYaKSeRzlFTY5_",
+        "stackPointer" : "0x0000000100f84c38"
+      },
+      {
+        "function" : "PlexApi.ResourcesService.ping(server: PlexShared.ServerWithConnection, timeout: Swift.Duration) async -> PlexApi.PingResult",
+        "functionInfo" : {
+          "arguments" : [
+            {
+              "label" : "server",
+              "type" : {
+                "base" : "PlexShared",
+                "name" : "ServerWithConnection"
+              }
+            },
+            {
+              "label" : "timeout",
+              "type" : {
+                "base" : "Swift",
+                "name" : "Duration"
+              }
+            }
+          ],
+          "functionName" : "ping",
+          "functionType" : {
+            "base" : "PlexApi",
+            "name" : "ResourcesService"
+          },
+          "raw" : "PlexApi.ResourcesService.ping(server: PlexShared.ServerWithConnection, timeout: Swift.Duration) async -> PlexApi.PingResult"
+        },
+        "index" : 3,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "$s7PlexApi16ResourcesServiceC4ping6server7timeoutAA10PingResultV0A6Shared20ServerWithConnectionV_s8DurationVtYaFTQ1_",
+        "stackPointer" : "0x0000000100f88145"
+      },
+      {
+        "function" : "PlexApi.ResourcesService.capabilities(server: PlexShared.Server) async throws -> PlexShared.Root<PlexShared.Capabilities>",
+        "functionInfo" : {
+          "arguments" : [
+            {
+              "label" : "server",
+              "type" : {
+                "base" : "PlexShared",
+                "name" : "Server"
+              }
+            }
+          ],
+          "functionName" : "capabilities",
+          "functionType" : {
+            "base" : "PlexApi",
+            "name" : "ResourcesService"
+          },
+          "raw" : "PlexApi.ResourcesService.capabilities(server: PlexShared.Server) async throws -> PlexShared.Root<PlexShared.Capabilities>"
+        },
+        "index" : 4,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "$s7PlexApi16ResourcesServiceC12capabilities6server0A6Shared4RootVyAF12CapabilitiesVGAF6ServerV_tYaKFTQ1_",
+        "stackPointer" : "0x0000000100f8cf25"
+      },
+      {
+        "function" : "static PlexRunner.Main.main() async throws -> ()",
+        "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58",
+        "index" : 5,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "$s10PlexRunner4MainO4mainyyYaKFZTQ1_",
+        "stackPointer" : "0x0000000100003619"
+      },
+      {
+        "function" : "static PlexRunner.Main.$main() async throws -> ()",
+        "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58",
+        "index" : 6,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "$s10PlexRunner4MainO5$mainyyYaKFZTQ0_",
+        "stackPointer" : "0x00000001000049c1"
+      },
+      {
+        "functionInfo" : "Error Domain= Code=0 \"(null)\"",
+        "index" : 7,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "async_MainTQ0_",
+        "stackPointer" : "0x0000000100004bd1"
+      },
+      {
+        "function" : "reabstraction thunk helper from @escaping @convention(thin) @async () -> () to @escaping @callee_guaranteed @async () -> (@out (), @error @owned Swift.Error)",
+        "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58",
+        "index" : 8,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "$sIetH_yts5Error_pIegHrzo_TRTQ0_",
+        "stackPointer" : "0x0000000100004d3d"
+      },
+      {
+        "function" : "partial apply forwarder for reabstraction thunk helper from @escaping @convention(thin) @async () -> () to @escaping @callee_guaranteed @async () -> (@out (), @error @owned Swift.Error)",
+        "functionInfo" : "noFunctionFound SwiftStacktrace\/FunctionInfo.swift:58",
+        "index" : 9,
+        "lib" : "PlexRunner",
+        "mangledFunction" : "$sIetH_yts5Error_pIegHrzo_TRTATQ0_",
+        "stackPointer" : "0x0000000100004e65"
+      },
+      {
+        "functionInfo" : "Error Domain= Code=0 \"(null)\"",
+        "index" : 10,
+        "lib" : "libswift_Concurrency.dylib",
+        "mangledFunction" : "_ZL23completeTaskWithClosurePN5swift12AsyncContextEPNS_10SwiftErrorE",
+        "stackPointer" : "0x00000002273f1c7d"
+      }
+    ],
+    "raw" : [
+      "0   PlexRunner                          0x0000000100336208 $s15SwiftStacktrace6CallerV6fileID4line8function5stackACSS_SuSSST_pSS7ElementSTRts_XPtcfcfA2_ + 40",
+      "1   PlexRunner                          0x00000001003522ac $s15SwiftStacktrace0B5ErrorVyACs0C0_p_SSSuSStcfC + 192",
+      "2   PlexRunner                          0x0000000100f84c38 $s7PlexApi9RequestorC7request3url_0D4UUID6method10queryItems18sendDefaultQueries7timeout20invalidateAfterError8useCache10onlyCachedx10Foundation3URLV_xmAN0F0VSgSSSayAN12URLQueryItemVGSgSbs8DurationVSgS3btYaKSeRzlFTY5_ + 4612",
+      "3   PlexRunner                          0x0000000100f88145 $s7PlexApi16ResourcesServiceC4ping6server7timeoutAA10PingResultV0A6Shared20ServerWithConnectionV_s8DurationVtYaFTQ1_ + 1",
+      "4   PlexRunner                          0x0000000100f8cf25 $s7PlexApi16ResourcesServiceC12capabilities6server0A6Shared4RootVyAF12CapabilitiesVGAF6ServerV_tYaKFTQ1_ + 1",
+      "5   PlexRunner                          0x0000000100003619 $s10PlexRunner4MainO4mainyyYaKFZTQ1_ + 1",
+      "6   PlexRunner                          0x00000001000049c1 $s10PlexRunner4MainO5$mainyyYaKFZTQ0_ + 1",
+      "7   PlexRunner                          0x0000000100004bd1 async_MainTQ0_ + 1",
+      "8   PlexRunner                          0x0000000100004d3d $sIetH_yts5Error_pIegHrzo_TRTQ0_ + 1",
+      "9   PlexRunner                          0x0000000100004e65 $sIetH_yts5Error_pIegHrzo_TRTATQ0_ + 1",
+      "10  libswift_Concurrency.dylib          0x00000002273f1c7d _ZL23completeTaskWithClosurePN5swift12AsyncContextEPNS_10SwiftErrorE + 1"
+    ]
+  },
+  "line" : 9,
+  "moduleName" : "StacktraceTests"
+}

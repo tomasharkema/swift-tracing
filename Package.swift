@@ -9,22 +9,27 @@ let package = Package(
   products: [
     .library(
       name: "SwiftTracing",
-      type: .dynamic,
+//      type: .dynamic,
       targets: ["SwiftTracing"]
     ),
     .library(
       name: "SwiftTaskToolbox",
-      type: .dynamic,
+//      type: .dynamic,
       targets: ["SwiftTaskToolbox"]
     ),
     .library(
       name: "SwiftTracingTestHelpers",
-      type: .dynamic,
+//      type: .dynamic,
       targets: ["SwiftTracingTestHelpers"]
     ),
     .library(
       name: "SwiftStacktrace",
-      type: .dynamic,
+//      type: .dynamic,
+      targets: ["SwiftStacktrace"]
+    ),
+    .library(
+      name: "SwiftStacktraceDynamic",
+            type: .dynamic,
       targets: ["SwiftStacktrace"]
     ),
   ],
@@ -60,11 +65,11 @@ let package = Package(
       ]
     ),
     .testTarget(
-      name: "SwiftTracingTests",
+      name: "TracingTests",
       dependencies: ["SwiftTracing", "SwiftTaskToolbox"]
     ),
     .testTarget(
-      name: "SwiftStacktraceTests",
+      name: "StacktraceTests",
       dependencies: [
         "SwiftStacktrace",
         .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),

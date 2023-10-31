@@ -25,7 +25,7 @@ public struct ParseError: Error {
 
 extension ParseError: CustomStringConvertible {
   public var description: String {
-    "\(reason) \(file):\(line) :: \(expr.debugDescription)"
+    "\(reason) \(file):\(line)" // :: \(expr.description)"
   }
 }
 

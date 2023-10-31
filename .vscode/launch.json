@@ -4,26 +4,6 @@
       "type": "lldb",
       "request": "launch",
       "sourceLanguages": ["swift"],
-      "name": "Debug TestApp",
-      "program": "${workspaceFolder:swift-tracing}/.build/debug/TestApp",
-      "args": [],
-      "cwd": "${workspaceFolder:swift-tracing}",
-      "preLaunchTask": "swift: Build Debug TestApp"
-    },
-    {
-      "type": "lldb",
-      "request": "launch",
-      "sourceLanguages": ["swift"],
-      "name": "Release TestApp",
-      "program": "${workspaceFolder:swift-tracing}/.build/release/TestApp",
-      "args": [],
-      "cwd": "${workspaceFolder:swift-tracing}",
-      "preLaunchTask": "swift: Build Release TestApp"
-    },
-    {
-      "type": "lldb",
-      "request": "launch",
-      "sourceLanguages": ["swift"],
       "args": [],
       "cwd": "${workspaceFolder:swift-tracing}",
       "name": "Debug TestRunner",
