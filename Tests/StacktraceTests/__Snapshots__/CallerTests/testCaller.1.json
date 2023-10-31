@@ -213,6 +213,6 @@
       "10  libswift_Concurrency.dylib          0x00000002273f1c7d _ZL23completeTaskWithClosurePN5swift12AsyncContextEPNS_10SwiftErrorE + 1"
     ]
   },
-  "line" : 9,
+  "line" : 8,
   "moduleName" : "StacktraceTests"
 }

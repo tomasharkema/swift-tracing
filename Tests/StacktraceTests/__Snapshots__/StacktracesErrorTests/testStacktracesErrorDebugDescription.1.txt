@@ -1,15 +1,12 @@
-▿ 73 elements
+▿ 70 elements
   - "StacktraceError: Error Domain= Code=0 \"(null)\""
   - " "
   - "  -> StacktracesErrorTests StacktracesErrorTests.swift:20 StacktraceTests"
   - " "
   - "  init SwiftStacktraceErrorTests.swift:0 SwiftStacktraceTests"
   - "   "
-  - "    at: one-time initialization function for (error in _5935BE46DF507FBDE85FF08AB29DA363) 4 StacktraceTests"
   - "    at: _dispatch_client_callout 5 libdispatch.dylib"
   - "    at: _dispatch_once_callout 6 libdispatch.dylib"
-  - "    at: StacktraceTests.StacktracesErrorTests.testStacktracesErrorDebugDescription() -> ()"
-  - "    at: @objc StacktraceTests.StacktracesErrorTests.testStacktracesErrorDebugDescription() -> () 9 StacktraceTests"
   - "    at: __invoking___ 10 CoreFoundation"
   - "    at: -[NSInvocation 11 CoreFoundation"
   - "    at: +[XCTFailableInvocation 12 XCTestCore"
@@ -70,5 +67,5 @@
   - "    at: -[XCTestObservationCenter 67 XCTestCore"
   - "    at: -[XCTestDriver 68 XCTestCore"
   - "    at: _XCTestMain 69 XCTestCore"
-  - "    at: main 70 xctest"
+  - "    at: _XCTestToolLegacyConfigurationLoader 70 xctest"
   - "    at: start 71 dyld"
