@@ -15,7 +15,7 @@ class OSSignposterTests: XCTestCase {
   let signposter = Signposter(subsystem: "a", category: "b")
 
   func testInit() async throws {
-    let result: Int = try await signposter.measure(withNewId: "ojoo") {
+    _ = try await signposter.measure(withNewId: "ojoo") {
       XCTAssertNotNil(TracingHolder.signpostID)
       XCTAssertNotNil(TracingHolder.signposter)
       try await Task.sleep(seconds: 1)
@@ -23,6 +23,5 @@ class OSSignposterTests: XCTestCase {
       XCTAssertNotNil(TracingHolder.signposter)
       return 1
     }
-    print(result)
   }
 }

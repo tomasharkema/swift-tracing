@@ -17,7 +17,10 @@ final class StacktracesErrorTests: XCTestCase {
       underlyingError: NSError(domain: "", code: 0),
       caller: caller
     )
-    return StacktraceError(first)
+    return StacktraceError(
+      underlyingError: first,
+       caller: caller
+      )
   }()
 
   func testStacktracesErrorDescription() {

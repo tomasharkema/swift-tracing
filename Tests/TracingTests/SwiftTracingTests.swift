@@ -9,7 +9,7 @@ class SwiftTracingTests: XCTestCase {
   func testInit() async throws {
     let id = signposter.makeSignpostID()
 
-    let result: Int = try await TracingHolder.with(signposter, id: id) {
+    _ = try await TracingHolder.with(signposter, id: id) {
       XCTAssertEqual(TracingHolder.signpostID, id)
       XCTAssertEqual(TracingHolder.signposter, signposter)
       try await Task.sleep(seconds: 1)
@@ -17,6 +17,5 @@ class SwiftTracingTests: XCTestCase {
       XCTAssertEqual(TracingHolder.signposter, signposter)
       return 1
     }
-    print(result)
   }
 }
