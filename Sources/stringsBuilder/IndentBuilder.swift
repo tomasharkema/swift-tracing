@@ -1,5 +1,5 @@
 //
-//  Indented.swift
+//  IndentBuilder.swift
 //
 //
 //  Created by Tomas Harkema on 31/10/2023.
@@ -11,9 +11,12 @@ package struct Indented {
   package var char: String
   package let result: (String?) -> IndentedResult
 
-  package init(_ charInput: String = "  ", @IndentedBuiler _ makeResult: @escaping () -> IndentedResult) {
-    self.char = charInput
-    self.result = { charPassthrough in
+  package init(
+    _ charInput: String = "  ",
+    @IndentedBuiler _ makeResult: @escaping () -> IndentedResult
+  ) {
+    char = charInput
+    result = { charPassthrough in
       var result = makeResult()
       if let charPassthrough, result.char == nil {
         result.char = charPassthrough
@@ -41,7 +44,7 @@ package struct IndentedResult {
   }
 
   package func map(_ transform: @escaping (String) -> String) -> IndentedResult {
-    return IndentedResult(char) { char in
+    IndentedResult(char) { char in
       let stri = strings(char).map {
         transform($0)
       }
@@ -51,10 +54,9 @@ package struct IndentedResult {
 }
 
 @resultBuilder
-package struct IndentedBuiler {
-
+package enum IndentedBuiler {
   package static func buildExpression(_ expression: String) -> IndentedResult {
-    return IndentedResult { _ in
+    IndentedResult { _ in
       [expression]
     }
   }
@@ -72,7 +74,7 @@ package struct IndentedBuiler {
   }
 
   package static func buildExpression(_ expression: IndentedResult) -> IndentedResult {
-    return expression
+    expression
   }
 
   package static func buildExpression(_ expression: StringResult) -> IndentedResult {
@@ -109,11 +111,11 @@ package struct IndentedBuiler {
   }
 
   package static func buildEither(first component: IndentedResult) -> IndentedResult {
-    return component
+    component
   }
 
   package static func buildEither(second component: IndentedResult) -> IndentedResult {
-    return component
+    component
   }
 
 //  package static func buildArray(_ components: [IndentedResult]) -> IndentedResult {
@@ -126,17 +128,17 @@ package struct IndentedBuiler {
 //        return element.strings(char!)
 //        //      "─ \($0)"
 //        //      "\t\($0)"
-////        "  \($0)"
+  ////        "  \($0)"
 //      }
 //      return finalize
 //    }
 //  }
 
-  package static func buildOptional(_ component: (IndentedResult)?) -> IndentedResult {
+  package static func buildOptional(_ component: IndentedResult?) -> IndentedResult {
     if let component {
-      return component
+      component
     } else {
-      return IndentedResult("9 ") { _ in
+      IndentedResult("9 ") { _ in
         []
       }
     }

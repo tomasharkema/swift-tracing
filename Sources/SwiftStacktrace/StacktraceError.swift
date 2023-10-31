@@ -103,7 +103,7 @@ public class StacktraceError: Error {
       Indented {
         chainString
       }
-      
+
     } else {
       let typeDescription = String(describing: type(of: underlyingError))
       let underlyingErrorDescription = String(describing: underlyingError)
@@ -133,7 +133,7 @@ extension StacktraceError: CustomDebugStringConvertible {
   public var debugDescription: String {
     debugDescriptionResult.final
   }
-  
+
   @StringBuilder
   package var debugDescriptionResult: StringResult {
     underlyingErrorDescription
@@ -146,7 +146,7 @@ extension StacktraceError: CustomDebugStringConvertible {
         self.stacktrace.stack.initialized.stackFormattedResult
       }
     }
-    
+
 //    return "\(descr)\n\n\t\(stacktraceDescription)\n\(stackFormatted)"
   }
 }

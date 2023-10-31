@@ -3,7 +3,6 @@ import SnapshotTesting
 import XCTest
 
 final class StackTests: XCTestCase {
-
   func testStack() throws {
     let lines = try Bundle.module.lines
     let stack = LazyStack(lines)

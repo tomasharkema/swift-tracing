@@ -97,21 +97,26 @@ public struct Frame: Hashable, Equatable, Sendable, Encodable {
 
   var isFromSwiftTracing: Bool {
     if lib.contains("SwiftTracing") {
-      return true
-    } else if case .success(let functionInfo) = functionInfo, let base = functionInfo.functionType?.base {
-      return base == "SwiftTracing"
+      true
+    } else if case let .success(functionInfo) = functionInfo,
+              let base = functionInfo.functionType?.base
+    {
+      base == "SwiftTracing"
     } else {
-      return functionOrMangled.contains("SwiftTracing.") || mangledFunction.contains("$s12SwiftTracing")
+      functionOrMangled.contains("SwiftTracing.") || mangledFunction.contains("$s12SwiftTracing")
     }
   }
 
   var isFromSwiftStacktrace: Bool {
     if lib.contains("SwiftStacktrace") {
-      return true
-    } else if case .success(let functionInfo) = functionInfo, let base = functionInfo.functionType?.base {
-      return base == "SwiftStacktrace"
+      true
+    } else if case let .success(functionInfo) = functionInfo,
+              let base = functionInfo.functionType?.base
+    {
+      base == "SwiftStacktrace"
     } else {
-      return functionOrMangled.contains("SwiftStacktrace.") || mangledFunction.contains("$s12SwiftStacktrace")
+      functionOrMangled.contains("SwiftStacktrace.") || mangledFunction
+        .contains("$s12SwiftStacktrace")
     }
   }
 }

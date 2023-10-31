@@ -1,7 +1,7 @@
 import Foundation
 import SnapshotTesting
 
-//func assertSnapshot(
+// func assertSnapshot(
 //  of string: String,
 //  named name: String? = nil,
 //  record recording: Bool = false,
@@ -9,7 +9,7 @@ import SnapshotTesting
 //  file: StaticString = #file,
 //  testName: String = #function,
 //  line: UInt = #line
-//) {
+// ) {
 //  assertSnapshot(
 //    of: string.split(separator: "\n"),
 //    as: .dump,
@@ -19,4 +19,4 @@ import SnapshotTesting
 //    testName: testName,
 //    line: line
 //  )
-//}
+// }

@@ -3,7 +3,6 @@ import SnapshotTesting
 import XCTest
 
 final class CallerTests: XCTestCase {
-
   func testCaller() throws {
     let lines = try Bundle.module.lines
     let caller = LazyCaller(lines)

@@ -134,7 +134,6 @@ public protocol StackStringConvertible {
 }
 
 extension Stack: StackStringConvertible {
-
   public var stackFormatted: String {
     stackFormattedResult.final
   }

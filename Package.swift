@@ -23,11 +23,6 @@ let package = Package(
       name: "SwiftStacktrace",
       targets: ["SwiftStacktrace"]
     ),
-    .library(
-      name: "SwiftStacktraceDynamic",
-      type: .dynamic,
-      targets: ["SwiftStacktrace"]
-    ),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0"),
@@ -58,8 +53,6 @@ let package = Package(
     .target(
       name: "StringsBuilder",
       dependencies: [
-//        .product(name: "SwiftSyntax", package: "swift-syntax"),
-//        .product(name: "SwiftParser", package: "swift-syntax"),
       ]
     ),
     .executableTarget(
@@ -80,7 +73,7 @@ let package = Package(
       ],
       exclude: ["__Snapshots__"],
       resources: [
-        .copy("TestResources"),
+        .process("TestResources"),
       ]
     ),
   ]
@@ -140,6 +133,16 @@ let swiftSettings: [SwiftSetting] = [
   .enableUpcomingFeature("InternalImportsByDefault"),
   .enableExperimentalFeature("NestedProtocols"),
   .enableExperimentalFeature("AccessLevelOnImport"),
+
+  .unsafeFlags(
+    [
+      "-Xfrontend",
+      "-warn-concurrency",
+      "-Xfrontend",
+      "-enable-actor-data-race-checks",
+    ],
+    .when(configuration: .debug)
+  ),
 ]
 
 for target in package.targets {

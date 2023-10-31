@@ -1,6 +1,6 @@
 //
 //  StringBuilder.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 31/10/2023.
 //
@@ -48,8 +48,7 @@ package struct Line {
 }
 
 @resultBuilder
-package struct StringBuilder {
-
+package enum StringBuilder {
   package static func buildExpression(_ expression: String) -> StringResult {
     StringResult {
       [expression]
@@ -61,7 +60,7 @@ package struct StringBuilder {
   }
 
   package static func buildExpression(_ expression: IndentedResult) -> StringResult {
-    return StringResult {
+    StringResult {
       let fn = expression.strings
       return fn(expression.char!)
     }
@@ -78,11 +77,11 @@ package struct StringBuilder {
   }
 
   package static func buildBlock(_ parts: StringResult) -> StringResult {
-    return parts
+    parts
   }
 
   package static func buildBlock(_ parts: StringResult...) -> StringResult {
-    return StringResult {
+    StringResult {
       let elements = parts.flatMap {
         let res = $0.strings()
         return res
@@ -92,11 +91,11 @@ package struct StringBuilder {
   }
 
   package static func buildEither(first component: StringResult) -> StringResult {
-    return component
+    component
   }
-  
+
   package static func buildEither(second component: StringResult) -> StringResult {
-    return component
+    component
   }
 
   package static func buildArray(_ components: [StringResult]) -> StringResult {
@@ -111,7 +110,7 @@ package struct StringBuilder {
     return res
   }
 
-  package static func buildOptional(_ component: (StringResult)?) -> StringResult {
+  package static func buildOptional(_ component: StringResult?) -> StringResult {
     if let component {
       return component
     } else {
