@@ -133,16 +133,6 @@ let swiftSettings: [SwiftSetting] = [
   .enableUpcomingFeature("InternalImportsByDefault"),
   .enableExperimentalFeature("NestedProtocols"),
   .enableExperimentalFeature("AccessLevelOnImport"),
-
-  .unsafeFlags(
-    [
-      "-Xfrontend",
-      "-warn-concurrency",
-      "-Xfrontend",
-      "-enable-actor-data-race-checks",
-    ],
-    .when(configuration: .debug)
-  ),
 ]
 
 for target in package.targets {
