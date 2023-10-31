@@ -1,9 +1,11 @@
 import Foundation
 
-extension PackageResources {
-  static var lines: [String] {
+extension Bundle {
+  var lines: [String] {
     get throws {
-      try JSONDecoder().decode([String].self, from: Data(PackageResources.lines_json))
+      let url = url(forResource: "lines", withExtension: "json", subdirectory: "TestResources")!
+      let data = try Data(contentsOf: url)
+      return try JSONDecoder().decode([String].self, from: data)
     }
   }
 }

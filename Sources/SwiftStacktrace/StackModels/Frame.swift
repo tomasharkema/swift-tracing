@@ -125,7 +125,7 @@ extension Frame: CustomDebugStringConvertible {
       "\(function ?? mangledFunction)" // \(error)"
     }
 
-    return "\(functionText) \(index) \(lib) \(stackPointer)"
+    return "\(functionText) \(index) \(lib)" // \(stackPointer)"
   }
 }
 

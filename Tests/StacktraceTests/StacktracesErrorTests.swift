@@ -5,7 +5,7 @@ import XCTest
 final class StacktracesErrorTests: XCTestCase {
   private static let error = {
     // swiftlint:disable:next force_try
-    let lines = try! PackageResources.lines
+    let lines = try! Bundle.module.lines
     let stack = LazyStack(lines)
     let caller = Caller(
       fileID: "SwiftStacktraceTests/SwiftStacktraceErrorTests.swift",
@@ -20,18 +20,18 @@ final class StacktracesErrorTests: XCTestCase {
     return StacktraceError(first)
   }()
 
-  func testStacktraceErrorDescription() {
+  func testStacktracesErrorDescription() {
     let string = String(describing: Self.error)
-    assertSnapshot(of: string)
+    assertSnapshot(of: string.split(separator: "\n"), as: .dump)
   }
 
-  func testStacktraceErrorDebugDescription() {
+  func testStacktracesErrorDebugDescription() {
     let string = Self.error.debugDescription
-    assertSnapshot(of: string)
+    assertSnapshot(of: string.split(separator: "\n"), as: .dump)
   }
 
-  func testStacktraceErrorDebugLocalizedDescription() {
+  func testStacktracesErrorDebugLocalizedDescription() {
     let string = Self.error.localizedDescription
-    assertSnapshot(of: string)
+    assertSnapshot(of: string.split(separator: "\n"), as: .dump)
   }
 }

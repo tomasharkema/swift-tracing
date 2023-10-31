@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StringsBuilder
 
 typealias StackError = StacktraceError
 
@@ -119,7 +120,7 @@ extension StacktraceError: LocalizedError {
 
 extension StacktraceError: CustomStringConvertible {
   @StringBuilder
-  public var descriptionResult: StringResult {
+  package var descriptionResult: StringResult {
     "hallo?"
   }
 
@@ -134,21 +135,15 @@ extension StacktraceError: CustomDebugStringConvertible {
   }
   
   @StringBuilder
-  public var debugDescriptionResult: StringResult {
-    let stack = latestError().stacktrace
-    let stackFormatted = stack.stack.initialized.stackFormattedResult
-
-    let stacktraceDescription = stack.debugDescription
-    let underlyingErrorDescriptionResult = underlyingErrorDescription
-    
-    underlyingErrorDescriptionResult
-    ""
+  package var debugDescriptionResult: StringResult {
+    underlyingErrorDescription
+    " "
     Indented {
-      "\(stacktraceDescription)"
+      "\(self.latestError().stacktrace.debugDescription)"
       " "
 
       Indented {
-        stackFormatted
+        self.stacktrace.stack.initialized.stackFormattedResult
       }
     }
     

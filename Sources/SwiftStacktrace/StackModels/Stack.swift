@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StringsBuilder
 
 public class LazyStack: LazyInitializable {
   private let raw: [String]
@@ -139,7 +140,7 @@ extension Stack: StackStringConvertible {
   }
 
   @StringBuilder
-  public var stackFormattedResult: StringResult {
+  package var stackFormattedResult: StringResult {
     for frame in frames.initialized {
       if !frame.isFromSwiftTracing, !frame.isFromSwiftStacktrace {
         switch frame.functionInfo {
@@ -147,9 +148,7 @@ extension Stack: StackStringConvertible {
           "at: \(functionInfo.debugDescription)"
 
         case let .failure(error):
-          //              Indented {
-          "at: \(frame.debugDescription)" // \(error)
-                                          //              }
+          "at: \(frame.debugDescription)"
         }
       }
     }
@@ -165,7 +164,7 @@ extension Stack: CustomDebugStringConvertible {
 
 extension Stack: CustomBriefStringConvertible {
   @StringBuilder
-  public var briefDescriptionResult: StringResult {
+  package var briefDescriptionResult: StringResult {
     for frame in frames {
       let description = frame.briefDescription
       "\(description)"

@@ -9,27 +9,23 @@ let package = Package(
   products: [
     .library(
       name: "SwiftTracing",
-//      type: .dynamic,
       targets: ["SwiftTracing"]
     ),
     .library(
       name: "SwiftTaskToolbox",
-//      type: .dynamic,
       targets: ["SwiftTaskToolbox"]
     ),
     .library(
       name: "SwiftTracingTestHelpers",
-//      type: .dynamic,
       targets: ["SwiftTracingTestHelpers"]
     ),
     .library(
       name: "SwiftStacktrace",
-//      type: .dynamic,
       targets: ["SwiftStacktrace"]
     ),
     .library(
       name: "SwiftStacktraceDynamic",
-            type: .dynamic,
+      type: .dynamic,
       targets: ["SwiftStacktrace"]
     ),
   ],
@@ -54,8 +50,16 @@ let package = Package(
     .target(
       name: "SwiftStacktrace",
       dependencies: [
+        "StringsBuilder",
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftParser", package: "swift-syntax"),
+      ]
+    ),
+    .target(
+      name: "StringsBuilder",
+      dependencies: [
+//        .product(name: "SwiftSyntax", package: "swift-syntax"),
+//        .product(name: "SwiftParser", package: "swift-syntax"),
       ]
     ),
     .executableTarget(
@@ -76,7 +80,7 @@ let package = Package(
       ],
       exclude: ["__Snapshots__"],
       resources: [
-        .embedInCode("TestResources"),
+        .copy("TestResources"),
       ]
     ),
   ]
@@ -105,7 +109,7 @@ let isSubDependency: () -> Bool = {
 if isXcode, !isSubDependency() {
 #if !os(Linux)
   package.dependencies.append(contentsOf: [
-    .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.51.12"),
+    .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.52.0"),
   ])
 
   package.dependencies.append(.package(

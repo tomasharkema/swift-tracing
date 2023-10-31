@@ -14,6 +14,9 @@ enum TestApp {
   static let signposter = Signposter(subsystem: "a", category: "b")
 
   static func main() async throws {
+    let error = StacktraceError(StacktraceError( NSError(domain: "", code: 0)))
+    print(error.debugDescription)
+
 #if DEBUG
     print("DEBUG")
 #endif
