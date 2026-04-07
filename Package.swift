@@ -1,11 +1,11 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.3
 
 import Foundation
 import PackageDescription
 
 let package = Package(
   name: "SwiftTracing",
-  platforms: [.iOS(.v14), .macOS(.v12)],
+  platforms: [.iOS(.v26), .macOS(.v26)],
   products: [
     .library(
       name: "SwiftTracing",
@@ -29,15 +29,15 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0"),
-    .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.12.0"),
-    .package(url: "https://github.com/apple/swift-algorithms", from: "1.1.0"),
+    .package(url: "https://github.com/swiftlang/swift-syntax", from: "603.0.0"),
+    .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.19.2"),
+    .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.1"),
   ],
   targets: [
     .target(
       name: "SwiftTracing",
       dependencies: [
-        "SwiftStacktrace",
+        "SwiftStacktrace"
       ]
     ),
     .target(
@@ -58,13 +58,13 @@ let package = Package(
     .target(
       name: "StringsBuilder",
       dependencies: [
-        .product(name: "Algorithms", package: "swift-algorithms"),
+        .product(name: "Algorithms", package: "swift-algorithms")
       ]
     ),
     .executableTarget(
       name: "TestRunner",
       dependencies: [
-        "SwiftTracing",
+        "SwiftTracing"
       ]
     ),
     .testTarget(
@@ -79,7 +79,7 @@ let package = Package(
       ],
       exclude: ["__Snapshots__"],
       resources: [
-        .process("TestResources"),
+        .process("TestResources")
       ]
     ),
   ]
@@ -93,56 +93,47 @@ let isSubDependency: () -> Bool = {
   guard let context else {
     return false
   }
-  guard let json = (try? JSONSerialization
-    .jsonObject(with: context.data(using: .utf8) ?? Data())) as? [String: Any]
+  guard
+    let json =
+      (try? JSONSerialization
+      .jsonObject(with: context.data(using: .utf8) ?? Data())) as? [String: Any]
   else {
     return false
   }
   guard let packageDirectory = json["packageDirectory"] as? String else {
     return false
   }
-  return packageDirectory.contains(".build") || packageDirectory
-    .contains("DerivedData") || packageDirectory == "/"
+  return packageDirectory.contains(".build")
+    || packageDirectory
+      .contains("DerivedData")
+    || packageDirectory == "/"
 }
 
 if isXcode, !isSubDependency() {
-#if !os(Linux)
-  package.dependencies.append(contentsOf: [
-    .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.52.0"),
-  ])
+  #if !os(Linux)
+    package.dependencies.append(contentsOf: [
+      .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.60.1")
+    ])
 
-  package.dependencies.append(.package(
-    url: "https://github.com/realm/SwiftLint.git",
-    from: "0.52.2"
-  ))
+    package.dependencies.append(
+      .package(
+        url: "https://github.com/realm/SwiftLint",
+        from: "0.63.2"
+      ))
 
-  for target in package.targets {
-    var plugin = target.plugins ?? []
-    plugin.append(.plugin(name: "SwiftLintPlugin", package: "SwiftLint"))
-    target.plugins = plugin
-  }
+    for target in package.targets {
+      var plugin = target.plugins ?? []
+      plugin.append(.plugin(name: "SwiftLintPlugin", package: "SwiftLint"))
+      target.plugins = plugin
+    }
 
-#endif
+  #endif
 }
 
 if !isSubDependency() {
-  package.dependencies.append(.package(
-    url: "https://github.com/apple/swift-docc-plugin.git",
-    from: "1.3.0"
-  ))
-}
-
-let swiftSettings: [SwiftSetting] = [
-  .enableUpcomingFeature("ConciseMagicFile"),
-  .enableUpcomingFeature("BareSlashRegexLiterals"),
-  .enableUpcomingFeature("ExistentialAny"),
-  .enableUpcomingFeature("InternalImportsByDefault"),
-  .enableExperimentalFeature("NestedProtocols"),
-  .enableExperimentalFeature("AccessLevelOnImport"),
-]
-
-for target in package.targets {
-  var settings = target.swiftSettings ?? []
-  settings.append(contentsOf: swiftSettings)
-  target.swiftSettings = settings
+  package.dependencies.append(
+    .package(
+      url: "https://github.com/apple/swift-docc-plugin",
+      from: "1.4.5"
+    ))
 }
