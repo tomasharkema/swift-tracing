@@ -29,7 +29,7 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(url: "https://github.com/swiftlang/swift-syntax", from: "603.0.0"),
+    .package(url: "https://github.com/swiftlang/swift-syntax", "509.1.0"..<"604.0.0"),
     .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.19.2"),
     .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.1"),
   ],
