@@ -1,36 +1,40 @@
 import Foundation
 import SwiftSyntax
 
-public struct ParseError: Error, Sendable {
-    let expr: any SyntaxProtocol
-    let reason: Reason
-    let file: String
-    let line: UInt
+public struct ParseError: Error {
+  let expr: SyntaxProtocol
+  let reason: Reason
+  let file: String
+  let line: UInt
 
-    init(expr: any SyntaxProtocol, reason: Reason, _ file: String = #fileID, _ line: UInt = #line) {
-        self.expr = expr
-        self.reason = reason
-        self.file = file
-        self.line = line
-    }
+  init(
+    expr: SyntaxProtocol,
+    reason: Reason,
+    _ file: String = #fileID, _ line: UInt = #line
+  ) {
+    self.expr = expr
+    self.reason = reason
+    self.file = file
+    self.line = line
+  }
 
-    public enum Reason: Sendable {
-        case noLabel
-        case unsupportedType
-        case memberTypeNotFound
-        case parsingFailed
-        case noFunctionFound
-    }
+  public enum Reason: Sendable {
+    case noLabel
+    case unsupportedType
+    case memberTypeNotFound
+    case parsingFailed
+    case noFunctionFound
+  }
 }
 
 extension ParseError: CustomStringConvertible {
-    public var description: String {
-        "\(reason) \(file):\(line)"  // :: \(expr.description)"
-    }
+  public var description: String {
+    "\(reason) \(file):\(line)"  // :: \(expr.description)"
+  }
 }
 
 extension ParseError: LocalizedError {
-    public var errorDescription: String? {
-        description
-    }
+  public var errorDescription: String? {
+    description
+  }
 }
