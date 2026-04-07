@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct RuntimeWarnings: OptionSet {
+public struct RuntimeWarnings: OptionSet, Sendable {
   public static let calledOnMainThread = RuntimeWarnings(rawValue: 1 << 0)
   public static let noPreviousCaller = RuntimeWarnings(rawValue: 1 << 1)
   public static let notFromAnEntry = RuntimeWarnings(rawValue: 1 << 2)
@@ -22,7 +22,7 @@ public struct RuntimeWarnings: OptionSet {
 }
 
 public enum Settings {
-  public static var runtimeWarnings: RuntimeWarnings = [
+  nonisolated(unsafe) public static var runtimeWarnings: RuntimeWarnings = [
     .calledOnMainThread, .notFromAnEntry, .printComingFromThread,
     .allowMainThreadWithoutEntryNoMainActor,
   ]

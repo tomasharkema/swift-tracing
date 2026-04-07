@@ -1,10 +1,11 @@
 import Foundation
+
 #if canImport(os)
-import os
+  import os
 #endif
 
 /// A helper class for OSSignposter for iOS <= 14
-public struct Signposter: Equatable, Hashable {
+public struct Signposter: Equatable, Sendable {
   let subsystem: String
   let category: String
 

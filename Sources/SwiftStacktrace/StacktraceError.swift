@@ -14,10 +14,23 @@ public protocol StacktraceErrorContainable {
   var stacktraceError: StacktraceError? { get }
 }
 
-public class StacktraceError: Error {
+enum EitherCaller {
+  case lazy(LazyCaller)
+  case caller(Caller)
+
+  var initialized: Caller {
+    switch self {
+    case .lazy(let caller):
+      return caller.initialized
+    case .caller(let caller):
+      return caller
+    }
+  }
+}
+
+public final class StacktraceError: Error, Sendable {
   public let underlyingError: any Error
-  private let stacktraceClosure: () -> Caller
-  package lazy var stacktrace: Caller = stacktraceClosure()
+  private let caller: EitherCaller
 
   public init(
     _ underlyingError: any Error,
@@ -30,10 +43,7 @@ public class StacktraceError: Error {
     //     self.stackTrace = stack.stackTrace
     // } else {
     self.underlyingError = underlyingError
-    let lazyCaller = LazyCaller(fileID: fileID, line: line, function: function)
-    stacktraceClosure = {
-      lazyCaller.initialized
-    }
+    caller = .lazy(LazyCaller(fileID: fileID, line: line, function: function))
     // }
   }
 
@@ -46,17 +56,15 @@ public class StacktraceError: Error {
     //     self.stackTrace = stack.stackTrace
     // } else {
     self.underlyingError = underlyingError
-    stacktraceClosure = {
-      caller
-    }
+    self.caller = .caller(caller)
     // }
   }
 
   private static func lastUnderlyingStackError(
     _ currentError: StacktraceError
   ) -> StacktraceError? {
-    (currentError.underlyingError as? StacktraceError) ??
-      (currentError.underlyingError as? any StacktraceErrorContainable)?.stacktraceError
+    (currentError.underlyingError as? StacktraceError)
+      ?? (currentError.underlyingError as? any StacktraceErrorContainable)?.stacktraceError
   }
 
   private func chain() -> (chain: [StacktraceError], last: StacktraceError)? {
@@ -81,6 +89,10 @@ public class StacktraceError: Error {
     } else {
       self
     }
+  }
+
+  package var stacktrace: Caller {
+    caller.initialized
   }
 
   @StringBuilder
@@ -145,6 +157,6 @@ extension StacktraceError: CustomDebugStringConvertible {
       }
     }
 
-//    return "\(descr)\n\n\t\(stacktraceDescription)\n\(stackFormatted)"
+    //    return "\(descr)\n\n\t\(stacktraceDescription)\n\(stackFormatted)"
   }
 }

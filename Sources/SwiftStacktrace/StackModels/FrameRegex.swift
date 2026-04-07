@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RegexBuilder
+@preconcurrency import RegexBuilder
 
 @available(iOS 16.0, macOS 13, *)
 enum FrameRegex {
@@ -47,3 +47,5 @@ enum FrameRegex {
     }
   }
 }
+
+extension Regex: @retroactive @unchecked Sendable {}

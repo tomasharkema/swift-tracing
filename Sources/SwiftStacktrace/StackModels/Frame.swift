@@ -8,13 +8,15 @@
 import Foundation
 import SwiftSyntax
 
-public class LazyFrame: LazyInitializable {
+public final class LazyFrame: LazyInitializable, Sendable {
   package let raw: String
-
-  public lazy var initialized: Frame = .init(raw)
 
   package init(_ line: String) {
     raw = line
+  }
+
+  public var initialized: Frame {
+    .init(raw)
   }
 }
 
@@ -30,7 +32,7 @@ public struct Frame: Hashable, Equatable, Sendable, Encodable {
 
   fileprivate init(_ line: String) {
     guard #available(macOS 13, iOS 16, *),
-          let match = line.firstMatch(of: FrameRegex.frameRegex)
+      let match = line.firstMatch(of: FrameRegex.frameRegex)
     else {
       assertionFailure("STACKFRAME: line not matched: \(line)")
       index = 0
@@ -50,7 +52,8 @@ public struct Frame: Hashable, Equatable, Sendable, Encodable {
     let cleanupped = demangled.flatMap { cleanup(line: $0) }
     function = cleanupped
 
-    let functionInfo = cleanupped
+    let functionInfo =
+      cleanupped
       .flatMap { line in
         Result {
           try FunctionInfo(line)
@@ -78,13 +81,15 @@ public struct Frame: Hashable, Equatable, Sendable, Encodable {
   }
 
   package var isSwiftTask: Bool {
-    isSwiftConcurrency && functionOrMangled.contains("Task") && !functionOrMangled
-      .contains("TaskLocal")
+    isSwiftConcurrency && functionOrMangled.contains("Task")
+      && !functionOrMangled
+        .contains("TaskLocal")
   }
 
   package var isFromUIKit: Bool {
-    (lib.contains("UIKitCore") || lib.contains("libswiftUIKit")) &&
-      (functionOrMangled.contains("UIView") || functionOrMangled.contains("UIApplicationMain"))
+    (lib.contains("UIKitCore") || lib.contains("libswiftUIKit"))
+      && (functionOrMangled.contains("UIView")
+        || functionOrMangled.contains("UIApplicationMain"))
   }
 
   package var isAddObserverMain: Bool {
@@ -98,39 +103,42 @@ public struct Frame: Hashable, Equatable, Sendable, Encodable {
   var isFromSwiftTracing: Bool {
     if lib.contains("SwiftTracing") {
       true
-    } else if case let .success(functionInfo) = functionInfo,
-              let base = functionInfo.functionType?.base
+    } else if case .success(let functionInfo) = functionInfo,
+      let base = functionInfo.functionType?.base
     {
       base == "SwiftTracing"
     } else {
-      functionOrMangled.contains("SwiftTracing.") || mangledFunction.contains("$s12SwiftTracing")
+      functionOrMangled.contains("SwiftTracing.")
+        || mangledFunction.contains("$s12SwiftTracing")
     }
   }
 
   var isFromSwiftStacktrace: Bool {
     if lib.contains("SwiftStacktrace") {
       true
-    } else if case let .success(functionInfo) = functionInfo,
-              let base = functionInfo.functionType?.base
+    } else if case .success(let functionInfo) = functionInfo,
+      let base = functionInfo.functionType?.base
     {
       base == "SwiftStacktrace"
     } else {
-      functionOrMangled.contains("SwiftStacktrace.") || mangledFunction
-        .contains("$s12SwiftStacktrace")
+      functionOrMangled.contains("SwiftStacktrace.")
+        || mangledFunction
+          .contains("$s12SwiftStacktrace")
     }
   }
 }
 
 extension Frame: CustomDebugStringConvertible {
   public var debugDescription: String {
-    let functionText: String = switch functionInfo {
-    case let .success(result):
-      result.debugDescription
-    case let .failure(error):
-      "\(function ?? mangledFunction)" // \(error)"
-    }
+    let functionText: String =
+      switch functionInfo {
+      case .success(let result):
+        result.debugDescription
+      case .failure(let error):
+        "\(function ?? mangledFunction)"  // \(error)"
+      }
 
-    return "\(functionText) \(index) \(lib)" // \(stackPointer)"
+    return "\(functionText) \(index) \(lib)"  // \(stackPointer)"
   }
 }
 

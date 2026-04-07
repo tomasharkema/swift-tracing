@@ -1,8 +1,7 @@
 import Foundation
 
-public protocol LazyInitializable: AnyObject {
+public protocol LazyInitializable: AnyObject, Sendable {
   associatedtype InitializedType
-
   var initialized: InitializedType { get }
 }
 
@@ -30,13 +29,13 @@ extension LazyInitializable where InitializedType: CustomBriefStringConvertible 
   }
 }
 
-public extension LazyInitializable where InitializedType: Encodable {
+extension LazyInitializable where InitializedType: Encodable {
   // init(from decoder: any Decoder) throws {
-//     let value = try InitializedType(from: decoder)
-//     self.initialized = value
-//   }
+  //     let value = try InitializedType(from: decoder)
+  //     self.initialized = value
+  //   }
 
-  func encode(to encoder: any Encoder) throws {
+  public func encode(to encoder: any Encoder) throws {
     try initialized.encode(to: encoder)
   }
 }

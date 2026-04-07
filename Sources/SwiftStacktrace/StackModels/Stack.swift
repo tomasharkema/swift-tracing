@@ -8,17 +8,19 @@
 import Foundation
 import StringsBuilder
 
-public class LazyStack: LazyInitializable {
+public final class LazyStack: LazyInitializable, Sendable {
   private let raw: [String]
-
-  public lazy var initialized: Stack = .init(raw)
 
   package init(_ lines: any Sequence<String>) {
     raw = Array(lines)
   }
+
+  public var initialized: Stack {
+    .init(raw)
+  }
 }
 
-public struct Stack: Hashable, Equatable, LazyContainer {
+public struct Stack: Hashable, Equatable, LazyContainer, Sendable {
   public typealias LazyType = [LazyFrame]
 
   private let raw: [String]
@@ -90,10 +92,12 @@ public struct Stack: Hashable, Equatable, LazyContainer {
   package var swiftUiMainThread: (Frame, Frame)? {
     let swiftUiFrame = frames.first { $0.initialized.lib == "SwiftUI" }?.initialized
     guard let swiftUiFrame else { return nil }
-    let dispatchMain = frames
+    let dispatchMain =
+      frames
       .first {
-        $0.initialized.lib.hasPrefix("libdispatch") && $0.initialized.functionOrMangled
-          .contains("_dispatch_main_queue")
+        $0.initialized.lib.hasPrefix("libdispatch")
+          && $0.initialized.functionOrMangled
+            .contains("_dispatch_main_queue")
       }?.initialized
     guard let dispatchMain else { return nil }
     return (swiftUiFrame, dispatchMain)
@@ -121,11 +125,7 @@ public struct Stack: Hashable, Equatable, LazyContainer {
   }
 
   public var isEntry: Bool {
-    isSwiftTask ||
-      isSwiftConcurrency ||
-      isFromUIKit ||
-      isAddObserverMain ||
-      isSwiftUiMainThread
+    isSwiftTask || isSwiftConcurrency || isFromUIKit || isAddObserverMain || isSwiftUiMainThread
   }
 }
 
@@ -143,10 +143,10 @@ extension Stack: StackStringConvertible {
     for frame in frames.initialized {
       if !frame.isFromSwiftTracing, !frame.isFromSwiftStacktrace {
         switch frame.functionInfo {
-        case let .success(functionInfo):
+        case .success(let functionInfo):
           "at: \(functionInfo.debugDescription)"
 
-        case let .failure(error):
+        case .failure(let error):
           "at: \(frame.debugDescription)"
         }
       }

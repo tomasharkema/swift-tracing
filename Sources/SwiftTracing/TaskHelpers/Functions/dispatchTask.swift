@@ -16,26 +16,26 @@ public func dispatchTask(
   _ fileID: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function,
   dso: UnsafeRawPointer = #dsohandle
 ) {
-#if DEBUG
-  let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
+  #if DEBUG
+    let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
 
-  if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
-    logger
-      .fault(
-        "🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))"
-      )
-    assertionFailure("🚦 ALREADY PREVIOUS CALLER!!! \(caller)", file: fileID, line: line)
-  }
-#endif
+    if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
+      logger
+        .fault(
+          "🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))"
+        )
+      assertionFailure("🚦 ALREADY PREVIOUS CALLER!!! \(caller)", file: fileID, line: line)
+    }
+  #endif
 
   Task(priority: priority) {
-#if DEBUG
-    await TaskCaller.$caller.withValue(caller) {
+    #if DEBUG
+      await TaskCaller.$caller.withValue(caller) {
+        await handler()
+      }
+    #else
       await handler()
-    }
-#else
-    await handler()
-#endif
+    #endif
   }
 }
 
@@ -47,26 +47,26 @@ public func dispatchTaskDetached(
   _ fileID: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function,
   dso: UnsafeRawPointer = #dsohandle
 ) {
-#if DEBUG
-  let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
+  #if DEBUG
+    let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
 
-  if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
-    logger
-      .fault(
-        "🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))"
-      )
-    assertionFailure("🚦 ALREADY PREVIOUS CALLER!!! \(caller)", file: fileID, line: line)
-  }
-#endif
+    if options.contains(.assertOnAlreadyOnTaskContext), let previousCaller = TaskCaller.caller {
+      logger
+        .fault(
+          "🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))"
+        )
+      assertionFailure("🚦 ALREADY PREVIOUS CALLER!!! \(caller)", file: fileID, line: line)
+    }
+  #endif
 
   Task.detached(priority: priority) {
-#if DEBUG
-    await TaskCaller.$caller.withValue(caller) {
+    #if DEBUG
+      await TaskCaller.$caller.withValue(caller) {
+        await handler()
+      }
+    #else
       await handler()
-    }
-#else
-    await handler()
-#endif
+    #endif
   }
 }
 
@@ -77,37 +77,37 @@ public func dispatchTaskMain(
   @_implicitSelfCapture _ handler: @MainActor @Sendable @escaping () async -> Void,
   _ fileID: StaticString = #fileID, _ line: UInt = #line, _ function: String = #function
 ) {
-#if DEBUG
-  let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
+  #if DEBUG
+    let caller = LazyCaller(fileID: "\(fileID)", line: line, function: function).initialized
 
-  if let previousCaller = TaskCaller.caller {
-    logger
-      .info(
-        "🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))"
-      )
-    if options.contains(.assertOnAlreadyOnTaskContext) {
-      assertionFailure(
-        "🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))",
-        file: fileID,
-        line: line
-      )
+    if let previousCaller = TaskCaller.caller {
+      logger
+        .info(
+          "🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))"
+        )
+      if options.contains(.assertOnAlreadyOnTaskContext) {
+        assertionFailure(
+          "🚦 ALREADY PREVIOUS CALLER!!! \(String(describing: caller))\n\n\(String(describing: caller.stack))\n\n\(String(describing: previousCaller.stack))",
+          file: fileID,
+          line: line
+        )
+      }
     }
-  }
-#endif
+  #endif
 
   Task(priority: priority) { @MainActor in
-#if DEBUG
-    await TaskCaller.$caller.withValue(caller) {
-      dispatchPrecondition(condition: .onQueue(.main))
+    #if DEBUG
+      await TaskCaller.$caller.withValue(caller) {
+        dispatchPrecondition(condition: .onQueue(.main))
+        await handler()
+      }
+    #else
       await handler()
-    }
-#else
-    await handler()
-#endif
+    #endif
   }
 }
 
-public struct DispatchTaskOptions: OptionSet {
+public struct DispatchTaskOptions: OptionSet, Sendable {
   public static let assertOnAlreadyOnTaskContext = DispatchTaskOptions(rawValue: 1 << 0)
 
   public static let `default`: DispatchTaskOptions = []

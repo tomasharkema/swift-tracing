@@ -1,9 +1,10 @@
 import Foundation
+
 #if canImport(os)
-import os
+  import os
 #endif
 
-public struct SignpostID: Equatable, Hashable {
+public struct SignpostID: Equatable, Hashable, Sendable {
   let rawValue: os_signpost_id_t
 
   @available(iOS 15, *)

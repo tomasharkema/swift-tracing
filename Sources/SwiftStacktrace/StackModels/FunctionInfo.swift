@@ -22,16 +22,16 @@ import SwiftSyntax
 public struct FunctionInfo: Hashable, Equatable, Sendable, Encodable {
   let functionType: TypeName?
   let functionName: String
-//  let functionGenerics: String?
-//
-//  let arguments: String?
-//  let asyncToken: String?
-//  let throwsToken: String?
-//  let returnTypeLib: String?
-//  let returnType: String?
-//
-//  let extraPrefix: String?
-//  let extraSuffix: String?
+  //  let functionGenerics: String?
+  //
+  //  let arguments: String?
+  //  let asyncToken: String?
+  //  let throwsToken: String?
+  //  let returnTypeLib: String?
+  //  let returnType: String?
+  //
+  //  let extraPrefix: String?
+  //  let extraSuffix: String?
 
   let arguments: [FunctionArgument]
 
@@ -75,14 +75,14 @@ public struct FunctionInfo: Hashable, Equatable, Sendable, Encodable {
     functionType = try base.map { try TypeName($0) }
     functionName = memberAccessExpr.declName.description
 
-//    let arguments = functionBlock.arguments.map { argument in
-//      let typeExpression = argument.expression.as(MemberAccessExprSyntax.self)
-//      let name = argument.label?.text ?? ""
-//      let typeBase = typeExpression?.base?.description ?? ""
-//      let typeName = typeExpression?.declName.baseName.description ?? ""
-//      let type = TypeName(base: typeBase, name: typeName)
-//      return FunctionArgument(label: name, typeName: type)
-//    }
+    //    let arguments = functionBlock.arguments.map { argument in
+    //      let typeExpression = argument.expression.as(MemberAccessExprSyntax.self)
+    //      let name = argument.label?.text ?? ""
+    //      let typeBase = typeExpression?.base?.description ?? ""
+    //      let typeName = typeExpression?.declName.baseName.description ?? ""
+    //      let type = TypeName(base: typeBase, name: typeName)
+    //      return FunctionArgument(label: name, typeName: type)
+    //    }
 
     let arguments = try functionBlock.arguments.compactMap { argument in
       try FunctionArgument(argument)
@@ -97,12 +97,12 @@ public struct FunctionInfo: Hashable, Equatable, Sendable, Encodable {
 
 extension FunctionInfo: CustomDebugStringConvertible {
   public var debugDescription: String {
-    raw // "\(functionType?.debugDescription ?? "") \(functionName) \(arguments)"
+    raw  // "\(functionType?.debugDescription ?? "") \(functionName) \(arguments)"
   }
 }
 
-public extension FunctionInfo {
-  struct FunctionArgument: Hashable, Equatable, Sendable, Encodable {
+extension FunctionInfo {
+  public struct FunctionArgument: Hashable, Equatable, Sendable, Encodable {
     let label: String?
     let type: TypeName
 
@@ -126,8 +126,8 @@ extension FunctionInfo.FunctionArgument: CustomDebugStringConvertible {
   }
 }
 
-public extension FunctionInfo {
-  struct TypeName: Hashable, Equatable, Sendable, Encodable {
+extension FunctionInfo {
+  public struct TypeName: Hashable, Equatable, Sendable, Encodable {
     let base: String?
     let name: String
 
@@ -201,7 +201,7 @@ struct _FunctionInfo: Hashable, Equatable, Sendable {
       return nil
     }
 
-    let regex = // swiftlint:disable:next line_length
+    let regex =  // swiftlint:disable:next line_length
       /((?<awaitToken>await) )?((?<resumeToken>resume) )?((?<partialToken>partial) )?((?<functionToken>function) )?((?<forToken>for) )?((?<staticToken>static) )?((?<libName>[a-zA-Z]+).)?((?<typeName>[a-zA-Z]+).)?(?<functionName>[a-zA-Z$]+)(?<functionGenerics><[a-zA-Z:. ]+>)?\((?<arguments>.*)\) ((?<asyncToken>async ))?((?<throwsToken>throws ))?-> ((?<returnTypeLib>[a-zA-Z]+).)?(?<returnType>[a-zA-Z]+)?/
 
     guard let tokens = line.firstMatch(of: regex) else {
@@ -218,10 +218,10 @@ struct _FunctionInfo: Hashable, Equatable, Sendable {
 
     libName = tokens.output.libName.map { String($0) }
     typeName = tokens.output.typeName.map { String($0) }
-    functionName = String(tokens.output.functionName) // .map { String($0) }
+    functionName = String(tokens.output.functionName)  // .map { String($0) }
     functionGenerics = tokens.output.functionGenerics.map { String($0) }
 
-    arguments = String(tokens.output.arguments) // .map { String($0) }
+    arguments = String(tokens.output.arguments)  // .map { String($0) }
     asyncToken = tokens.output.asyncToken.map { String($0) }
     throwsToken = tokens.output.throwsToken.map { String($0) }
     returnTypeLib = tokens.output.returnTypeLib.map { String($0) }

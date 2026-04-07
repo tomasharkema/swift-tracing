@@ -8,18 +8,11 @@
 import Foundation
 import RegexBuilder
 
-public class LazyCaller: LazyInitializable {
+public final class LazyCaller: LazyInitializable, Sendable {
   public let fileID: String
   public let line: UInt
   public let function: String
   public let stack: LazyStack
-
-  public lazy var initialized: Caller = .init(
-    fileID: fileID,
-    line: line,
-    function: function,
-    stack: stack
-  )
 
   public init(
     fileID: String = #fileID,
@@ -32,9 +25,18 @@ public class LazyCaller: LazyInitializable {
     self.function = function
     self.stack = LazyStack(stack)
   }
+
+  public var initialized: Caller {
+    .init(
+      fileID: fileID,
+      line: line,
+      function: function,
+      stack: stack
+    )
+  }
 }
 
-public struct Caller: Hashable, Equatable, LazyContainer {
+public struct Caller: Hashable, Equatable, LazyContainer, Sendable {
   public let file: String
   public let line: UInt
   public let function: String
@@ -81,11 +83,9 @@ public struct Caller: Hashable, Equatable, LazyContainer {
   }
 
   public var isEntry: Bool {
-    stack.initialized.isSwiftTask ||
-      stack.initialized.isSwiftConcurrency ||
-      stack.initialized.isFromUIKit ||
-      stack.initialized.isAddObserverMain ||
-      stack.initialized.isSwiftUiMainThread
+    stack.initialized.isSwiftTask || stack.initialized.isSwiftConcurrency
+      || stack.initialized.isFromUIKit || stack.initialized.isAddObserverMain
+      || stack.initialized.isSwiftUiMainThread
   }
 
   public var comingFromMainActor: Frame? {
