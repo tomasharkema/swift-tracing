@@ -35,7 +35,7 @@ jobs:
       - name: Generate Docc
         run: RESOLVE_COMMAND_PLUGINS=1 sh docs.sh
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v4
         with:
           path: 'docs'
       - name: Deploy to GitHub Pages
