@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftDemangle
+@_exported import SwiftDemangle
 import SwiftSyntax
 
 public final class LazyFrame: LazyInitializable, Sendable {
