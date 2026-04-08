@@ -134,7 +134,7 @@ extension Frame: CustomDebugStringConvertible {
       switch functionInfo {
       case .success(let result):
         result.debugDescription
-      case .failure(let error):
+      case .failure:
         "\(function ?? mangledFunction)"  // \(error)"
       }
 

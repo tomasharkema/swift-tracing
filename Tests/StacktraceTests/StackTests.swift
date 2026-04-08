@@ -1,8 +1,12 @@
+import Foundation
 import SnapshotTesting
-@testable import SwiftStacktrace
-import XCTest
+import Testing
 
-final class StackTests: XCTestCase {
+@testable import SwiftStacktrace
+
+@Suite(.snapshots(diffTool: .ksdiff))
+struct StackTests {
+  @Test
   func testStack() throws {
     let lines = try Bundle.module.lines
     let stack = LazyStack(lines)
@@ -10,6 +14,7 @@ final class StackTests: XCTestCase {
     assertSnapshot(of: eager, as: .json)
   }
 
+  @Test
   func testStackJson() throws {
     let lines = try Bundle.module.lines
     let stack = LazyStack(lines)
@@ -18,6 +23,7 @@ final class StackTests: XCTestCase {
     assertSnapshot(of: json.split(separator: "\n"), as: .dump)
   }
 
+  @Test
   func testStacktrace() throws {
     let lines = try Bundle.module.lines
     let stack = LazyStack(lines)

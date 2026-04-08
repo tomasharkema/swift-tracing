@@ -1,11 +1,14 @@
+import Foundation
 import SnapshotTesting
-@testable import SwiftStacktrace
-import XCTest
+import Testing
 
-final class StacktraceErrorTests: XCTestCase {
-  private static let error = {
-    // swiftlint:disable:next force_try
-    let lines = try! Bundle.module.lines
+@testable import SwiftStacktrace
+
+@Suite(.snapshots(diffTool: .ksdiff))
+struct StacktraceErrorTests {
+
+  private func testError() throws -> StacktraceError {
+    let lines = try Bundle.module.lines
     let stack = LazyStack(lines)
     let caller = Caller(
       fileID: "SwiftStacktraceTests/SwiftStacktraceErrorTests.swift",
@@ -17,20 +20,23 @@ final class StacktraceErrorTests: XCTestCase {
       underlyingError: NSError(domain: "", code: 0),
       caller: caller
     )
-  }()
+  }
 
-  func testStacktraceErrorDescription() {
-    let string = String(describing: Self.error)
+  @Test
+  func testStacktraceErrorDescription() throws {
+    let string = String(describing: try testError())
     assertSnapshot(of: string.split(separator: "\n"), as: .dump)
   }
 
-  func testStacktraceErrorDebugDescription() {
-    let string = Self.error.debugDescription
+  @Test
+  func testStacktraceErrorDebugDescription() throws {
+    let string = try testError().debugDescription
     assertSnapshot(of: string.split(separator: "\n"), as: .dump)
   }
 
-  func testStacktraceErrorDebugLocalizedDescription() {
-    let string = Self.error.localizedDescription
+  @Test
+  func testStacktraceErrorDebugLocalizedDescription() throws {
+    let string = try testError().localizedDescription
     assertSnapshot(of: string.split(separator: "\n"), as: .dump)
   }
 }

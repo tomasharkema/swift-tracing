@@ -1,2 +1,0 @@
-▿ 1 element
-  - "De bewerking kon niet worden voltooid. ( fout 0.)"

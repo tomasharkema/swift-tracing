@@ -1,24 +1,30 @@
 {
   "configurations": [
     {
-      "type": "lldb",
+      "type": "swift",
       "request": "launch",
-      "sourceLanguages": ["swift"],
+      "sourceLanguages": [
+        "swift"
+      ],
       "args": [],
       "cwd": "${workspaceFolder:swift-tracing}",
       "name": "Debug TestRunner",
-      "program": "${workspaceFolder:swift-tracing}/.build/debug/TestRunner",
-      "preLaunchTask": "swift: Build Debug TestRunner"
+      "preLaunchTask": "swift: Build Debug TestRunner",
+      "target": "TestRunner",
+      "configuration": "debug"
     },
     {
-      "type": "lldb",
+      "type": "swift",
       "request": "launch",
-      "sourceLanguages": ["swift"],
+      "sourceLanguages": [
+        "swift"
+      ],
       "args": [],
       "cwd": "${workspaceFolder:swift-tracing}",
       "name": "Release TestRunner",
-      "program": "${workspaceFolder:swift-tracing}/.build/release/TestRunner",
-      "preLaunchTask": "swift: Build Release TestRunner"
+      "preLaunchTask": "swift: Build Release TestRunner",
+      "target": "TestRunner",
+      "configuration": "release"
     }
   ]
 }

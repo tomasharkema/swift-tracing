@@ -1,20 +1,22 @@
 import Foundation
-import SwiftTaskToolbox
+// import SwiftTaskToolbox
+import Testing
+
 @testable import SwiftTracing
-import XCTest
 
-class SwiftTracingTests: XCTestCase {
-  let signposter = Signposter(subsystem: "a", category: "b")
+struct SwiftTracingTests {
+  private let signposter = Signposter(subsystem: "a", category: "b")
 
+  @Test
   func testInit() async throws {
     let id = signposter.makeSignpostID()
 
     _ = try await TracingHolder.with(signposter, id: id) {
-      XCTAssertEqual(TracingHolder.signpostID, id)
-      XCTAssertEqual(TracingHolder.signposter, signposter)
-      try await Task.sleep(seconds: 1)
-      XCTAssertEqual(TracingHolder.signpostID, id)
-      XCTAssertEqual(TracingHolder.signposter, signposter)
+      #expect(TracingHolder.signpostID == id)
+      #expect(TracingHolder.signposter == signposter)
+      try await Task.sleep(until: .now + .seconds(1))
+      #expect(TracingHolder.signpostID == id)
+      #expect(TracingHolder.signposter == signposter)
       return 1
     }
   }

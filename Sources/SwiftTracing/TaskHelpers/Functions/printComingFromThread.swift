@@ -131,7 +131,7 @@
     @_implicitSelfCapture @_inheritActorContext _ handler: @Sendable @escaping () async -> Void,
     _ file: StaticString, _ line: UInt, _ function: String
   ) {
-    let (caller, result) = innerDebugResult(
+    let (caller, _) = innerDebugResult(
       allowFromMainThread: allowFromMainThread,
       file,
       line,
@@ -150,7 +150,7 @@
       -> ReturnType,
     _ file: StaticString, _ line: UInt, _ function: String
   ) async -> ReturnType {
-    let (caller, result) = innerDebugResult(
+    let (caller, _) = innerDebugResult(
       allowFromMainThread: allowFromMainThread,
       file,
       line,

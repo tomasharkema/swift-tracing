@@ -16,10 +16,6 @@ let package = Package(
       targets: ["SwiftTaskToolbox"]
     ),
     .library(
-      name: "SwiftTracingTestHelpers",
-      targets: ["SwiftTracingTestHelpers"]
-    ),
-    .library(
       name: "SwiftStacktrace",
       targets: ["SwiftStacktrace"]
     ),
@@ -29,7 +25,7 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(url: "https://github.com/swiftlang/swift-syntax", "509.1.0"..<"604.0.0"),
+    .package(url: "https://github.com/swiftlang/swift-syntax", from: "603.0.0"),
     .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.19.2"),
     .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.1"),
   ],
@@ -42,10 +38,6 @@ let package = Package(
     ),
     .target(
       name: "SwiftTaskToolbox"
-    ),
-    .target(
-      name: "SwiftTracingTestHelpers",
-      dependencies: ["SwiftTaskToolbox"]
     ),
     .target(
       name: "SwiftStacktrace",
@@ -69,7 +61,9 @@ let package = Package(
     ),
     .testTarget(
       name: "TracingTests",
-      dependencies: ["SwiftTracing", "SwiftTaskToolbox"]
+      dependencies: [
+        "SwiftTracing"
+      ]
     ),
     .testTarget(
       name: "StacktraceTests",
@@ -85,55 +79,27 @@ let package = Package(
   ]
 )
 
-let isXcode = ProcessInfo.processInfo.environment["__CFBundleIdentifier"] == "com.apple.dt.Xcode"
-let isSubDependency: () -> Bool = {
-  let context = ProcessInfo.processInfo.arguments.drop {
-    $0 != "-context"
-  }.dropFirst(1).first
-  guard let context else {
-    return false
-  }
-  guard
-    let json =
-      (try? JSONSerialization
-      .jsonObject(with: context.data(using: .utf8) ?? Data())) as? [String: Any]
-  else {
-    return false
-  }
-  guard let packageDirectory = json["packageDirectory"] as? String else {
-    return false
-  }
-  return packageDirectory.contains(".build")
-    || packageDirectory
-      .contains("DerivedData")
-    || packageDirectory == "/"
-}
+#if !os(Linux)
+  //    package.dependencies.append(contentsOf: [
+  //      .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.60.1")
+  //    ])
 
-if isXcode, !isSubDependency() {
-  #if !os(Linux)
-    package.dependencies.append(contentsOf: [
-      .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.60.1")
-    ])
-
-    package.dependencies.append(
-      .package(
-        url: "https://github.com/realm/SwiftLint",
-        from: "0.63.2"
-      ))
-
-    for target in package.targets {
-      var plugin = target.plugins ?? []
-      plugin.append(.plugin(name: "SwiftLintPlugin", package: "SwiftLint"))
-      target.plugins = plugin
-    }
-
-  #endif
-}
-
-if !isSubDependency() {
   package.dependencies.append(
     .package(
-      url: "https://github.com/apple/swift-docc-plugin",
-      from: "1.4.5"
+      url: "https://github.com/SimplyDanny/SwiftLintPlugins",
+      from: "0.62.2"
     ))
-}
+
+  for target in package.targets {
+    var plugin = target.plugins ?? []
+    plugin.append(.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"))
+    target.plugins = plugin
+  }
+
+#endif
+
+package.dependencies.append(
+  .package(
+    url: "https://github.com/apple/swift-docc-plugin",
+    from: "1.4.5"
+  ))

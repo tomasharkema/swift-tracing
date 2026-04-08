@@ -1,8 +1,12 @@
+import Foundation
 import SnapshotTesting
-@testable import SwiftStacktrace
-import XCTest
+import Testing
 
-final class CallerTests: XCTestCase {
+@testable import SwiftStacktrace
+
+@Suite(.snapshots(diffTool: .ksdiff))
+struct CallerTests {
+  @Test
   func testCaller() throws {
     let lines = try Bundle.module.lines
     let caller = LazyCaller(lines)
@@ -10,6 +14,7 @@ final class CallerTests: XCTestCase {
     assertSnapshot(of: eager, as: .json)
   }
 
+  @Test
   func testCallerJson() throws {
     let lines = try Bundle.module.lines
     let caller = LazyCaller(lines)

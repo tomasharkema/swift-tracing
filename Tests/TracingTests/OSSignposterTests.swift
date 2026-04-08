@@ -7,20 +7,21 @@
 
 import Foundation
 import OSLog
-import SwiftTaskToolbox
-@testable import SwiftTracing
-import XCTest
+import Testing
 
-class OSSignposterTests: XCTestCase {
+@testable import SwiftTracing
+
+struct OSSignposterTests {
   let signposter = Signposter(subsystem: "a", category: "b")
 
+  @Test
   func testInit() async throws {
     _ = try await signposter.measure(withNewId: "ojoo") {
-      XCTAssertNotNil(TracingHolder.signpostID)
-      XCTAssertNotNil(TracingHolder.signposter)
-      try await Task.sleep(seconds: 1)
-      XCTAssertNotNil(TracingHolder.signpostID)
-      XCTAssertNotNil(TracingHolder.signposter)
+      #expect(TracingHolder.signpostID != nil)
+      #expect(TracingHolder.signposter != nil)
+      try await Task.sleep(until: .now + .seconds(1))
+      #expect(TracingHolder.signpostID != nil)
+      #expect(TracingHolder.signposter != nil)
       return 1
     }
   }

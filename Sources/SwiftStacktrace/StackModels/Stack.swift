@@ -146,7 +146,7 @@ extension Stack: StackStringConvertible {
         case .success(let functionInfo):
           "at: \(functionInfo.debugDescription)"
 
-        case .failure(let error):
+        case .failure:
           "at: \(frame.debugDescription)"
         }
       }
