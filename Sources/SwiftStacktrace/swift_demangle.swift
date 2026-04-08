@@ -4,7 +4,7 @@
 //
 //  Created by Tomas Harkema on 28/10/2023.
 //
-
+#if canImport(Darwin)
 import Darwin
 
 // swiftlint:disable:next type_name
@@ -27,3 +27,4 @@ func swift_demangle(_ mangled: String) -> String? {
   }
   return nil
 }
+#endif
