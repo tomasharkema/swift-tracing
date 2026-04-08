@@ -6,8 +6,11 @@
 //
 
 import Foundation
-@_exported import SwiftDemangle
 import SwiftSyntax
+
+#if WithDemangle
+  import SwiftDemangle
+#endif
 
 public final class LazyFrame: LazyInitializable, Sendable {
   package let raw: String
@@ -51,7 +54,11 @@ public struct Frame: Hashable, Equatable, Sendable, Encodable {
     mangledFunction = String(match[FrameRegex.mangledFuncRef])
 
     do {
-      let demangled = try mangledFunction.demangling(.defaultOptions)
+      #if WithDemangle
+        let demangled = try mangledFunction.demangling(.defaultOptions)
+      #else
+        let demangled = mangledFunction
+      #endif
       let cleaned = cleanup(line: demangled)
       self.functionInfo = .success(try FunctionInfo(cleaned))
       self.function = cleaned

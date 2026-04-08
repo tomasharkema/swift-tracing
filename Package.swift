@@ -24,6 +24,10 @@ let package = Package(
       targets: ["StringsBuilder"]
     ),
   ],
+  traits: [
+    .trait(name: "WithDemangle"),
+    .default(enabledTraits: []),
+  ],
   dependencies: [
     .package(url: "https://github.com/oozoofrog/SwiftDemangle", from: "6.0.4"),
     .package(url: "https://github.com/swiftlang/swift-syntax", "600.0.0"..<"603.0.0"),
@@ -44,10 +48,13 @@ let package = Package(
       name: "SwiftStacktrace",
       dependencies: [
         "StringsBuilder",
-        "SwiftDemangle",
+        .product(
+          name: "SwiftDemangle", package: "SwiftDemangle",
+          condition: .when(traits: ["WithDemangle"])
+        ),
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftParser", package: "swift-syntax"),
-      ]
+      ],
     ),
     .target(
       name: "StringsBuilder",
@@ -81,24 +88,24 @@ let package = Package(
   ]
 )
 
-#if !os(Linux)
-  //    package.dependencies.append(contentsOf: [
-  //      .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.60.1")
-  //    ])
+// #if !os(Linux)
+//    package.dependencies.append(contentsOf: [
+//      .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.60.1")
+//    ])
 
-  package.dependencies.append(
-    .package(
-      url: "https://github.com/SimplyDanny/SwiftLintPlugins",
-      from: "0.62.2"
-    ))
+// package.dependencies.append(
+//   .package(
+//     url: "https://github.com/SimplyDanny/SwiftLintPlugins",
+//     from: "0.62.2"
+//   ))
 
-  for target in package.targets {
-    var plugin = target.plugins ?? []
-    plugin.append(.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"))
-    target.plugins = plugin
-  }
+//   for target in package.targets {
+//     var plugin = target.plugins ?? []
+//     // plugin.append(.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"))
+//     target.plugins = plugin
+//   }
 
-#endif
+// #endif
 
 package.dependencies.append(
   .package(

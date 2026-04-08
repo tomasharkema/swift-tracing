@@ -1,5 +1,5 @@
 {
-  "originHash" : "6daec7691641a4db3375d0f327e516803c446aec284b06975768ef97de0ab58a",
+  "originHash" : "fe02c2769dda2477537f55ea8b0ec8012dc471e144b2ad2d17a9f7d536f85b48",
   "pins" : [
     {
       "identity" : "swift-algorithms",
@@ -62,24 +62,6 @@
       "state" : {
         "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
         "version" : "602.0.0"
-      }
-    },
-    {
-      "identity" : "swiftdemangle",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/oozoofrog/SwiftDemangle",
-      "state" : {
-        "revision" : "41ad01ac001f2ee57545b0de4f2e6c4a3ea5f400",
-        "version" : "6.2.3"
-      }
-    },
-    {
-      "identity" : "swiftlintplugins",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SimplyDanny/SwiftLintPlugins",
-      "state" : {
-        "revision" : "8a4640d14777685ba8f14e832373160498fbab92",
-        "version" : "0.63.2"
       }
     },
     {
