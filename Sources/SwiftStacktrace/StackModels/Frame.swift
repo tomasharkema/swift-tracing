@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftDemangle
 import SwiftSyntax
 
 public final class LazyFrame: LazyInitializable, Sendable {
@@ -48,27 +49,21 @@ public struct Frame: Hashable, Equatable, Sendable, Encodable {
     lib = String(match[FrameRegex.libraryRef])
     stackPointer = String(match[FrameRegex.stackPointerRef])
     mangledFunction = String(match[FrameRegex.mangledFuncRef])
-    let demangled = swift_demangle(mangledFunction)
-    let cleanupped = demangled.flatMap { cleanup(line: $0) }
-    function = cleanupped
 
-    let functionInfo =
-      cleanupped
-      .flatMap { line in
-        Result {
-          try FunctionInfo(line)
-        }.mapError { error in
-          if let error = error as? ParseError {
-            FunctionInfoError.parseError(error)
-          } else {
-            FunctionInfoError.otherError(error)
-          }
+    do {
+      let demangled = try mangledFunction.demangling(.defaultOptions)
+      let cleaned = cleanup(line: demangled)
+      self.functionInfo = .success(try FunctionInfo(cleaned))
+      self.function = cleaned
+
+    } catch {
+      self.function = nil
+      self.functionInfo =
+        if let error = error as? ParseError {
+          .failure(FunctionInfoError.parseError(error))
+        } else {
+          .failure(FunctionInfoError.otherError(error))
         }
-      }
-    if let functionInfo {
-      self.functionInfo = functionInfo
-    } else {
-      self.functionInfo = .failure(.otherError(NSError(domain: "", code: 0)))
     }
   }
 

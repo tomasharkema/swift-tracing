@@ -5,12 +5,12 @@
 //  Created by Tomas Harkema on 04/09/2023.
 //
 
-import Combine
-import Foundation
-import SwiftStacktrace
-import SwiftUI
+#if canImport(Combine) && DEBUG
 
-#if DEBUG
+  import Combine
+  import Foundation
+  import SwiftStacktrace
+  import SwiftUI
 
   nonisolated(unsafe)  // is fine, it's just a debug feature!
     var cancableForFileLocation = [Caller: AnyCancellable]()

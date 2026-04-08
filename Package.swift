@@ -25,6 +25,7 @@ let package = Package(
     ),
   ],
   dependencies: [
+    .package(url: "https://github.com/oozoofrog/SwiftDemangle", from: "6.0.4"),
     .package(url: "https://github.com/swiftlang/swift-syntax", "600.0.0"..<"603.0.0"),
     .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.19.2"),
     .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.1"),
@@ -43,6 +44,7 @@ let package = Package(
       name: "SwiftStacktrace",
       dependencies: [
         "StringsBuilder",
+        "SwiftDemangle",
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftParser", package: "swift-syntax"),
       ]
